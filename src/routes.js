@@ -1,7 +1,7 @@
 import { Switch, Route } from 'react-router-dom'
 import React from 'react'
-import Dashboard from './components/Dashboard'
-import Landing from './components/Landing'
+import Dashboard from './components/dashboard'
+import Landing from './components/landing'
 
 export default (
   <Switch>
