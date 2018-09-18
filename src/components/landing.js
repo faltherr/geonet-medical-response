@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import '../CSS/Landing.css'
 
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {}
   }
-  
+
   login = () => {
     let auth0domain = `https://${process.env.REACT_APP_AUTH0_DOMAIN}`
     let clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
@@ -15,13 +16,28 @@ class Landing extends Component {
 
     window.location = location
   }
-  render() { 
+  render() {
     return (
       <div>
-        Landing
+        <div className="landing-main-container">
+          <div className="landing-container">
+            <div className="landing-logo">
+              <img src={require("../logo_transparent.png")} style={{ height: '200px', width: '200px' }} alt="" />
+            </div>
+            <div className="landing-name">
+              <h1>Company Name</h1>
+            </div>
+            <div>
+              <button className="landing-button" onClick={this.login}>Admin Login</button>
+            </div>
+            <div className="landing-mission">
+              <p>"This is where the mission statement will go."</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
- 
+
 export default Landing;
