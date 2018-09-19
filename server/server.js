@@ -26,6 +26,11 @@ app.get('/api/patients/:id', controller.getPatient)
 app.get('/api/healthworkers/:id', controller.getHealthworker)
 app.get('/api/surveys/:id', controller.getSurvey)
 
+app.post('/api/patients', controller.addPatient)
+app.post('/api/healthworkers', controller.addHealthworker)
+
+app.put('/api/patients/:id', controller.updatePatient)
+
 app.listen(port, () => {
   console.log('listening on port:', port)
 })
