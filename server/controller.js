@@ -85,5 +85,45 @@ module.exports = {
       console.log(err)
       res.status(500).send('Something went wrong with getting survey by id')
     })
+  },
+  addPatient: (req,res) => {
+    let db = req.app.get('db')
+    let {name, age, sex, location, phone, active } = req.body
+
+    db.add_patient([name, age, sex, location, phone, active])
+    .then(results => {
+      res.status(200).send(results)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Something went wrong with adding patient')
+    })
+  },
+  addHealthworker: (req,res) => {
+    let db = req.app.get('db')
+    let {name, phone, active, email} = req.body
+
+    db.add_healthworker([name, phone, active, email])
+    .then(results => {
+      res.status(200).send(results)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Something went wrong with adding healthworker')
+    })
+  },
+  updatePatient: (req, res) => {
+    let {id} = req.params
+    let {name, age, sex, location, phone, active} = req.body
+    let db = req.app.get('db')
+    
+    db.update_patient([name, age, sex, location, phone, active, id])
+    .then(results => {
+      res.status(200).send(results)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send('Something went wrong with updating patient')
+    })
   }
 }
