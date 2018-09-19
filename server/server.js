@@ -32,6 +32,18 @@ app.get('/api/currentUser', (req, res) => {
 })
 
 app.get('/api/patients', controller.getPatients)
+app.get('/api/healthworkers', controller.getHealthworkers)
+app.get('/api/outposts', controller.getOutposts)
+app.get('/api/surveys', controller.getSurveys)
+
+app.get('/api/patients/:id', controller.getPatient)
+app.get('/api/healthworkers/:id', controller.getHealthworker)
+app.get('/api/surveys/:id', controller.getSurvey)
+
+app.post('/api/patients', controller.addPatient)
+app.post('/api/healthworkers', controller.addHealthworker)
+
+app.put('/api/patients/:id', controller.updatePatient)
 
 app.listen(port, () => {
   console.log('listening on port:', port)
