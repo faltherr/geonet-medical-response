@@ -3,14 +3,15 @@ const session = require('express-session');
 const bodyParser = require('body-parser')
 const massive = require('massive')
 const telerivet = require('telerivet')
-const AuthCtrl = require('./AuthCtrl');
-
+const AuthCtrl = require('./AuthCtrl')
+const what3words = require('./what3WordsController')
 const controller = require('./controller')
 require ('dotenv').config()
 
 const app = express()
 const port = 8443
-const {CONNECTION_STRING} = process.env
+const {CONNECTION_STRING, WHAT3WORDS_SECRET} = process.env
+
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -30,6 +31,10 @@ app.get('/auth/callback', AuthCtrl.auth)
 app.get('/api/currentUser', (req, res) => {
   res.send(req.session.user)
 })
+
+//WHAT3WORDS
+app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
+
 
 app.get('/api/patients', controller.getPatients)
 app.get('/api/healthworkers', controller.getHealthworkers)

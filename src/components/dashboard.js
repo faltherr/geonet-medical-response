@@ -8,9 +8,8 @@ class Dashboard extends Component {
   componentDidMount() {
     loadModules(['esri/Map', 
     'esri/views/MapView', 
-    'esri/layers/FeatureLayer',
-    "esri/dijit/BasemapGallery",
-    'dojo/domReady!']).then(([Map, MapView, FeatureLayer, Point, Legend, BasemapGallery]) => {
+    "esri/Graphic",
+    ]).then(([Map, MapView, Graphic]) => {
 
       const map = new Map({
         basemap: 'dark-gray'
@@ -19,15 +18,12 @@ class Dashboard extends Component {
       const mapView = new MapView({
         container: 'mapDiv',
         map,
-        center: [8.561571, -11.274584],
+        center: [-80, 35],
         zoom: 4, 
         padding: { top: 10}
       })
    
-      const layer = new FeatureLayer({
-        url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer"
-      })
-      map.add(layer)
+     
 
       mapView.breakpoints = {
         xsmall: 544,
@@ -35,11 +31,40 @@ class Dashboard extends Component {
         medium: 1024,
         large: 1200
       }
-      
+
+      var point = {
+        type: "point", // autocasts as new Point()
+        longitude: -49.97,
+        latitude: 41.73
+      };
+
+      var markerSymbol = {
+        type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+        color: [226, 119, 40],
+        outline: { // autocasts as new SimpleLineSymbol()
+          color: [255, 255, 255],
+          width: 2
+        }
+      };
+      var pointGraphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol
+      });
+
+      mapView.graphics.add(pointGraphic)
+      // .adds([])
+// toggle here and remove what you don't want to see. 
+// possibly graphics.remove
+
+//any method thats on the view this.state.mapView.graphics.add 
+// build checkboxes 
+
+
       this.setState({
         map,
         mapView
       })
+      //this will go in the redux 
 
     })
   }
