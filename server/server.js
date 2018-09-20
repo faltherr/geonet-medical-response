@@ -33,7 +33,7 @@ app.get('/api/currentUser', (req, res) => {
 })
 
 //WHAT3WORDS
-app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
+// app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
 
 
 app.get('/api/patients', controller.getPatients)
