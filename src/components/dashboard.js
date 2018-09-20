@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import { loadModules, loadCss } from 'esri-loader'
-
 import '../CSS/dashboard.css'
+import { connect } from 'react-redux'
+import { getMap } from '../redux/reducers/mapReducer'
+import { getPatientGraphic } from '../redux/reducers/patientsReducer'
+import PatientPopup from '../components/patientPopup'
+
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
   componentDidMount() {
+
     loadModules(['esri/Map', 
-    'esri/views/MapView', 
-    "esri/Graphic",
-    ]).then(([Map, MapView, Graphic]) => {
+    'esri/views/MapView'
+    ]).then(([Map, MapView]) => {
 
       const map = new Map({
         basemap: 'dark-gray'
       })
-
+    
       const mapView = new MapView({
         container: 'mapDiv',
         map,
@@ -23,8 +27,6 @@ class Dashboard extends Component {
         padding: { top: 10}
       })
    
-     
-
       mapView.breakpoints = {
         xsmall: 544,
         small: 677,
@@ -32,26 +34,15 @@ class Dashboard extends Component {
         large: 1200
       }
 
-      var point = {
-        type: "point", // autocasts as new Point()
-        longitude: -49.97,
-        latitude: 41.73
-      };
+    
+      let mapObj = {
+        map, 
+        mapView
+      }
 
-      var markerSymbol = {
-        type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-        color: [226, 119, 40],
-        outline: { // autocasts as new SimpleLineSymbol()
-          color: [255, 255, 255],
-          width: 2
-        }
-      };
-      var pointGraphic = new Graphic({
-        geometry: point,
-        symbol: markerSymbol
-      });
-
-      mapView.graphics.add(pointGraphic)
+      this.props.getMap(mapObj)
+      this.props.getPatientGraphic
+      //dispatch action where payload equals above maps
       // .adds([])
 // toggle here and remove what you don't want to see. 
 // possibly graphics.remove
@@ -60,17 +51,15 @@ class Dashboard extends Component {
 // build checkboxes 
 
 
-      this.setState({
-        map,
-        mapView
-      })
-      //this will go in the redux 
-
     })
   }
     render () {
+      let {map, mapView} = this.props
+      console.log('map view', mapView)
+      // console.log('map', map)
       return (
         <div className='wrapper'>
+        <PatientPopup />
           <header className='box header' id="title-id"></header>
             <div className=" box sidebar">MENU</div>
             <div className="map" id="mapDiv"></div>
@@ -81,4 +70,11 @@ class Dashboard extends Component {
       )
     }
   }
-export default Dashboard
+
+  let mapStateToProps = state => {
+    return {
+      map: state.map.map,
+      mapView: state.map.mapView
+    }
+  }
+export default connect( mapStateToProps, { getMap })(Dashboard)

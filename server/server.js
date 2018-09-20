@@ -1,11 +1,15 @@
 const express = require('express')
-const session = require('express-session');
-const bodyParser = require('body-parser')
-const massive = require('massive')
-const telerivet = require('telerivet')
-const AuthCtrl = require('./AuthCtrl')
-const what3words = require('./what3WordsController')
-const controller = require('./controller')
+    , session = require('express-session')
+    , bodyParser = require('body-parser')
+    , massive = require('massive')
+    , telerivet = require('telerivet')
+    , AuthCtrl = require('./controllers/AuthCtrl')
+    , PatientCtrl = require('./controllers/PatientsCtrl')
+    , HealthworkersCtrl = require('./controllers/HealthworkersCtrl')
+    , OutpostCtrl = require('./controllers/OutpostsCtrl')
+    , SurveyCtrl = require('./controllers/SurveyCtrl')
+    , What3wordsCtrl = require('./controllers/What3WordsCtrl')
+
 require ('dotenv').config()
 
 const app = express()
@@ -26,29 +30,34 @@ massive(CONNECTION_STRING).then(db => {
   console.log('db is connected')
 })
 
-//Auth
+
+//WHAT3WORDS
+// app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
+
+//AuthCtrl
 app.get('/auth/callback', AuthCtrl.auth)
 app.get('/api/currentUser', (req, res) => {
   res.send(req.session.user)
 })
 
-//WHAT3WORDS
-// app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
+// PatientsCtrl
+app.get('/api/patients', PatientCtrl.getPatients)
+app.get('/api/patients/:id', PatientCtrl.getPatient)
+app.post('/api/patients', PatientCtrl.addPatient)
+app.put('/api/patients/:id', PatientCtrl.updatePatient)
 
+// HealthworkersCtrl 
+app.get('/api/healthworkers', HealthworkersCtrl.getHealthworkers)
+app.post('/api/healthworkers', HealthworkersCtrl.addHealthworker)
+app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
 
-app.get('/api/patients', controller.getPatients)
-app.get('/api/healthworkers', controller.getHealthworkers)
-app.get('/api/outposts', controller.getOutposts)
-app.get('/api/surveys', controller.getSurveys)
+// OutpostCtrl 
+app.get('/api/outposts', OutpostCtrl.getOutposts)
 
-app.get('/api/patients/:id', controller.getPatient)
-app.get('/api/healthworkers/:id', controller.getHealthworker)
-app.get('/api/surveys/:id', controller.getSurvey)
+// SurveysCtrl 
+app.get('/api/surveys', SurveyCtrl.getSurveys)
+app.get('/api/surveys/:id', SurveyCtrl.getSurvey)
 
-app.post('/api/patients', controller.addPatient)
-app.post('/api/healthworkers', controller.addHealthworker)
-
-app.put('/api/patients/:id', controller.updatePatient)
 
 app.listen(port, () => {
   console.log('listening on port:', port)
