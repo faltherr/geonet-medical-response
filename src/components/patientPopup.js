@@ -17,8 +17,8 @@ class PatientPopup extends Component {
 
       const point = {
         type: "point", // autocasts as new Point()
-        longitude: -49.97,
-        latitude: 41.73
+        longitude: -11.271115,
+        latitude: 8.568134
       }
 
       const markerSymbol = {

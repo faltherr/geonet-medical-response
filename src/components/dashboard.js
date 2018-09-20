@@ -3,7 +3,6 @@ import { loadModules, loadCss } from 'esri-loader'
 import '../CSS/dashboard.css'
 import { connect } from 'react-redux'
 import { getMap } from '../redux/reducers/mapReducer'
-import { getPatientGraphic } from '../redux/reducers/patientsReducer'
 import PatientPopup from '../components/patientPopup'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -22,8 +21,8 @@ class Dashboard extends Component {
       const mapView = new MapView({
         container: 'mapDiv',
         map,
-        center: [-80, 35],
-        zoom: 4, 
+        center: [8.568134, -11.271115],
+        zoom: 3, 
         padding: { top: 10}
       })
    
@@ -41,14 +40,13 @@ class Dashboard extends Component {
       }
 
       this.props.getMap(mapObj)
-      this.props.getPatientGraphic
       //dispatch action where payload equals above maps
       // .adds([])
-// toggle here and remove what you don't want to see. 
-// possibly graphics.remove
+      // toggle here and remove what you don't want to see. 
+      // possibly graphics.remove
 
-//any method thats on the view this.state.mapView.graphics.add 
-// build checkboxes 
+      //any method thats on the view this.state.mapView.graphics.add 
+      // build checkboxes 
 
 
     })
@@ -59,7 +57,7 @@ class Dashboard extends Component {
       // console.log('map', map)
       return (
         <div className='wrapper'>
-        <PatientPopup />
+          <PatientPopup/>
           <header className='box header' id="title-id"></header>
             <div className=" box sidebar">MENU</div>
             <div className="map" id="mapDiv"></div>
