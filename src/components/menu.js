@@ -1,23 +1,40 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { getPatients } from '../redux/reducers/patientsReducer'
+
 class Menu extends Component {
+  
+  componentDidMount() {
+    this.props.getPatients()
+  }
+
   render () {
+   
+   console.log(this.props.patientData)
     return (
-    <div>
-
-
-
-        {/* <div className="box">
-          <a href="#" class="slide-trigger">MENU</a>
-            <div className="items">
-                <div className="item">Add Patient</div>
-                <div className="item">Add HealthCare Worker</div>
-                <div className="item">FAQ's</div>
-                <div className="item">Tutorials</div>
-            </div>
-        </div> */}
+      <div>
+        HELLO
+        {
+          this.props.patientData.map( patient => {
+            return (
+              <div>
+                  <p>{patient.name}</p>
+                  <p>{patient.location}</p>
+                  <p>{patient.latitude}</p>
+                  <p>{patient.longitude}</p>
+              </div>
+            )
+          })
+        }
+         
       </div>
-
     )
   }
 }
-export default Menu 
+
+let mapStateToProps = state => {
+  return {
+    patientData: state.patients.patientData
+  }
+}
+export default connect( mapStateToProps, { getPatients })(Menu);

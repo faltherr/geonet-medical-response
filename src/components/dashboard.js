@@ -1,24 +1,27 @@
 import React, { Component } from 'react'
-// import Menu from './Menu'
-import { loadModules } from 'esri-loader'
+import { loadModules, loadCss } from 'esri-loader'
 
+import '../CSS/dashboard.css'
+loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
   componentDidMount() {
     loadModules(['esri/Map', 
     'esri/views/MapView', 
     'esri/layers/FeatureLayer',
-    'dojo/domReady!']).then(([Map, MapView, FeatureLayer, Point, Legend]) => {
+    "esri/dijit/BasemapGallery",
+    'dojo/domReady!']).then(([Map, MapView, FeatureLayer, Point, Legend, BasemapGallery]) => {
 
       const map = new Map({
-        basemap: 'topo-vector'
+        basemap: 'dark-gray'
       })
 
       const mapView = new MapView({
         container: 'mapDiv',
         map,
-        center: [-118.71511,34.09042],
-        zoom: 3
+        center: [8.561571, -11.274584],
+        zoom: 4, 
+        padding: { top: 10}
       })
    
       const layer = new FeatureLayer({
@@ -26,7 +29,13 @@ class Dashboard extends Component {
       })
       map.add(layer)
 
-    
+      mapView.breakpoints = {
+        xsmall: 544,
+        small: 677,
+        medium: 1024,
+        large: 1200
+      }
+      
       this.setState({
         map,
         mapView
@@ -36,14 +45,13 @@ class Dashboard extends Component {
   }
     render () {
       return (
-        <div>
-          {/* <Menu /> */}
-          <header>
-            Header
-          </header>
-        <div id="mapDiv" style={{height: '80vh'}}>
-
-        </div>
+        <div className='wrapper'>
+          <header className='box header' id="title-id"></header>
+            <div className=" box sidebar">MENU</div>
+            <div className="map" id="mapDiv"></div>
+            <div className=" box data">DATA</div>
+          <footer>
+          </footer>
       </div>
       )
     }
