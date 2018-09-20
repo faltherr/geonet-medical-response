@@ -4,6 +4,11 @@ module.exports = {
 
     db.get_patients()
     .then(results => {
+      // for each axios request inserting patients address into the what3words address paramters, then 
+      // results.forEach(patient => {
+      //   axios.get('someaddress')
+      // })
+      // axios.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}&${patient_address}`)
       res.status(200).send(results)
     })
     .catch(err => {
