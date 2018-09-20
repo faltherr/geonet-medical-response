@@ -31,7 +31,7 @@ module.exports = {
     if(users.length){
       console.log(1111111111)
       req.session.user = users[0]
-      res.redirect('/')
+      res.redirect('http://localhost:3000/#dashboard')
     } else {
       console.log(12233234324)
       let users = await db.create_admin(userInfo)
