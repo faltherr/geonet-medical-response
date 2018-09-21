@@ -27,11 +27,11 @@ class HealthworkerPopup extends Component {
          
           const markerSymbol = {
             type: "simple-marker", 
-            style: 'x',
-            color: [255, 0, 0],
+            style: 'circle',
             outline: { // SimpleLineSymbol()
               color: [255, 0, 0],
-              width: 1.7
+              width: 1.7,
+              style: 'solid'
             }
           }
        
@@ -42,16 +42,13 @@ class HealthworkerPopup extends Component {
          
           this.props.mapView.graphics.add(healthworkerGraphic)
         })
-    
       })
-    }
-    
+    }  
   }
 
   render () {
     return (
       <div>
-
       </div>
     )
   }
