@@ -1,41 +1,47 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getPatientGraphic } from '../redux/reducers/patientsReducer'
-// import { getMap } from '../redux/reducers/mapReducer'
+import { getPatients, getPatientGraphic } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 
 
 class PatientPopup extends Component {
  
+  componentDidMount() {
+    this.props.getPatients()
+  }
 
   componentDidUpdate(prevProps) {
-    
-    if(!prevProps.mapView.graphics) {
+    let {patientsData} = this.props
+
+    if ((!prevProps.mapView.graphics && this.props.mapView.graphics && patientsData) || (!prevProps.patientsData.length && this.props.patientsData.length && this.props.mapView.graphics)) {
+
     loadModules([
       'esri/Graphic'
     ]).then(([Graphic]) => {
-
-      const point = {
-        type: "point", // autocasts as new Point()
-        longitude: -11.271115,
-        latitude: 8.568134
-      }
-     
-      const markerSymbol = {
-        type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-        color: [226, 119, 40],
-        outline: { // autocasts as new SimpleLineSymbol()
-          color: [255, 255, 255],
-          width: 2
-        }
-      }
-
-      const patientGraphic = new Graphic({
-        geometry: point,
-        symbol: markerSymbol
-      });
-      this.props.mapView.graphics.add(patientGraphic)
-    })
+        patientsData.forEach( patient => {
+          const point = {
+            type: "point",
+            longitude: patient.longitude,
+            latitude: patient.latitude
+          }
+         
+          const markerSymbol = {
+            type: "simple-marker",
+            color: [226, 119, 40],
+            outline: {
+              color: [255, 255, 255],
+              width: 2
+            }
+          }
+    
+          const patientGraphic = new Graphic({
+            geometry: point,
+            symbol: markerSymbol
+          })
+          
+          this.props.mapView.graphics.add(patientGraphic)
+        })
+      })
     }
   }
 
@@ -43,6 +49,7 @@ class PatientPopup extends Component {
   render () {
     return (
       <div>
+  
       </div>
     )
   }
@@ -50,9 +57,9 @@ class PatientPopup extends Component {
 
 let mapStateToProps = state => {
   return {
-    // patientData: state.patients.patientData,
+    patientsData: state.patients.patientsData,
     patientGraphic: state.patients.patientGraphic,
     mapView: state.map.mapView
   }
 }
-export default connect( mapStateToProps, { getPatientGraphic})(PatientPopup)
+export default connect( mapStateToProps, { getPatients, getPatientGraphic})(PatientPopup)

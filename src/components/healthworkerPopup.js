@@ -51,20 +51,7 @@ class HealthworkerPopup extends Component {
   render () {
     return (
       <div>
-  {
-     this.props.healthworkersData.map( healthworker => {
-      let healthworkerLatitude = healthworker.latitude
-      let healthworkerLongitude = healthworker.longitude
-      // console.log('HEY', healthworkerLatitude)
-      return (
-        <div>
-          <p>{healthworker.latitude}</p>
-          <p>{healthworker.longitude}</p>
 
-        </div>
-      )
-    })
-  }
       </div>
     )
   }
