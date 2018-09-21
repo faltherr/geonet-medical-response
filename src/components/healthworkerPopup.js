@@ -11,7 +11,7 @@ class HealthworkerPopup extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.mapView.graphics) {
+    if (!prevProps.mapView.graphics && this.props.mapView.graphics) {
       loadModules([
         'esri/Graphic',
         "esri/geometry/Multipoint"
@@ -45,8 +45,8 @@ class HealthworkerPopup extends Component {
     console.log('haofalfjlajf', this.props.healthWorkersData)
     return (
       <div>
-        {/* {
-          healthworkersData.map( healthWorker => {
+        { 
+          this.props.healthWorkersData.map( healthWorker => {
             return (
               <div>
                 {healthWorker.latitude}
@@ -54,7 +54,7 @@ class HealthworkerPopup extends Component {
               </div>
             )
           })
-        } */}
+        }
       </div>
     )
   }
