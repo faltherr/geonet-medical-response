@@ -20,7 +20,7 @@ class PatientPopup extends Component {
         longitude: -11.271115,
         latitude: 8.568134
       }
-
+     
       const markerSymbol = {
         type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
         color: [226, 119, 40],
@@ -50,7 +50,7 @@ class PatientPopup extends Component {
 
 let mapStateToProps = state => {
   return {
-    patientData: state.patients.patientData,
+    // patientData: state.patients.patientData,
     patientGraphic: state.patients.patientGraphic,
     mapView: state.map.mapView
   }
