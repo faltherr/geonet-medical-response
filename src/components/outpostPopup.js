@@ -1,42 +1,47 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getOutpostGraphic } from '../redux/reducers/outpostReducer'
+import { getOutpostGraphic, getOutposts } from '../redux/reducers/outpostReducer'
 
 import { loadModules } from 'esri-loader'
 
 class OutpostPopup extends Component {
-
+componentDidMount () {
+  this.props.getOutposts()
+}
   componentDidUpdate(prevProps) {
-    
-    if(!prevProps.mapView.graphics) {
+    let { outpostsData } = this.props
+    if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
       loadModules([
         'esri/Graphic'
       ]).then(([Graphic]) => {
-  
-
-        const point = {
-          type: "point",
-          longitude: -11.244751,
-          latitude: 8.539315
-        }
-  
-        const markerSymbol = {
-          type: "simple-marker",
-          color: [116, 119, 40],
-          outline: {
-            color: [255, 255, 255],
-            width: 2
+        console.log('oeruwouerakflf', outpostsData)
+        outpostsData.forEach( outpost => {
+          const point = {
+            type: "point",
+            longitude: outpost.longitude,
+            latitude: outpost.latitude
           }
-        }
-  
-        const outpostGraphic = new Graphic({
-          geometry: point,
-          symbol: markerSymbol
+          console.log('outpostLatitude', outpost.latitude)
+    
+          const markerSymbol = {
+            type: "simple-marker",
+            style: 'circle',
+            outline: {
+              color: [128, 0, 128],
+              width: 2
+            }
+          }
+    
+          const outpostGraphic = new Graphic({
+            geometry: point,
+            symbol: markerSymbol
+          })
+
+          this.props.mapView.graphics.add(outpostGraphic)
         })
-        this.props.mapView.graphics.add(outpostGraphic)
       })
-      }
     }
+  }
 
 
 
@@ -52,8 +57,9 @@ class OutpostPopup extends Component {
 let mapStateToProps = state => {
   return {
     outpostGraphic: state.outposts.outpostGraphic,
+    outpostsData: state.outposts.outpostsData,
     mapView: state.map.mapView
   }
 }
 
-export default connect(mapStateToProps, {getOutpostGraphic})(OutpostPopup)
+export default connect(mapStateToProps, {getOutpostGraphic, getOutposts })(OutpostPopup)

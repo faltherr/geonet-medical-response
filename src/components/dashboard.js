@@ -24,7 +24,7 @@ class Dashboard extends Component {
         container: 'mapDiv',
         map,
         center: [ -11.271115, 8.568134],
-        zoom: 14, 
+        zoom: 8, 
         padding: { top: 10}
       })
    
