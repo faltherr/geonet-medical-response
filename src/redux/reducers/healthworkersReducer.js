@@ -1,38 +1,38 @@
 import axios from 'axios'
 
-const GET_HEALTH_WORKER_GRAPHIC = 'GET_HEALTH_WORKER_GRAPHIC'
-const GET_HEALTH_WORKERS = 'GET_HEALTH_WORKERS'
+const GET_HEALTHWORKER_GRAPHIC = 'GET_HEALTHWORKER_GRAPHIC'
+const GET_HEALTHWORKERS = 'GET_HEALTHWORKERS'
 const FULFILLED = '_FULFILLED' 
 
 let initialState = {
-  healthWorkerGraphic: {},
-  healthWorkersData: []
+  healthworkerGraphic: {},
+  healthworkersData: []
 }
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
-    case GET_HEALTH_WORKER_GRAPHIC:
-      return { ...state, healthWorkerGraphic: action.payload}
-    case GET_HEALTH_WORKERS + FULFILLED:
-      return { ...state, healthWorkersData: action.payload}
+    case GET_HEALTHWORKER_GRAPHIC:
+      return { ...state, healthworkerGraphic: action.payload}
+    case GET_HEALTHWORKERS + FULFILLED:
+      return { ...state, healthworkersData: action.payload}
     default:
       return state
   }
 }
 
-export function getHealthWorkerGraphic (healthWorkerGraphic) {
+export function getHealthworkerGraphic (healthworkerGraphic) {
   return {
-    type: GET_HEALTH_WORKER_GRAPHIC,
-    payload: healthWorkerGraphic
+    type: GET_HEALTHWORKER_GRAPHIC,
+    payload: healthworkerGraphic
   }
 }
 
-export function getHealthWorkers () {
-  let healthWorkers = axios.get('/api/healthworkers').then(response => {
+export function getHealthworkers () {
+  let healthworkers = axios.get('/api/healthworkers').then(response => {
     return response.data
   })
   return {
-    type: GET_HEALTH_WORKERS,
-    payload: healthWorkers
+    type: GET_HEALTHWORKERS,
+    payload: healthworkers
   }
 }
