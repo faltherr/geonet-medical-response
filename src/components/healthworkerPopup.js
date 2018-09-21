@@ -1,60 +1,70 @@
 import React, { Component } from 'react'
 import { loadModules } from 'esri-loader'
 import { connect } from 'react-redux' 
-import { getHealthWorkerGraphic, getHealthWorkers } from '../redux/reducers/healthworkersReducer'
+import { getHealthworkerGraphic, getHealthworkers } from '../redux/reducers/healthworkersReducer'
 
 
 class HealthworkerPopup extends Component {
 
   componentDidMount() {
-    this.props.getHealthWorkers()
+    this.props.getHealthworkers()
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.mapView.graphics && this.props.mapView.graphics) {
+   let { healthworkersData } = this.props
+
+  if ((!prevProps.mapView.graphics && this.props.mapView.graphics && healthworkersData) || (!prevProps.healthworkersData.length && this.props.healthworkersData.length && this.props.mapView.graphics)) {
+
       loadModules([
-        'esri/Graphic',
-        "esri/geometry/Multipoint"
-      ]).then(([Graphic, Multipoint]) => {
-
-        const pointHW = {
-          type: "point", // autocasts as new Point()
-          longitude: -12.479384,
-          latitude: 7.595613
-        }
+        'esri/Graphic'
+      ]).then(([Graphic]) => {
+         healthworkersData.forEach( healthworker => {
+          const point = {
+            type: "point", // autocasts as new Point()
+            longitude: healthworker.longitude,
+            latitude: healthworker.latitude
+          }
+         
+          const markerSymbol = {
+            type: "simple-marker", 
+            style: 'x',
+            color: [255, 0, 0],
+            outline: { // SimpleLineSymbol()
+              color: [255, 0, 0],
+              width: 1.7
+            }
+          }
        
-        const markerSymbolHW = {
-          type: "simple-marker", 
-          color: [255, 0, 0],
-          // outline: { // SimpleLineSymbol()
-          //   color: [255, 0, 0],
-          //   width: 4
-          // }
-        }
-
-        const healthWorkerGraphic = new Graphic({
-          geometry: pointHW,
-          symbol: markerSymbolHW
+          const healthworkerGraphic = new Graphic({
+            geometry: point,
+            symbol: markerSymbol
+          })
+         
+          this.props.mapView.graphics.add(healthworkerGraphic)
         })
-          this.props.mapView.graphics.add(healthWorkerGraphic)
+    
       })
     }
+    
   }
 
   render () {
-    console.log('haofalfjlajf', this.props.healthWorkersData)
     return (
       <div>
-        { 
-          this.props.healthWorkersData.map( healthWorker => {
-            return (
-              <div>
-                {healthWorker.latitude}
-                {healthWorker.longitude}
-              </div>
-            )
-          })
-        }
+  {
+     this.props.healthworkersData.map( healthworker => {
+      let healthworkerLatitude = healthworker.latitude
+      let healthworkerLongitude = healthworker.longitude
+      // console.log('HEY', healthworkerLatitude)
+      return (
+        <div>
+          <p>{healthworker.latitude}</p>
+          <p>{healthworker.longitude}</p>
+
+        </div>
+      )
+    })
+  }
       </div>
     )
   }
@@ -62,11 +72,11 @@ class HealthworkerPopup extends Component {
 
 let mapStateToProps = state => {
   return {
-    healthWorkersData: state.healthworkers.healthWorkersData, 
+    healthworkersData: state.healthworkers.healthworkersData, 
     mapView: state.map.mapView,
-    healthWorkerGraphic: state.healthworkers.healthWorkerGraphic
+    healthworkerGraphic: state.healthworkers.healthworkerGraphic
   }
 }
 
 
-export default connect(mapStateToProps, {getHealthWorkerGraphic, getHealthWorkers})(HealthworkerPopup)
+export default connect(mapStateToProps, {getHealthworkerGraphic, getHealthworkers})(HealthworkerPopup)

@@ -17,14 +17,14 @@ class Dashboard extends Component {
     ]).then(([Map, MapView]) => {
 
       const map = new Map({
-        basemap: 'dark-gray'
+        basemap: 'hybrid'
       })
     
       const mapView = new MapView({
         container: 'mapDiv',
         map,
-        center: [8.568134, -11.271115],
-        zoom: 3, 
+        center: [ -11.271115, 8.568134],
+        zoom: 14, 
         padding: { top: 10}
       })
    
@@ -42,20 +42,12 @@ class Dashboard extends Component {
       }
 
       this.props.getMap(mapObj)
-      //dispatch action where payload equals above maps
-      // .adds([])
-      // toggle here and remove what you don't want to see. 
-      // possibly graphics.remove
-
-      //any method thats on the view this.state.mapView.graphics.add 
-      // build checkboxes 
-
-
+   
     })
   }
     render () {
       let {map, mapView} = this.props
-      console.log('map view', mapView)
+      // console.log('map view', mapView)
       // console.log('map', map)
       return (
         <div className='wrapper'>
