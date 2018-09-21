@@ -4,6 +4,7 @@ import '../CSS/dashboard.css'
 import { connect } from 'react-redux'
 import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
+import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -59,6 +60,7 @@ class Dashboard extends Component {
       return (
         <div className='wrapper'>
           <PatientPopup/>
+          <OutpostPopup/>
           <HealthworkerPopup />
           <header className='box header' id="title-id"></header>
             <div className=" box sidebar">MENU</div>
