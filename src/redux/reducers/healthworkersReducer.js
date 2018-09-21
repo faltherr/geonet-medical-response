@@ -10,7 +10,6 @@ let initialState = {
 }
 
 export default function reducer (state = initialState, action) {
-  console.log('1111111',action.payload)
   switch (action.type) {
     case GET_HEALTH_WORKER_GRAPHIC:
       return { ...state, healthWorkerGraphic: action.payload}

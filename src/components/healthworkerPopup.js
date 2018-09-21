@@ -42,7 +42,6 @@ class HealthworkerPopup extends Component {
   }
 
   render () {
-    console.log('haofalfjlajf', this.props.healthWorkersData)
     return (
       <div>
         { 
