@@ -6,14 +6,14 @@ const GET_PATIENTGRAPHIC = 'GET_PATIENTGRAPHIC'
 
 
 let initialState = {
-  patientData: [],
+  patientsData: [],
   patientGraphic: {}
 }
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
     case GET_PATIENTS + FULFILLED:
-      return { ...state, patientData: action.payload}
+      return { ...state, patientsData: action.payload}
     case GET_PATIENTGRAPHIC:
       return { ...state, patientGraphic: action.payload}
     default:
