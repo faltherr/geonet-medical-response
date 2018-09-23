@@ -34,13 +34,32 @@ class HealthworkerPopup extends Component {
               style: 'solid'
             }
           }
-       
+    
+          const PopupTemplate = {
+            content: [{
+              title: "Healthworker",
+              type: "text",
+              text: `
+                    <h4>Name:</h4> <p>${healthworker.name}</p>
+                    <h4>Coordinates:</h4> <p>${healthworker.latitude}, ${healthworker.longitude}</p>
+                    <h4>Email:</h4> <p>${healthworker.email}</p>
+                    <h4>Outpost:</h4> <p>${healthworker.outpost_id}</p>
+                    <h4>Phone:</h4> <p>${healthworker.phone}</p>
+                    <h4>Active:</h4> <p>${healthworker.active}</p>
+                    `
+
+            }]
+          }
+
           const healthworkerGraphic = new Graphic({
             geometry: point,
-            symbol: markerSymbol
+            symbol: markerSymbol,
+            popupTemplate:  PopupTemplate
+
           })
-         
+
           this.props.mapView.graphics.add(healthworkerGraphic)
+          // layer.popupTemplate = popupTemplate
         })
       })
     }  

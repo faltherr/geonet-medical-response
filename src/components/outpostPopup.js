@@ -31,10 +31,22 @@ componentDidMount () {
               width: 2
             }
           }
-    
+       
+        const PopupTemplate = {
+            content: [{
+              title: "Healthworker",
+              type: "text",
+              text: `
+                    <h4>Location:</h4> <p>${outpost.location}</p>
+                    <h4>Coordinates:</h4> <p>${outpost.latitude}, ${outpost.longitude}</p>
+                    `
+            }]
+          }
+
           const outpostGraphic = new Graphic({
             geometry: point,
-            symbol: markerSymbol
+            symbol: markerSymbol,
+            popupTemplate: PopupTemplate
           })
 
           this.props.mapView.graphics.add(outpostGraphic)
