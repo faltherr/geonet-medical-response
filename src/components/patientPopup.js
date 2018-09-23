@@ -33,13 +33,31 @@ class PatientPopup extends Component {
               width: 2
             }
           }
-    
+          const PopupTemplate = {
+            content: [{
+              title: `${patient.name}`,
+              type: "text",
+              text: `
+                <h4>Name:</h4><p>${patient.name}</p>
+                <h4>Age:</h4></h4><p>${patient.age}</p>
+                <h4>Sex:</h4><p>${patient.sex}</p>
+                <h4>Location:</h4><p>${patient.location}</p>
+                <h4>Phone:</h4><p>${patient.phone}</p>
+                <h4>Active:</h4><p>${patient.active}</p>
+                <h4>Healthworker:</h4><p>${patient.healthworker_name}</p>
+                `
+            }]
+          }
+
+
           const patientGraphic = new Graphic({
             geometry: point,
-            symbol: markerSymbol
+            symbol: markerSymbol,
+            popupTemplate: PopupTemplate
           })
-          
+
           this.props.mapView.graphics.add(patientGraphic)
+          
         })
       })
     }
