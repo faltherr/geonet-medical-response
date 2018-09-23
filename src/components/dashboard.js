@@ -13,21 +13,22 @@ class Dashboard extends Component {
   componentDidMount() {
 
     loadModules(['esri/Map', 
-    'esri/views/MapView'
-    ]).then(([Map, MapView]) => {
-
+    'esri/views/MapView',
+    'esri/views/SceneView'
+    ]).then(([Map, MapView, SceneView]) => {
+     
       const map = new Map({
         basemap: 'hybrid'
       })
     
-      const mapView = new MapView({
+      const mapView = new SceneView({
         container: 'mapDiv',
         map,
         center: [ -11.271115, 8.568134],
-        zoom: 8, 
-        padding: { top: 10}
+        zoom: 18, 
+        padding: { top: 10 }
       })
-   
+    
       mapView.breakpoints = {
         xsmall: 544,
         small: 677,
@@ -35,12 +36,12 @@ class Dashboard extends Component {
         large: 1200
       }
 
-    
       let mapObj = {
         map, 
         mapView
       }
-
+     
+    
       this.props.getMap(mapObj)
    
     })
