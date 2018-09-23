@@ -27,7 +27,7 @@ class HealthworkerPopup extends Component {
          
           const markerSymbol = {
             type: "simple-marker", 
-            style: 'circle',
+            style: 'diamond',
             outline: { // SimpleLineSymbol()
               color: [255, 0, 0],
               width: 1.7,

@@ -25,7 +25,7 @@ componentDidMount () {
     
           const markerSymbol = {
             type: "simple-marker",
-            style: 'circle',
+            style: 'square',
             outline: {
               color: [128, 0, 128],
               width: 2
