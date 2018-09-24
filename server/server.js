@@ -8,6 +8,8 @@ const express = require('express')
     , OutpostCtrl = require('./controllers/OutpostsCtrl')
     , SurveyCtrl = require('./controllers/SurveyCtrl')
     , What3wordsCtrl = require('./controllers/What3WordsCtrl')
+    , sms_controller = require ('./controllers/sms_controller')
+    , urlencoded = require('body-parser').urlencoded
 
 require ('dotenv').config()
 
@@ -23,6 +25,10 @@ app.use(session({
 }))
 
 app.use(bodyParser.json())
+
+//URL encoded is for parsing sms from twilio
+app.use(urlencoded({ extended: true }));
+
 
 massive(CONNECTION_STRING).then(db => {
   app.set('db', db)
@@ -57,6 +63,8 @@ app.get('/api/outposts', OutpostCtrl.getOutposts)
 app.get('/api/surveys', SurveyCtrl.getSurveys)
 app.get('/api/surveys/:id', SurveyCtrl.getSurvey)
 
+// SMS controller
+app.post('/sms', sms_controller.emergency)
 
 app.listen(port, () => {
   console.log('listening on port:', port)
