@@ -24,6 +24,7 @@ export default function reducer (state = initialState, action) {
 export function getPatients () {
   let patients = axios.get('/api/patients').then(response => {
     return response.data
+    console.log('response', response.data)
   })
   return {
     type: GET_PATIENTS,
