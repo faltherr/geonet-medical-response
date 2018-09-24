@@ -25,7 +25,7 @@ class Dashboard extends Component {
         container: 'mapDiv',
         map,
         center: [ -11.271115, 8.568134],
-        zoom: 18, 
+        zoom: 8, 
         padding: { top: 10 }
       })
     
@@ -41,7 +41,7 @@ class Dashboard extends Component {
         mapView
       }
      
-    
+  
       this.props.getMap(mapObj)
    
     })
@@ -55,12 +55,7 @@ class Dashboard extends Component {
           <PatientPopup/>
           <OutpostPopup/>
           <HealthworkerPopup />
-          <header className='box header' id="title-id"></header>
-            <div className=" box sidebar">MENU</div>
             <div className="map" id="mapDiv"></div>
-            <div className=" box data">DATA</div>
-          <footer>
-          </footer>
       </div>
       )
     }

@@ -14,14 +14,16 @@ componentDidMount () {
       loadModules([
         'esri/Graphic'
       ]).then(([Graphic]) => {
-        console.log('oeruwouerakflf', outpostsData)
+        // console.log('oeruwouerakflf', outpostsData)
         outpostsData.forEach( outpost => {
+          
           const point = {
             type: "point",
             longitude: outpost.longitude,
             latitude: outpost.latitude
           }
-          console.log('outpostLatitude', outpost.latitude)
+          console.log('outpost', outpost.longitude)
+          // console.log('outpostLatitude', outpost.latitude)
     
           const markerSymbol = {
             type: "simple-marker",
@@ -48,7 +50,7 @@ componentDidMount () {
             symbol: markerSymbol,
             popupTemplate: PopupTemplate
           })
-
+          console.log('HELO', outpostGraphic)
           this.props.mapView.graphics.add(outpostGraphic)
         })
       })
