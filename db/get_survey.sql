@@ -1,2 +1,2 @@
-SELECT * FROM survey
-WHERE id = $1;
+-- SELECT * FROM survey
+-- WHERE id = $1;

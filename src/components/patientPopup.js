@@ -8,11 +8,11 @@ class PatientPopup extends Component {
  
   componentDidMount() {
     this.props.getPatients()
+    
   }
-
+  
   componentDidUpdate(prevProps) {
     let {patientsData} = this.props
-
     if ((!prevProps.mapView.graphics && this.props.mapView.graphics && patientsData) || (!prevProps.patientsData.length && this.props.patientsData.length && this.props.mapView.graphics)) {
 
     loadModules([
@@ -48,7 +48,7 @@ class PatientPopup extends Component {
                 `
             }]
           }
-
+          
           const patientGraphic = new Graphic({
             geometry: point,
             symbol: markerSymbol,
