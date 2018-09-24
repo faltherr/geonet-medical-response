@@ -14,8 +14,11 @@ class Dashboard extends Component {
 
     loadModules(['esri/Map', 
     'esri/views/MapView',
-    'esri/views/SceneView'
-    ]).then(([Map, MapView, SceneView]) => {
+    'esri/views/SceneView',
+    'esri/widgets/Legend',
+    'esri/widgets/BasemapToggle',
+    'esri/layers/GraphicsLayer'
+    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer]) => {
      
       const map = new Map({
         basemap: 'hybrid'
@@ -40,14 +43,27 @@ class Dashboard extends Component {
         map, 
         mapView
       }
-     
+     const legend = new Legend({
+       view: mapView,
+       style: "classic",
+      //  layerInfos: [{
+      //    layer: GraphicsLayer
+      //  }]
+     })
+
+     const toggle = new BasemapToggle({
+       view: mapView,
+       nextBasemap: "dark-gray"
+     })
     
       this.props.getMap(mapObj)
+      mapView.ui.add(legend, "bottom-right")
+      mapView.ui.add(toggle, "top-right")
    
     })
   }
     render () {
-      let {map, mapView} = this.props
+      let {map, mapView, legend} = this.props
       // console.log('map view', mapView)
       // console.log('map', map)
       return (
