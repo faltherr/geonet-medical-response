@@ -70,13 +70,8 @@ class Dashboard extends Component {
         <div className='wrapper'>
           <PatientPopup/>
           <OutpostPopup/>
-          <HealthworkerPopup />
-          <header className='box header' id="title-id"></header>
-            <div className=" box sidebar">MENU</div>
+          <HealthworkerPopup/>
             <div className="map" id="mapDiv"></div>
-            <div className=" box data">DATA</div>
-          <footer>
-          </footer>
       </div>
       )
     }
