@@ -60,8 +60,8 @@ app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
 app.get('/api/outposts', OutpostCtrl.getOutposts)
 
 // SurveysCtrl 
-app.get('/api/surveys', SurveyCtrl.getSurveys)
-app.get('/api/surveys/:id', SurveyCtrl.getSurvey)
+// app.get('/api/surveys', SurveyCtrl.getSurveys)
+// app.get('/api/surveys/:id', SurveyCtrl.getSurvey)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)
