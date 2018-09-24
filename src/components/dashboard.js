@@ -9,8 +9,7 @@ class Dashboard extends Component {
     loadModules(['esri/Map', 
     'esri/views/MapView', 
     'esri/layers/FeatureLayer',
-    "esri/dijit/BasemapGallery",
-    'dojo/domReady!']).then(([Map, MapView, FeatureLayer, Point, Legend, BasemapGallery]) => {
+    'dojo/domReady!']).then(([Map, MapView, FeatureLayer, Point, Legend]) => {
 
       const map = new Map({
         basemap: 'dark-gray'

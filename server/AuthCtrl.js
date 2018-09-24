@@ -14,7 +14,6 @@ module.exports = {
       grant_type: "authorization_code",
       redirect_uri: `http://${req.headers.host}/auth/callback`
     }
-    console.log(req.headers.host)
 
     let auth0domain = `https://${process.env.REACT_APP_AUTH0_DOMAIN}`
 
@@ -25,15 +24,12 @@ module.exports = {
 
     let db = req.app.get('db')
     let users = await db.find_healthworker_by_auth_id(userInfo.sub)
-    console.log('users',users)
-    console.log('sub', userInfo.sub)
+    // let healthWorkerId = [1,2,5,6,7,8]
 
     if(users.length){
-      console.log(1111111111)
       req.session.user = users[0]
-      res.redirect('/')
+      res.redirect('http://localhost:3000/#dashboard')
     } else {
-      console.log(12233234324)
       let users = await db.create_admin(userInfo)
       req.session.user = users[0]
       res.redirect('/')
