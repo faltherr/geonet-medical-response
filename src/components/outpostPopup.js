@@ -10,7 +10,9 @@ componentDidMount () {
 }
   componentDidUpdate(prevProps) {
     let { outpostsData } = this.props
+
     if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
+      
       loadModules([
         'esri/Graphic'
       ]).then(([Graphic]) => {
