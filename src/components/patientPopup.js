@@ -49,13 +49,12 @@ class PatientPopup extends Component {
             }]
           }
 
-
           const patientGraphic = new Graphic({
             geometry: point,
             symbol: markerSymbol,
             popupTemplate: PopupTemplate
+  
           })
-
           this.props.mapView.graphics.add(patientGraphic)
           
         })
