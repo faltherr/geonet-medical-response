@@ -1,19 +1,29 @@
 const surveyQs = require('../data/survey_questions')
 const axios = require('axios')
 
-module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond) {
+module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, respond) {
+
+    // This variable maintains the status of a response as valid unless the response is invalid. 
+    // If the response is invalid we will not send the next question (sendQuestion())
+    let validResponse = true
 
     // ********** Determine what cell the message body should fill ********** //
 
+    // We create a clone of the patient's object so that we can eliminate any columns that do not have a question in the survey.
+    // Here we remove lat and long because we want them to be input by our request to what3words
+    let clone = Object.assign({}, surveyNumberCheck[0])
+    delete clone.latitude
+    delete clone.longitude
     // objectArr holds the values of the current survey respondent
-    let objectArr = Object.values(surveyNumberCheck[0])
+    // let objectArr = Object.values(surveyNumberCheck[0])
+    let objectArr = Object.values(clone)
 
     //** The first null index should be identified as the value we want to insert into the table
     let firstNullIndex = objectArr.indexOf(null)
     
     //** Question to fill holds the key of the object at the first null value
     //** We will add this value to the database
-    let questionToFill = Object.keys(surveyNumberCheck[0])[firstNullIndex]
+    let questionToFill = Object.keys(clone)[firstNullIndex]
 
     // Here is the logic for checking to make sure the response type is accurate and will be added to our database correctly
     if (questionToFill === 'famplan' || questionToFill === 'illness' || questionToFill === 'hiv') {
@@ -37,6 +47,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
         } else {
             // This is the template for all invalid responses apply this to each case where the response is invalid to resend the question.
             // console.log('Please answer question again')
+            validResponse = false
             surveyQs.forEach(element => {
                 if (questionToFill in element) {
                     return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
@@ -51,6 +62,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
             db.survey.update({ phone: From }, newObj).then(function (error, updatedDatabase) { })
             objectArr[firstNullIndex] = Body
         } else {
+            validResponse = false
             surveyQs.forEach(element => {
                 if (questionToFill in element) {
                     return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
@@ -64,6 +76,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
             db.survey.update({ phone: From }, newObj).then(function (error, updatedDatabase) { })
             objectArr[firstNullIndex] = Body
         } else {
+            validResponse = false
             surveyQs.forEach(element => {
                 if (questionToFill in element) {
                     return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
@@ -84,7 +97,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
             db.survey.update({ phone: From }, newObj).then(function (error, updatedDatabase) { })
             objectArr[firstNullIndex] = fullDueDate
         } else {
-            // console.log('your date is terrible')
+            validResponse = false
             surveyQs.forEach(element => {
                 if (questionToFill in element) {
                     return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
@@ -105,38 +118,36 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
 
             // Add the 3words api get request request here! Check for latitude/longitude bounds for Sierra Leone
 
-            axios.get(`https://api.what3words.com/v2/forward?addr=${fullAddress}&key=${process.env.w3w_key}`).then( res => {
-                console.log(11111111111, res.data.geometry)
-                if (res.data.geometry){
-                    console.log(333333333333)
-                    //This fills the longitude cell
-                    let lngObj = {}
-                    lngObj['longitude']=res.data.geometry.lng
-                    db.survey.update({ phone: From }, lngObj)
-                    //This fills the latitude cell
-                    let latObj = {}
-                    latObj['latitude']=res.data.geometry.lat
-                    db.survey.update({ phone: From }, latObj)
-                    //This fills the location cell
-                    let newObj = {}
-                    newObj[questionToFill] = fullAddress;
-                    db.survey.update({ phone: From }, newObj)
-                    objectArr[firstNullIndex] = fullAddress
-                } else {
-                    console.log(222222222)
+            await axios.get(`https://api.what3words.com/v2/forward?addr=${fullAddress}&key=${process.env.w3w_key}`).then( res => {
+                    if(!res.data.geometry) {
                     // return respond(`Address not found. Please enter a valid three word address in the format word1.word2.word3.`)
                     surveyQs.forEach(element => {
-                        console.log(555555555)
+                        validResponse = false
                         if (questionToFill in element) {
-                            return respond(`Address not found. Please re-enter a valid address. ${Object.values(element)[0]}`)
+                            return respond(`Address not found. Please re-enter a valid answer. ${Object.values(element)[0]}`)
                         }
                     })
-                }
-            })
-
-            // The above code does not work, but perhaps if I sprinkle some conditional logic checking for lat lon in the database and then updating the question it might work... 
-            
+                    } else if( +res.data.geometry.lng<-13.307377 || +res.data.geometry.lng>-10.256908 || +res.data.geometry.lat>10.0316 || +res.data.geometry.lat<6.791397) {
+                        validResponse = false
+                        return respond(`The address you entered was not in Sierra Leone. Please double check and send a message in the format 'word1.word2.word3'.`)
+                    } else {
+                        // This fills the longitude cell
+                        let lngObj = {}
+                        lngObj['longitude']=res.data.geometry.lng
+                        db.survey.update({ phone: From }, lngObj)
+                        //This fills the latitude cell
+                        let latObj = {}
+                        latObj['latitude']=res.data.geometry.lat
+                        db.survey.update({ phone: From }, latObj)
+                        //This fills the location cell
+                        let newObj = {}
+                        newObj[questionToFill] = fullAddress;
+                        db.survey.update({ phone: From }, newObj)
+                        objectArr[firstNullIndex] = fullAddress
+                    }
+                })
         } else {
+            validResponse = false
             surveyQs.forEach(element => {
                 if (questionToFill in element) {
                     return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
@@ -159,10 +170,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
 
     //** We want to make sure that there is still a question to send
 
-    // This code will try to find the number of null values then decide how to process the logic for setting a second null value
-
-
-    // console.log('Second obj Arr!!!!!', objectArr)
+    // This code will find the number of null values then decide how to process the logic for setting a second null value
 
     function sendQuestion() {
         // null count identifies any unfilled cells in the survey
@@ -176,7 +184,7 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
             db.survey.update({ phone: From }, {completed:true})
             respond('Survey has been completed. Message us if there is an emergency with "emergency".')
         } else {
-            let questionToSend = Object.keys(surveyNumberCheck[0])[nextNullIndex]
+            let questionToSend = Object.keys(clone)[nextNullIndex]
             surveyQs.forEach(element => {
                 if (questionToSend in element) {
                     return respond(Object.values(element)[0])
@@ -184,6 +192,13 @@ module.exports = function surveyLogic(surveyNumberCheck, Body, From, db, respond
             })
         }
     }
+
     // Here we invoke the function that decides whether to send the next question of mark the survey as completed.
-    sendQuestion()
+    // We do this based on the variable valid response defined at the top of the file
+
+    if (validResponse){
+        sendQuestion()
+    } else {
+        return null
+    }
 }
