@@ -7,6 +7,10 @@ import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
 
+import circle from '../imgs/circle.png'
+import x from '../imgs/x.png'
+import diamond from '../imgs/diamond.png'
+
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
@@ -140,12 +144,21 @@ class Dashboard extends Component {
               <button onClick={this.communityThreeClick}
               >Community 3</button>
               <div id="panel"> 
-              <h2>COLOR AND SIZING LEGEND</h2>
-                <hr></hr>
-              <p>yellow circle : Patient Data</p>
-              <p>purple x : Outpost Location</p>
-              <p>blue diamond : Healthworker Data</p>
-              <p></p>
+                <h2>COLOR AND SIZING LEGEND</h2>
+                <div id='panel-details'>
+                  <div className='panel-line'>
+                    <img src={circle} class='icons'></img>
+                    <p> Patient Data</p>
+                  </div>
+                  <div className='panel-line'>
+                    <img src={x} class='icons'></img>
+                    <p> Outpost Location</p>
+                  </div>
+                  <div className='panel-line'>
+                    <img src={diamond} class='icons'></img>
+                    <p> Healthworker Data</p>
+                  </div>
+                </div>
               </div>
           </div>
       </div>
