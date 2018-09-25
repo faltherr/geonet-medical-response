@@ -25,13 +25,13 @@ class Landing extends Component {
               <img src={require("../logo_transparent.png")} style={{ height: '200px', width: '200px' }} alt="" />
             </div>
             <div className="landing-name">
-              <h1>Company Name</h1>
+              <h1>GeoNet Health Services</h1>
             </div>
             <div>
               <button className="landing-button" onClick={this.login}>Admin Login</button>
             </div>
             <div className="landing-mission">
-              <p>"This is where the mission statement will go."</p>
+              <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>
             </div>
           </div>
         </div>

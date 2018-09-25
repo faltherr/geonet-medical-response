@@ -63,7 +63,7 @@ class Dashboard extends Component {
     })
   }
     render () {
-      let {map, mapView, legend} = this.props
+      // let {map, mapView, legend} = this.props
       // console.log('map view', mapView)
       // console.log('map', map)
       return (
