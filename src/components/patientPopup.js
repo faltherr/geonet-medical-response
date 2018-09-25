@@ -16,8 +16,10 @@ class PatientPopup extends Component {
     if ((!prevProps.mapView.graphics && this.props.mapView.graphics && patientsData) || (!prevProps.patientsData.length && this.props.patientsData.length && this.props.mapView.graphics)) {
 
     loadModules([
-      'esri/Graphic'
-    ]).then(([Graphic]) => {
+      'esri/Graphic',
+      "esri/renderers/ClassBreaksRenderer",
+      "esri/layers/FeatureLayer"
+    ]).then(([Graphic, ClassBreaksRenderer, FeatureLayer]) => {
         patientsData.forEach( patient => {
           const point = {
             type: "point",
@@ -27,36 +29,94 @@ class PatientPopup extends Component {
          
           const markerSymbol = {
             type: "simple-marker",
-            color: [226, 119, 40],
             outline: {
-              color: [255, 255, 255],
+              color: [255, 215, 0, 1],
               width: 2
             }
           }
           const PopupTemplate = {
+            title: "Patient Information",
             content: [{
-              title: `${patient.name}`,
               type: "text",
               text: `
-                <h4>Name:</h4><p>${patient.name}</p>
-                <h4>Age:</h4></h4><p>${patient.age}</p>
-                <h4>Sex:</h4><p>${patient.sex}</p>
-                <h4>Location:</h4><p>${patient.location}</p>
-                <h4>Phone:</h4><p>${patient.phone}</p>
-                <h4>Active:</h4><p>${patient.active}</p>
-                <h4>Healthworker:</h4><p>${patient.healthworker_name}</p>
+                <span><h4>Location: ${patient.location}</h4></span>
+                <span><h4>Patient Name: ${patient.name}</h4></span>
+                <span><h4>Age:  ${patient.age}</h4></span>
+                <span><h4>Sex:  ${patient.sex}</h4></span>
+                <span><h4>Due Date:  ${patient.duedate}</h4></span>
+                <span><h4>Phone:  ${patient.phone}</h4></span>
+                <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+                <span><h4>Alert:  ${patient.alert}</h4></span>
+               </h4></span>
                 `
             }]
           }
-          
+
           const patientGraphic = new Graphic({
             geometry: point,
             symbol: markerSymbol,
             popupTemplate: PopupTemplate
   
           })
+
           this.props.mapView.graphics.add(patientGraphic)
           
+          const renderer = {
+            type: "class-breaks",
+            field: "DUE_DATE"
+          }
+          // renderer.addClassBreakInfo ({
+          //   minVal: 0,
+          //   maxValue: 1,
+          //   symbol: {
+          //     type: 'point-3d',
+          //     symbolLayers: [{
+          //       type: "object",
+          //       resource: { primitive: "cone" },
+          //       material: { color: [0,169,230] },
+          //       height: 200,
+          //       width: 200
+          //     }]
+          //   }
+          // })
+          // renderer.addClassBreakInfo ({
+          //   minVal: 1.1,
+          //   maxValue: 2,
+          //   symbol: {
+          //     type: 'point-3d',
+          //     symbolLayers: [{
+          //       type: "object",
+          //       resource: { primitive: "cone" },
+          //       material: { color: [255,255,255] },
+          //       height: 500,
+          //       width: 500
+          //     }]
+          //   }
+          // })
+
+          // renderer.addClassBreakInfo ({
+          //   minVal: 2.1,
+          //   maxValue: 3,
+          //   symbol: {
+          //     type: 'point-3d',
+          //     symbolLayers: [{
+          //       type: "object",
+          //       resource: { primitive: "cone" },
+          //       material: { color: [255,255,255] },
+          //       height: 800,
+          //       width: 800
+          //     }]
+          //   }
+          // })
+
+        const layer = new FeatureLayer ({
+          renderer: renderer
+        })
+
+
+        
+
+
         })
       })
     }

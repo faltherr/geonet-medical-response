@@ -21,14 +21,14 @@ class Dashboard extends Component {
     ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer]) => {
      
       const map = new Map({
-        basemap: 'hybrid'
+        basemap: 'dark-gray'
       })
     
       const mapView = new SceneView({
         container: 'mapDiv',
         map,
         center: [ -11.271115, 8.568134],
-        zoom: 8, 
+        scale: 50000000, 
         padding: { top: 10 }
       })
     
@@ -43,35 +43,111 @@ class Dashboard extends Component {
         map, 
         mapView
       }
-     const legend = new Legend({
-       view: mapView,
-       style: "classic",
-      //  layerInfos: [{
-      //    layer: GraphicsLayer
-      //  }]
+      // legend and rendering
+      const panel = document.getElementById("panel")
+      const legend = new Legend({
+        view: mapView,
+        container: panel
      })
-
+  
+     //basemap toggle 
      const toggle = new BasemapToggle({
        view: mapView,
-       nextBasemap: "dark-gray"
+       nextBasemap: "hybrid"
      })
     
-      this.props.getMap(mapObj)
-      mapView.ui.add(legend, "bottom-right")
-      mapView.ui.add(toggle, "top-right")
-   
+
+    //button that opens legend 
+    const buttonWidget = document.createElement("div")
+    buttonWidget.id = "buttonWidget"
+    buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
+    buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
+
+
+    this.props.getMap(mapObj)
+    mapView.ui.add(legend, "top-right")
+    mapView.ui.add(toggle, "top-left")
+    mapView.ui.add(buttonWidget, "top-right")
+
+     buttonWidget.addEventListener("click", function () {
+       const expanded = panel.classList.contains("panel-expanded")
+
+       if (expanded) {
+         panel.classList.remove("panel-expanded")
+       } else {
+         panel.classList.add("panel-expanded")
+       }
+     })
+
+    //mapView.GoTo ( zooming feature)
+    const speedOption = {
+      speedFactor: 0.3,
+      easing: "out-quint"
+    }
+      mapView.goTo({   
+        target: [-12.179104, 9.101593, 50000],
+        heading: 320,
+        tilt: 45, 
+        zoom: 8
+      }, speedOption)
+    })
+  }
+
+  communityOneClick = () => {
+    let { mapView } = this.props
+      mapView.goTo({   
+      target: [-11.754213, 8.733465, 50000],
+      heading: 0,
+      tilt: 0, 
+      zoom: 15, 
+      speedFactor: 0.1
+    })
+  }
+  communityTwoClick = () => {
+    let { mapView } = this.props
+      mapView.goTo({   
+      target: [-11.372061, 9.532759, 50000],
+      heading: 0,
+      tilt: 0, 
+      zoom: 15, 
+      speedFactor: 0.1
+    })
+  }
+  communityThreeClick = () => {
+    let { mapView } = this.props
+      mapView.goTo({   
+      target: [-11.406373, 9.546019, 50000],
+      heading: 0,
+      tilt: 0, 
+      zoom: 16, 
+      speedFactor: 0.1
     })
   }
     render () {
       let {map, mapView, legend} = this.props
-      // console.log('map view', mapView)
-      // console.log('map', map)
       return (
         <div className='wrapper'>
           <PatientPopup/>
           <OutpostPopup/>
           <HealthworkerPopup/>
+         
             <div className="map" id="mapDiv"></div>
+            <div id="optionsDiv">
+              <button onClick={this.communityOneClick}
+              >Community 1</button>
+              <button onClick={this.communityTwoClick}
+              >Community 2</button>
+              <button onClick={this.communityThreeClick}
+              >Community 3</button>
+              <div id="panel"> 
+              <h2>COLOR AND SIZING LEGEND</h2>
+                <hr></hr>
+              <p>yellow circle : Patient Data</p>
+              <p>purple x : Outpost Location</p>
+              <p>blue diamond : Healthworker Data</p>
+              <p></p>
+              </div>
+          </div>
       </div>
       )
     }
