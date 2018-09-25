@@ -45,12 +45,16 @@ width:100vw
   width: 100%;
 }
 #panel {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
   position: absolute;
   top: 55px;
   bottom: 0;
   right: 0;
   width: 0;
-  background-color: #fff;
+  background-color: #252429;
+  color: #48484A
 }
 
 #panel.panel-expanded {
@@ -58,6 +62,40 @@ width:100vw
   height: 80vh;
 }
 
+#panel-details {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #9E9E9F
+
+}
+.icons {
+  max-height: 40px;
+  max-width: 40px;
+  padding-top: 10px;
+  margin-right: 10px
+}
+
+.panel-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%
+
+}
+.esri-legend__message {
+  display: none
+}
+
+.esri-widget.esri-component.esri-widget-button.esri-interactive{
+  color: #48484A;
+  background-color: #fff;
+  padding: 5px
+}
 #optionsDiv button {
   background-color: #303030;
   color:rgba(255, 255, 255, 0.899);
