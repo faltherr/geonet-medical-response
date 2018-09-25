@@ -21,7 +21,7 @@ class Dashboard extends Component {
     ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer]) => {
      
       const map = new Map({
-        basemap: 'dark-gray'
+        basemap: 'streets-night-vector'
       })
     
       const mapView = new SceneView({
@@ -43,19 +43,20 @@ class Dashboard extends Component {
         map, 
         mapView
       }
+
       // legend and rendering
       const panel = document.getElementById("panel")
       const legend = new Legend({
         view: mapView,
         container: panel
      })
-  
+     console.log(legend)
      //basemap toggle 
      const toggle = new BasemapToggle({
        view: mapView,
        nextBasemap: "hybrid"
      })
-    
+
 
     //button that opens legend 
     const buttonWidget = document.createElement("div")
@@ -92,11 +93,21 @@ class Dashboard extends Component {
       }, speedOption)
     })
   }
-
+ 
+  sierraLeonClick = () => {
+    let { mapView } = this.props
+      mapView.goTo({   
+      target: [-12.179104, 9.101593],
+      heading: 0,
+      tilt: 10, 
+      zoom: 8, 
+      speedFactor: 0.1
+    })
+  }
   communityOneClick = () => {
     let { mapView } = this.props
       mapView.goTo({   
-      target: [-11.754213, 8.733465, 50000],
+      target: [-11.272010, 8.567534],
       heading: 0,
       tilt: 0, 
       zoom: 15, 
@@ -106,33 +117,39 @@ class Dashboard extends Component {
   communityTwoClick = () => {
     let { mapView } = this.props
       mapView.goTo({   
-      target: [-11.372061, 9.532759, 50000],
-      heading: 0,
-      tilt: 0, 
-      zoom: 15, 
-      speedFactor: 0.1
-    })
-  }
-  communityThreeClick = () => {
-    let { mapView } = this.props
-      mapView.goTo({   
-      target: [-11.406373, 9.546019, 50000],
-      heading: 0,
+      target: [-11.384337, 9.54637],
+      heading: 30,
       tilt: 0, 
       zoom: 16, 
       speedFactor: 0.1
     })
   }
+
+  communityThreeClick = () => {
+    let { mapView } = this.props
+      mapView.goTo({   
+      target: [-12.074651, 7.948549],
+      heading: 20,
+      tilt: 0, 
+      zoom: 15, 
+      speedFactor: 0.1
+    })
+  }
+ 
+  
     render () {
+     
       let {map, mapView, legend} = this.props
       return (
         <div className='wrapper'>
           <PatientPopup/>
           <OutpostPopup/>
           <HealthworkerPopup/>
-         
+        
             <div className="map" id="mapDiv"></div>
             <div id="optionsDiv">
+              <button onClick={this.sierraLeonClick}
+              >Sierra Leone</button>
               <button onClick={this.communityOneClick}
               >Community 1</button>
               <button onClick={this.communityTwoClick}
@@ -145,14 +162,16 @@ class Dashboard extends Component {
               <p>yellow circle : Patient Data</p>
               <p>purple x : Outpost Location</p>
               <p>blue diamond : Healthworker Data</p>
-              <p></p>
+             
               </div>
           </div>
       </div>
+     
+    
       )
-    }
+    } 
   }
-
+ 
   let mapStateToProps = state => {
     return {
       map: state.map.map,

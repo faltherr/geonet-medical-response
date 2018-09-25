@@ -57,3 +57,19 @@ width:100vw
   width: 250px;
   height: 80vh;
 }
+
+#optionsDiv button {
+  background-color: #CAF270;
+  border: 2px solid #242328;
+  color: #242328;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 5px;
+}
+.esri-component,
+.esri-widget,
+.esri-widget--button, 
+.esri-interactive {
+  background-color: #CAF270;
+  color:#242328;
+}
