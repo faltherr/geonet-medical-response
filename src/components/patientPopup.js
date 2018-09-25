@@ -2,61 +2,89 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
+import * as moment from 'moment'
 
 
 class PatientPopup extends Component {
  
   componentDidMount() {
     this.props.getPatients()
-    
   }
   
   componentDidUpdate(prevProps) {
     let {patientsData} = this.props
     if ((!prevProps.mapView.graphics && this.props.mapView.graphics && patientsData) || (!prevProps.patientsData.length && this.props.patientsData.length && this.props.mapView.graphics)) {
-
+      // console.log('data',patientsData[0].duedate)
     loadModules([
-      'esri/Graphic'
-    ]).then(([Graphic]) => {
+      'esri/Graphic',
+      "esri/renderers/ClassBreaksRenderer",
+      "esri/layers/FeatureLayer"
+    ]).then(([Graphic, ClassBreaksRenderer, FeatureLayer]) => {
         patientsData.forEach( patient => {
           const point = {
             type: "point",
             longitude: patient.longitude,
             latitude: patient.latitude
           }
-         
+         const firstTri = [255, 215, 0, 1]
+
+        
+        // date formatting 
+        let todayUnformatted = new Date()
+        let today = moment(todayUnformatted).format('YYYY/MM/DD')
+        let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
+        let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
+
+        console.log('today', today)
+        console.log('dueDateFormatted', dueDateFormatted)
+        console.log('months until', monthsUntilDueDate)
+        let color
+
+        if (monthsUntilDueDate <= 3 ) {
+          color = '#CAF270'
+        } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
+          color =  '#73D487'
+        } else {
+          color = '#288993'
+        }
+
           const markerSymbol = {
             type: "simple-marker",
-            color: [226, 119, 40],
+            color: color,
+            size: 15,
             outline: {
-              color: [255, 255, 255],
+              color: 'white',
               width: 2
             }
           }
+
           const PopupTemplate = {
+            title: "Patient Information",
             content: [{
-              title: `${patient.name}`,
               type: "text",
               text: `
-                <h4>Name:</h4><p>${patient.name}</p>
-                <h4>Age:</h4></h4><p>${patient.age}</p>
-                <h4>Sex:</h4><p>${patient.sex}</p>
-                <h4>Location:</h4><p>${patient.location}</p>
-                <h4>Phone:</h4><p>${patient.phone}</p>
-                <h4>Active:</h4><p>${patient.active}</p>
-                <h4>Healthworker:</h4><p>${patient.healthworker_name}</p>
+                <span><h4>Location: ${patient.location}</h4></span>
+                <span><h4>Patient Name: ${patient.name}</h4></span>
+                <span><h4>Age:  ${patient.age}</h4></span>
+                <span><h4>Sex:  ${patient.sex}</h4></span>
+                <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+                <span><h4>Phone:  ${patient.phone}</h4></span>
+                <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+                <span><h4>Alert:  ${patient.alert}</h4></span>
+               </h4></span>
                 `
             }]
           }
-          
+
           const patientGraphic = new Graphic({
             geometry: point,
             symbol: markerSymbol,
             popupTemplate: PopupTemplate
   
           })
+
           this.props.mapView.graphics.add(patientGraphic)
-          
+
         })
       })
     }

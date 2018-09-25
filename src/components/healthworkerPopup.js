@@ -28,26 +28,26 @@ class HealthworkerPopup extends Component {
           const markerSymbol = {
             type: "simple-marker", 
             style: 'diamond',
+            color: '#40607A', 
+            size: 14,
             outline: { // SimpleLineSymbol()
-              color: [255, 0, 0],
-              width: 1.7,
-              style: 'solid'
+              color: 'white',
+              width: 2
+              
             }
           }
     
           const PopupTemplate = {
+            title: "Field Healthworker Information",
             content: [{
-              title: "Healthworker",
               type: "text",
               text: `
-                    <h4>Name:</h4> <p>${healthworker.name}</p>
-                    <h4>Coordinates:</h4> <p>${healthworker.latitude}, ${healthworker.longitude}</p>
-                    <h4>Email:</h4> <p>${healthworker.email}</p>
-                    <h4>Outpost:</h4> <p>${healthworker.outpost_id}</p>
-                    <h4>Phone:</h4> <p>${healthworker.phone}</p>
-                    <h4>Active:</h4> <p>${healthworker.active}</p>
+                    <span><h4>Name:  ${healthworker.name}</h4></span>
+                    <span><h4>Coordinates:  ${healthworker.latitude}, ${healthworker.longitude}</h4></span>
+                    <span><h4>Email:  ${healthworker.email}</h4></span>
+                    <span><h4>Outpost:  ${healthworker.outpost_id}</h4></span>
+                    <span><h4>Phone:  ${healthworker.phone}</h4></span>
                     `
-
             }]
           }
 

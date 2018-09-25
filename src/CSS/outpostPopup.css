@@ -1,0 +1,19 @@
+.esri-popup__main-container {
+  background-color: rgb(36, 34, 34);
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  opacity: 2;
+ 
+}
+.esri-popup__main-container span {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-size: 15px;
+}
+/* .esri-popup__main-container h4 {
+  font-size: 20px;
+}
+.esri-popup__main-container p {
+  font-size: 20px;
+} */
