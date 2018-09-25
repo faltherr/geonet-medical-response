@@ -26,7 +26,7 @@ class PatientPopup extends Component {
             longitude: patient.longitude,
             latitude: patient.latitude
           }
-         const firstTri = [255, 215, 0, 1]
+        //  const firstTri = [255, 215, 0, 1]
 
         
         // date formatting 

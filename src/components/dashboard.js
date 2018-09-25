@@ -143,7 +143,7 @@ class Dashboard extends Component {
   
     render () {
      
-      let {map, mapView, legend} = this.props
+      // let {map, mapView, legend} = this.props
       return (
         <div className='wrapper'>
           <PatientPopup/>
@@ -164,15 +164,15 @@ class Dashboard extends Component {
                 <h2>COLOR AND SIZING LEGEND</h2>
                 <div id='panel-details'>
                   <div className='panel-line'>
-                    <img src={circle} class='icons'></img>
+                    <img src={circle} class='icons'alt=''></img>
                     <p> Patient Data</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={x} class='icons'></img>
+                    <img src={x} class='icons' alt=''></img>
                     <p> Outpost Location</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={diamond} class='icons'></img>
+                    <img src={diamond} class='icons' alt=''></img>
                     <p> Healthworker Data</p>
                   </div>
                 </div>

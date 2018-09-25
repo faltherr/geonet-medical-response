@@ -2,7 +2,6 @@ const axios = require('axios')
 
 module.exports = {
   auth: async (req, res) => {
-    console.log('getting here yooooo')
     let { code } = req.query
 
     try {
