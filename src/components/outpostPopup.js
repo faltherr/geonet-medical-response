@@ -5,13 +5,15 @@ import { loadModules } from 'esri-loader'
 import '../CSS/outpostPopup.css'
 
 class OutpostPopup extends Component {
+
 componentDidMount () {
   this.props.getOutposts()
 }
-  componentDidUpdate(prevProps) {
-    let { outpostsData } = this.props
 
-    if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
+componentDidUpdate(prevProps) {
+  let { outpostsData } = this.props
+
+  if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
       
       loadModules([
         'esri/Graphic', 
@@ -62,10 +64,10 @@ componentDidMount () {
         text: `
           <span><h4>Location:  ${outpost.location}</h4></span>
           <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
-                    `
+              `
         }]
       }
-
+     
       const outpostGraphic = new Graphic ({
         geometry: pointGeometry,
         symbol: markerSymbol,
@@ -82,11 +84,9 @@ componentDidMount () {
       
          
         })
-
       })
     }
   }
-
 
     render() {
       return (
@@ -101,7 +101,7 @@ let mapStateToProps = state => {
   return {
     outpostGraphic: state.outposts.outpostGraphic,
     outpostsData: state.outposts.outpostsData,
-    mapView: state.map.mapView,
+    mapView: state.map.mapView, 
     map: state.map.map
   }
 }
