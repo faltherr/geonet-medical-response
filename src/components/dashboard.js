@@ -143,7 +143,7 @@ class Dashboard extends Component {
   
     render () {
      
-      let {map, mapView, legend} = this.props
+      // let {map, mapView, legend} = this.props
       return (
         <div className='wrapper'>
           <PatientPopup/>
