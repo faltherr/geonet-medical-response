@@ -35,28 +35,44 @@ class PatientPopup extends Component {
         let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
         let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
-        console.log('today', today)
-        console.log('dueDateFormatted', dueDateFormatted)
-        console.log('months until', monthsUntilDueDate)
+        // console.log('today', today)
+        // console.log('dueDateFormatted', dueDateFormatted)
+        // console.log('months until', monthsUntilDueDate)
         let color
 
-        if (monthsUntilDueDate <= 3 ) {
-          color = '#CAF270'
-        } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
-          color =  '#73D487'
-        } else {
-          color = '#288993'
-        }
+        // if (monthsUntilDueDate <= 3 ) {
+        //   color = '#CAF270'
+        // } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
+        //   color =  '#73D487'
+        // } else {
+        //   color = '#288993'
+        // }
 
-          const markerSymbol = {
-            type: "simple-marker",
-            color: color,
-            size: 15,
-            outline: {
-              color: 'white',
-              width: 2
-            }
+        //   const markerSymbol = {
+        //     type: "simple-marker",
+        //     color: color,
+        //     size: 15,
+        //     outline: {
+        //       color: 'white',
+        //       width: 2
+        //     }
+        //   }
+
+          if (monthsUntilDueDate <= 3 ) {
+            color = require('./symbols/woman_lime.png')
+          } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
+            color =  require('./symbols/woman_green.png')
+          } else {
+            color = require('./symbols/woman_aqua.png')
           }
+
+          let markerSymbol = {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: color,
+            contentType: 'image/png',
+            width: "28px",
+            height: "28px"
+          };
 
           const PopupTemplate = {
             title: "Patient Information",
@@ -80,7 +96,7 @@ class PatientPopup extends Component {
             geometry: point,
             symbol: markerSymbol,
             popupTemplate: PopupTemplate
-  
+
           })
 
           this.props.mapView.graphics.add(patientGraphic)

@@ -21,8 +21,9 @@ class Dashboard extends Component {
     'esri/views/SceneView',
     'esri/widgets/Legend',
     'esri/widgets/BasemapToggle',
-    'esri/layers/GraphicsLayer'
-    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer]) => {
+    'esri/layers/GraphicsLayer',
+    "esri/geometry/SpatialReference",
+    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference]) => {
      
       const map = new Map({
         basemap: 'streets-night-vector'
@@ -33,7 +34,8 @@ class Dashboard extends Component {
         map,
         center: [ -11.271115, 8.568134],
         scale: 50000000, 
-        padding: { top: 10 }
+        padding: { top: 10 },
+        spatialReference: new SpatialReference({wkid: 3857})
       })
     
       mapView.breakpoints = {
@@ -54,7 +56,7 @@ class Dashboard extends Component {
         view: mapView,
         container: panel
      })
-     console.log(legend)
+    //  console.log(legend)
      //basemap toggle 
      const toggle = new BasemapToggle({
        view: mapView,
@@ -164,15 +166,15 @@ class Dashboard extends Component {
                 <h2>COLOR AND SIZING LEGEND</h2>
                 <div id='panel-details'>
                   <div className='panel-line'>
-                    <img src={circle} class='icons'alt=''></img>
+                    <img src={circle} className='icons'alt=''></img>
                     <p> Patient Data</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={x} class='icons' alt=''></img>
+                    <img src={x} className='icons' alt=''></img>
                     <p> Outpost Location</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={diamond} class='icons' alt=''></img>
+                    <img src={diamond} className='icons' alt=''></img>
                     <p> Healthworker Data</p>
                   </div>
                 </div>
