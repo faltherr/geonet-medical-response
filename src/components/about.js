@@ -22,7 +22,7 @@ export default class About extends Component {
                     </div> */}
 
                     <Tabs>
-                        <div label='Mission' className= 'tab-header'>
+                        <div label='Mission' className='tab-header'>
                             <h3 className='description-titles'>Our Mission:</h3>
                             <p className='description-text'> {description.mission} </p>
                         </div>
@@ -37,11 +37,10 @@ export default class About extends Component {
                             <h3 className='description-titles'>How does it work? </h3>
                             <p className='description-text'>{description.howItWorks}</p>
                             <div className='flow-chart-container'>
-                                <img src={healthGrids_demo} alt = 'flow' className='flowchart'/>
+                                <img src={healthGrids_demo} alt='flow' className='flowchart' />
                             </div>
                         </div>
                     </Tabs>
-
 
                 </div>
             </div>
