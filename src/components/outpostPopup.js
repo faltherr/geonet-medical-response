@@ -5,20 +5,21 @@ import { loadModules } from 'esri-loader'
 import '../CSS/outpostPopup.css'
 
 class OutpostPopup extends Component {
+
 componentDidMount () {
   this.props.getOutposts()
 }
-  componentDidUpdate(prevProps) {
-    let { outpostsData } = this.props
 
-    if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
+componentDidUpdate(prevProps) {
+  let { outpostsData } = this.props
+
+  if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
       
   loadModules([
-   'esri/Graphic', 
-    "esri/layers/GraphicsLayer",
-  ]).then(([Graphic, GraphicsLayer]) => {
+   'esri/Graphic'
+  ]).then(([Graphic]) => {
     outpostsData.forEach( outpost => {
-          
+     
       const point = {
         type: "point",
         longitude: outpost.longitude,
@@ -28,7 +29,6 @@ componentDidMount () {
       const markerSymbol = {
         type: "simple-marker",
         style: 'x',
-
         outline: {
           color: '#4A148C',
           width: 3
@@ -42,24 +42,23 @@ componentDidMount () {
         text: `
           <span><h4>Location:  ${outpost.location}</h4></span>
           <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
-                    `
+              `
         }]
       }
-
+     
       const outpostGraphic = new Graphic ({
         geometry: point,
         symbol: markerSymbol,
         popupTemplate: PopupTemplate
       })
 
-      this.props.mapView.graphics.add(outpostGraphic)
+
+        this.props.mapView.graphics.add(outpostGraphic)
          
         })
-
       })
     }
   }
-
 
     render() {
       return (
@@ -74,7 +73,7 @@ let mapStateToProps = state => {
   return {
     outpostGraphic: state.outposts.outpostGraphic,
     outpostsData: state.outposts.outpostsData,
-    mapView: state.map.mapView,
+    mapView: state.map.mapView, 
     map: state.map.map
   }
 }
