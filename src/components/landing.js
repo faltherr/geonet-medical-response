@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../CSS/Landing.css'
-import PieCharts from './PieCharts';
 
 class Landing extends Component {
   constructor(props) {
@@ -35,7 +34,6 @@ class Landing extends Component {
               <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>
             </div>
           </div>
-        <PieCharts />
         </div>
       </div>
     );
