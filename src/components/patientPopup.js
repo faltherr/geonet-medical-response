@@ -32,43 +32,44 @@ class PatientPopup extends Component {
       let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
       let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
-      let color
-        if (monthsUntilDueDate <= 3 ) {
-          color = '#CAF270'
-        } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
-          color =  '#73D487'
-        } else {
-          color = '#288993'
-        }
+       
+        let color
 
-      const markerSymbol = {
-        type: "simple-marker",
-        color: color,
-        size: 15,
-        outline: {
-          color: 'white',
-          width: 2
-        }
-      }
+          if (monthsUntilDueDate <= 3 ) {
+            color = require('./symbols/woman_lime.png')
+          } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
+            color =  require('./symbols/woman_green.png')
+          } else {
+            color = require('./symbols/woman_aqua.png')
+          }
 
-      const PopupTemplate = {
-        title: "Patient Information",
-        content: [{
-          type: "text",
-          text: `
-            <span><h4>Location: ${patient.location}</h4></span>
-            <span><h4>Patient Name: ${patient.name}</h4></span>
-            <span><h4>Age:  ${patient.age}</h4></span>
-            <span><h4>Sex:  ${patient.sex}</h4></span>
-            <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
-            <span><h4>Phone:  ${patient.phone}</h4></span>
-            <span><h4>Family Plan:  ${patient.famplan}</h4></span>
-            <span><h4>Alert:  ${patient.alert}</h4></span>
-            </h4></span>
-            <button>EDIT</button>
-              `
-        }]
-      }
+          let markerSymbol = {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: color,
+            contentType: 'image/png',
+            width: "28px",
+            height: "28px"
+          };
+
+          const PopupTemplate = {
+            title: "Patient Information",
+            content: [{
+              type: "text",
+              text: `
+                <span><h4>Location: ${patient.location}</h4></span>
+                <span><h4>Patient Name: ${patient.name}</h4></span>
+                <span><h4>Age:  ${patient.age}</h4></span>
+                <span><h4>Sex:  ${patient.sex}</h4></span>
+                <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+                <span><h4>Phone:  ${patient.phone}</h4></span>
+                <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+                <span><h4>Alert:  ${patient.alert}</h4></span>
+               </h4></span>
+                `
+            }]
+          }
+
+    
       const patientGraphic = new Graphic({
         geometry: point,
         symbol: markerSymbol,

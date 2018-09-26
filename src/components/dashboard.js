@@ -20,8 +20,10 @@ class Dashboard extends Component {
     'esri/views/MapView',
     'esri/views/SceneView',
     'esri/widgets/Legend',
-    'esri/widgets/BasemapToggle'
-    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle]) => {
+    'esri/widgets/BasemapToggle',
+    'esri/layers/GraphicsLayer',
+    "esri/geometry/SpatialReference",
+    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference]) => {
      
       const map = new Map({
         basemap: 'streets-night-vector'
@@ -31,7 +33,9 @@ class Dashboard extends Component {
         container: 'mapDiv',
         map,
         center: [ -11.271115, 8.568134],
-        padding: { top: 10 }
+        scale: 50000000, 
+        padding: { top: 10 },
+        spatialReference: new SpatialReference({wkid: 3857})
       })
     
       mapView.breakpoints = {

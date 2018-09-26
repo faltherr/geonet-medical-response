@@ -15,25 +15,47 @@ componentDidUpdate(prevProps) {
 
   if((!prevProps.mapView.graphics && this.props.mapView.graphics && outpostsData) || (!prevProps.outpostsData.length && this.props.outpostsData.length && this.props.mapView.graphics)) {
       
-  loadModules([
-   'esri/Graphic'
-  ]).then(([Graphic]) => {
-    outpostsData.forEach( outpost => {
-     
-      const point = {
-        type: "point",
-        longitude: outpost.longitude,
-        latitude: outpost.latitude
-     }  
+      loadModules([
+        'esri/Graphic', 
+        "esri/layers/GraphicsLayer",
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/geometry/geometryEngine",
+        "esri/geometry/Point",
+        "esri/geometry/support/webMercatorUtils",
+        "esri/geometry/SpatialReference",
+        "esri/tasks/support/BufferParameters"
+        // You need to maintain the order of the modules that you import so that the variable name you set in the .then references the correct module
+      ]).then(([Graphic, GraphicsLayer, PictureMarkerSymbol, geometryEngine, Point, webMercatorUtils, SpatialReference, BufferParameters]) => {
+        outpostsData.forEach( outpost => {
 
-      const markerSymbol = {
-        type: "simple-marker",
-        style: 'x',
-        outline: {
-          color: '#4A148C',
-          width: 3
-        }
-      }
+          let pointGeometry = new Point({
+            type: "point",
+            longitude: outpost.longitude,
+            latitude: outpost.latitude,
+          })
+          
+          // Here we calculate the buffers for each health center
+          var ptBuff = geometryEngine.geodesicBuffer(pointGeometry, [25], "kilometers")
+          // console.log(ptBuff)
+          
+          // Add the symbol styling here
+
+          let markerSymbol = {
+              type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+              url: require('./symbols/hut_white_outline_filled.png'),
+              contentType: 'image/png',
+              width: "22px",
+              height: "22px"
+            };
+
+            let fillSymbol = {
+              type: "simple-fill", // autocasts as new SimpleFillSymbol()
+              color: [227, 139, 79, 0.4],
+              outline: { // autocasts as new SimpleLineSymbol()
+                color: [255, 255, 255],
+                width: 1
+              }
+            }
        
       const PopupTemplate = {
         title: "Community Outposts",
@@ -47,13 +69,19 @@ componentDidUpdate(prevProps) {
       }
      
       const outpostGraphic = new Graphic ({
-        geometry: point,
+        geometry: pointGeometry,
         symbol: markerSymbol,
         popupTemplate: PopupTemplate
       })
 
+      let ptBufferGraphic = new Graphic({
+        geometry: ptBuff,
+        symbol: fillSymbol
+      })
 
-        this.props.mapView.graphics.add(outpostGraphic)
+      this.props.mapView.graphics.add(outpostGraphic)
+      this.props.mapView.graphics.add(ptBufferGraphic)
+      
          
         })
       })
