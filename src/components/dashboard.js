@@ -43,7 +43,7 @@ class Dashboard extends Component {
         map, 
         mapView
       }
-     const legend = new Legend({
+     var legend = new Legend({
        view: mapView,
        style: "classic",
       //  layerInfos: [{

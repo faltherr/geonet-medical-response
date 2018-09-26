@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../CSS/Landing.css'
+import PieCharts from './PieCharts';
 
 class Landing extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class Landing extends Component {
               <p>"This is where the mission statement will go."</p>
             </div>
           </div>
+        <PieCharts />
         </div>
       </div>
     );
