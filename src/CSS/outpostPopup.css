@@ -1,15 +1,16 @@
 .esri-popup__main-container {
   background-color: #252429;
-  color: #9E9E9F;
+  color: rgb(204, 204, 208);
   font-family: Arial, Helvetica, sans-serif;
   opacity: 2;
- 
+  border: none;
 }
 .esri-popup__main-container span {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   font-size: 15px;
+  
 }
 /* .esri-popup__main-container h4 {
   font-size: 20px;
