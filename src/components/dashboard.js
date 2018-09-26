@@ -54,7 +54,7 @@ class Dashboard extends Component {
         view: mapView,
         container: panel
      })
-     console.log(legend)
+
      //basemap toggle 
      const toggle = new BasemapToggle({
        view: mapView,
@@ -164,15 +164,15 @@ class Dashboard extends Component {
                 <h2>COLOR AND SIZING LEGEND</h2>
                 <div id='panel-details'>
                   <div className='panel-line'>
-                    <img src={circle} class='icons'alt=''></img>
+                    <img src={circle} className='icons'></img>
                     <p> Patient Data</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={x} class='icons' alt=''></img>
+                    <img src={x} className='icons'></img>
                     <p> Outpost Location</p>
                   </div>
                   <div className='panel-line'>
-                    <img src={diamond} class='icons' alt=''></img>
+                    <img src={diamond} className='icons'></img>
                     <p> Healthworker Data</p>
                   </div>
                 </div>
