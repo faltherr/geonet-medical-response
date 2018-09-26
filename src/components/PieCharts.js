@@ -13,22 +13,6 @@ class PieCharts extends Component {
     }
   }
 
-  // handleMouseEnter(o) {
-  //   const { dataKey } = o;
-  //   const { opacity } = this.state;
-  //   this.setState({
-  //     opacity: { ...opacity, [dataKey]: 0.5 }
-  //   })
-  // }
-  // handleMouseLeave(o) {
-  //   const { dataKey } = o;
-  //   const { opacity } = this.state;
-
-  //   this.setState({
-  //     opacity: { ...opacity, [dataKey]: 1 },
-  //   });
-  // },
-
   componentDidMount() {
     this.props.getPatients()
   }
