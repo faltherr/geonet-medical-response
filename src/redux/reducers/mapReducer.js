@@ -1,5 +1,5 @@
 const GET_MAP = 'GET_MAP'
-const GET_MAPVIEW = 'GET_MAPVIEW'
+// const GET_MAPVIEW = 'GET_MAPVIEW'
 
 
 let initialState = {

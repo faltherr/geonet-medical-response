@@ -48,8 +48,8 @@ app.get('/api/currentUser', (req, res) => {
 // PatientsCtrl
 app.get('/api/patients', PatientCtrl.getPatients)
 app.get('/api/patients/:id', PatientCtrl.getPatient)
-app.post('/api/patients', PatientCtrl.addPatient)
-app.put('/api/patients/:id', PatientCtrl.updatePatient)
+// app.post('/api/patients', PatientCtrl.addPatient)
+// app.put('/api/patients/:id', PatientCtrl.updatePatient)
 
 // HealthworkersCtrl 
 app.get('/api/healthworkers', HealthworkersCtrl.getHealthworkers)
@@ -60,8 +60,8 @@ app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
 app.get('/api/outposts', OutpostCtrl.getOutposts)
 
 // SurveysCtrl 
-// app.get('/api/surveys', SurveyCtrl.getSurveys)
-// app.get('/api/surveys/:id', SurveyCtrl.getSurvey)
+app.post('/api/surveys', SurveyCtrl.addSurvey)
+app.put('/api/surveys/:id', SurveyCtrl.updateSurvey)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)

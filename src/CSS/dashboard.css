@@ -5,7 +5,14 @@ html {
   height: 100%;
   width: 100%;
 }
-
+#optionsDiv {
+  position: absolute;
+  bottom: 17px;
+  width: 100%;
+  padding: 20px 0;
+  z-index: 1;
+  text-align: center;
+}
 /* .wrapper {
  display: grid;
  grid-template-rows: 5% 15% auto;
@@ -37,3 +44,89 @@ width:100vw
   color:white;
   width: 100%;
 }
+#panel {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  position: absolute;
+  top: 55px;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  background-color: #252429;
+  color: #48484A
+}
+
+#panel.panel-expanded {
+  width: 250px;
+  height: 80vh;
+}
+
+#panel-details {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #9E9E9F
+
+}
+.icons {
+  max-height: 40px;
+  max-width: 40px;
+  padding-top: 10px;
+  margin-right: 10px
+}
+
+.panel-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%
+
+}
+.esri-legend__message {
+  display: none
+}
+
+.esri-widget.esri-component.esri-widget-button.esri-interactive{
+  color: #48484A;
+  background-color: #fff;
+  padding: 5px
+}
+#optionsDiv button {
+  background-color: #303030;
+  color:rgba(255, 255, 255, 0.899);
+  border: none;
+  font-size: 15px;
+  margin: 5px;
+  font-weight: 100;
+  padding: 8px;
+}
+
+.esri-component,
+.esri-widget,
+.esri-widget-button, 
+.esri-interactive {
+  background-color: #202020;
+  color:white;
+  border: .1px solid darkgray;
+  font-weight: 900;
+}
+.esri-icon-pan,
+.esri-icon-rotate {
+  color: white;
+}
+.esri-icon-pan:hover,
+.esri-icon-rotate:hover {
+  color: black;
+}
+.esri-widget.esri-component.esri-widget-button.esri-interactive {
+  padding: 5px;
+}
+.esri-ui-manual-container>.esri-component {
+  display: none;
+}
+
