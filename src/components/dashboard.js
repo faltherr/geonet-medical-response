@@ -56,7 +56,6 @@ class Dashboard extends Component {
         view: mapView,
         container: panel
      })
-
      //basemap toggle 
      const toggle = new BasemapToggle({
        view: mapView,
