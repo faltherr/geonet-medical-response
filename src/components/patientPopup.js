@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
+import alert from './symbols/alert.gif'
+
 
 class PatientPopup extends Component {
  
@@ -32,23 +34,34 @@ class PatientPopup extends Component {
       let dueDateFormatted = moment(patient.duedate)
       let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
-       
         let color
+        let width
+        let height
 
-          if (monthsUntilDueDate <= 3 ) {
+          if (patient.alert === true){
+            color = alert
+            width = "70px"
+            height = "70px"
+          } else if (monthsUntilDueDate <= 3 ) {
             color = require('./symbols/woman_lime.png')
+            width = "28px"
+            height = "28px"
           } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
             color =  require('./symbols/woman_green.png')
+            width = "28px"
+            height = "28px"
           } else {
             color = require('./symbols/woman_aqua.png')
+            width = "28px"
+            height = "28px"
           }
 
           let markerSymbol = {
             type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
             url: color,
-            contentType: 'image/png',
-            width: "28px",
-            height: "28px"
+            // contentType: 'image/png',
+            width: width,
+            height: height,
           };
 
           const PopupTemplate = {
@@ -60,7 +73,6 @@ class PatientPopup extends Component {
                 <span><h4>Location: ${patient.location}</h4></span>
                 <span><h4>Patient Name: ${patient.name}</h4></span>
                 <span><h4>Age:  ${patient.age}</h4></span>
-                <span><h4>Sex:  ${patient.sex}</h4></span>
                 <span><h4>Due Date:  ${moment(patient.duedate).format('MMMM, YYYY')}</h4></span>
                 <span><h4>Phone:  ${patient.phone}</h4></span>
                 <span><h4>Family Plan:  ${patient.famplan}</h4></span>
