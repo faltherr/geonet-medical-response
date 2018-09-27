@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import Slideout from './Slideout';
+
 import '../CSS/Landing.css'
 
 class Landing extends Component {
@@ -21,7 +21,6 @@ class Landing extends Component {
   render() {
     return (
       <div>
-        <Slideout />
         <div className="landing-main-container">
           <div className="landing-box">
             <div className="landing-logo">
