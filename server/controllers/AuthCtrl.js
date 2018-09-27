@@ -23,7 +23,6 @@ module.exports = {
 
     let db = req.app.get('db')
     let users = await db.find_healthworker_by_auth_id(userInfo.sub)
-    // let healthWorkerId = [1,2,5,6,7,8]
 
     if(users.length){
       req.session.user = users[0]

@@ -28,8 +28,8 @@ class PatientPopup extends Component {
 
         // date formatting 
       let todayUnformatted = new Date()
-      let today = moment(todayUnformatted).format('YYYY/MM/DD')
-      let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
+      let today = moment(todayUnformatted)
+      let dueDateFormatted = moment(patient.duedate)
       let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
        
@@ -56,14 +56,14 @@ class PatientPopup extends Component {
             content: [{
               type: "text",
               text: `
+                <span><h4>Alert:  ${patient.alert}</h4></span>
                 <span><h4>Location: ${patient.location}</h4></span>
                 <span><h4>Patient Name: ${patient.name}</h4></span>
                 <span><h4>Age:  ${patient.age}</h4></span>
                 <span><h4>Sex:  ${patient.sex}</h4></span>
-                <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+                <span><h4>Due Date:  ${moment(patient.duedate).format('MMMM, YYYY')}</h4></span>
                 <span><h4>Phone:  ${patient.phone}</h4></span>
                 <span><h4>Family Plan:  ${patient.famplan}</h4></span>
-                <span><h4>Alert:  ${patient.alert}</h4></span>
                </h4></span>
                 `
             }]
