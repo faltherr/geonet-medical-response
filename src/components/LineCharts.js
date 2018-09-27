@@ -19,7 +19,7 @@ class LineCharts extends Component {
         var date = maternal[0].series[i].end
         var stringDate = +date.substring(0, 4)
         var mortality = maternal[0].series[i].value
-        dates.push({ date: stringDate, ["Deaths/100,000 Live Births"]: mortality })
+        dates.push({ date: stringDate, ["Deaths (Per 100,000 Live Births)"]: mortality })
       }
     }
     return dates
@@ -32,7 +32,7 @@ class LineCharts extends Component {
         var date = children[0].series[i].end
         var stringDate = +date.substring(0, 4)
         var mortality = children[0].series[i].value
-        dates.push({ date: stringDate, ["Deaths/1,000 Live Births"]: mortality })
+        dates.push({ date: stringDate, ["Deaths (Per 1,000 Live Births)"]: mortality })
       }
     }
     return dates
@@ -62,9 +62,9 @@ class LineCharts extends Component {
           <XAxis dataKey="date" />
           <YAxis yAxisID />
           <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
+          <Tooltip title="Maternal Mortality"/>
           <Legend />
-          <Line type="monotone" dataKey="Deaths/100,000 Live Births" stroke="#8884d8" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="Deaths (Per 100,000 Live Births)" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
         <LineChart width={600} height={300} data={this.state.data2}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -73,7 +73,7 @@ class LineCharts extends Component {
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="Deaths/1,000 Live Births" stroke="green" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="Deaths (Per 1,000 Live Births)" stroke="green" activeDot={{ r: 8 }} />
         </LineChart>
         </div>
         <PieCharts />

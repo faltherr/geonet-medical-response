@@ -45,6 +45,14 @@ app.get('/api/currentUser', (req, res) => {
   res.send(req.session.user)
 })
 
+//Users/Admins
+
+
+app.get('/api/logout', (req, res) => {
+  req.session.destroy()
+  res.sendStatus(200)
+})
+
 // PatientsCtrl
 app.get('/api/patients', PatientCtrl.getPatients)
 app.get('/api/patients/:id', PatientCtrl.getPatient)
