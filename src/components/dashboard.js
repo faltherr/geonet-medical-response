@@ -151,7 +151,9 @@ class Dashboard extends Component {
     // let {map, mapView, legend} = this.props
     return (
       <div className='wrapper'>
-        <Slideout />
+        <div style={{background: '#01101B'}}>
+          <Slideout />
+        </div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />

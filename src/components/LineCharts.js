@@ -66,6 +66,7 @@ class LineCharts extends Component {
           <Legend />
           <Line type="monotone" dataKey="Deaths (Per 100,000 Live Births)" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
+        <br/>
         <LineChart width={600} height={300} data={this.state.data2}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <XAxis dataKey="date" />
@@ -76,7 +77,6 @@ class LineCharts extends Component {
           <Line type="monotone" dataKey="Deaths (Per 1,000 Live Births)" stroke="green" activeDot={{ r: 8 }} />
         </LineChart>
         </div>
-        <PieCharts />
       </div>
     );
   }
