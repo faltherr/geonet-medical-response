@@ -6,6 +6,8 @@ import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
+import PieCharts from '../components/PieCharts'
+import LineCharts from '../components/LineCharts'
 
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'

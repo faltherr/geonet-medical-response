@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
 import Slideout from './Slideout';
 import '../CSS/Landing.css'
 
@@ -22,12 +23,12 @@ class Landing extends Component {
       <div>
         <Slideout />
         <div className="landing-main-container">
-          <div className="landing-container">
+          <div className="landing-box">
             <div className="landing-logo">
-              <img src={require("../logo_transparent.png")} style={{ height: '200px', width: '200px' }} alt="" />
+              <img src={require("../logo_transparent.png")} style={{ height: '350px', width: '350px', marginTop: '30px' }} alt="" />
             </div>
             <div className="landing-name">
-              <h1>GeoNet Medical Response</h1>
+              {/* <h1>GeoNet Medical Response</h1> */}
             </div>
             <div>
               <button className="landing-button" onClick={this.login}>Admin Login</button>
@@ -36,6 +37,9 @@ class Landing extends Component {
               <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>
             </div>
           </div>
+          <Link to= '/about'>
+            <button className='about-button'>About Us</button>
+          </Link>
         </div>
       </div>
     );
