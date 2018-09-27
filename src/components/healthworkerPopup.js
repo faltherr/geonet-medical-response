@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 import { loadModules } from 'esri-loader'
 import { connect } from 'react-redux' 
 import { getHealthworkerGraphic, getHealthworkers } from '../redux/reducers/healthworkersReducer'
-
+import EditHealthworkerModal from './EditHealthworkerModal'
 
 class HealthworkerPopup extends Component {
-  
+  state = {
+    showModal: false,
+    healthworkerId: ''
+  }
+
   componentDidMount() {
     this.props.getHealthworkers()
   }
@@ -48,8 +52,20 @@ class HealthworkerPopup extends Component {
           <span><h4>Outpost:  ${healthworker.outpost_id}</h4></span>
           <span><h4>Phone:  ${healthworker.phone}</h4></span>
               `
-        }]
+        }],
+        actions: [{
+          title: "Edit HealthWorker",
+          id: `${healthworker.id}`, 
+          className: "esri-icon-user" }]
       }
+
+      // Edit Healthworker button 
+     let { showEditModal } = this
+     this.props.mapView.popup.on('trigger-action', function(event){
+       if (event.action.title === "Edit Healthworker") {
+         showEditModal(event.action.id)
+       }
+     })
 
       const healthworkerGraphic = new Graphic({
         geometry: point,
@@ -61,10 +77,27 @@ class HealthworkerPopup extends Component {
       })
     }  
   }
+  showEditModal = (healthworker_id) => {
+    this.setState ({ 
+      showModal: true,
+      healthworkerId: healthworker_id
+    })
+  }
+  hideEditModal = () => { this.setState({ showModal: false})}
 
   render () {
     return (
       <div>
+        {
+          this.state.showModal 
+          &&
+          <EditHealthworkerModal
+            showModal ={this.state.showModal}
+            hideModal={this.state.hideEditModal}
+            healthworkersData={this.props.healthworkersData}
+            healthworkerId={this.state.healthworkerId}
+          />
+        }
       </div>
     )
   }
