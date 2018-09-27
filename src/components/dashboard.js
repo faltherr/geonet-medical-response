@@ -8,7 +8,6 @@ import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
-
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'
 import diamond from '../imgs/diamond.png'
@@ -17,8 +16,9 @@ import Slideout from './Slideout';
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
-  componentDidMount() {
 
+  componentDidMount() {
+    
     loadModules(['esri/Map',
       'esri/views/MapView',
       'esri/views/SceneView',
