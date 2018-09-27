@@ -6,7 +6,6 @@ import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
-
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'
 import diamond from '../imgs/diamond.png'
@@ -14,7 +13,9 @@ import diamond from '../imgs/diamond.png'
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
+
   componentDidMount() {
+    
 
     loadModules(['esri/Map', 
     'esri/views/MapView',
@@ -144,7 +145,7 @@ class Dashboard extends Component {
       easing: "out-quint"
     })
   }
- 
+  
     render () {
         // let {map, mapView, legend} = this.props
       return (
