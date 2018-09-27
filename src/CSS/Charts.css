@@ -1,0 +1,8 @@
+.charts-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.pie-chart {
+  padding: 0px
+}

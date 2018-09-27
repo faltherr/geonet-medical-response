@@ -13,22 +13,6 @@ class PieCharts extends Component {
     }
   }
 
-  // handleMouseEnter(o) {
-  //   const { dataKey } = o;
-  //   const { opacity } = this.state;
-  //   this.setState({
-  //     opacity: { ...opacity, [dataKey]: 0.5 }
-  //   })
-  // }
-  // handleMouseLeave(o) {
-  //   const { dataKey } = o;
-  //   const { opacity } = this.state;
-
-  //   this.setState({
-  //     opacity: { ...opacity, [dataKey]: 1 },
-  //   });
-  // },
-
   componentDidMount() {
     this.props.getPatients()
   }
@@ -70,20 +54,20 @@ class PieCharts extends Component {
 
   render() {
     return (
-      this.props.patientsData.length ?
-        <div>
-          <PieChart width={800} height={400}>
+      // this.props.patientsData.length ?
+        <div className='pie-chart'>
+          <PieChart width={600} height={400}>
             <Pie data={this.state.data1} cx={200} cy={200} outerRadius={60} fill="#8884d8"
             />
             <Pie data={this.state.data2} cx={200} cy={200} outerRadius={90} innerRadius={70} fill="#82ca9d" label />
             <Tooltip />
-            <Legend verticalAlign="bottom" align="right" iconType="square" />
+            <Legend width={250} iconType="square" wrapperStyle={{right:10, top: 150}} />
           </PieChart>
         </div>
-        :
-        <div>
-          No Data Available
-        </div>
+    //     :
+    //     <div>
+    //       No Data Available
+    //     </div>
     );
   }
 }
