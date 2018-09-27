@@ -6,6 +6,8 @@ import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
+import PieCharts from '../components/PieCharts'
+import LineCharts from '../components/LineCharts'
 
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'
@@ -152,30 +154,34 @@ class Dashboard extends Component {
           <PatientPopup/>
           <OutpostPopup/>
           <HealthworkerPopup/>
-        <div className="map" id="mapDiv"></div>
+          <div className="map" id="mapDiv"></div>
+          <div className="charts">
+            <PieCharts/>
+            <LineCharts/>
+          </div>
           <div id="optionsDiv">
-            <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-            <button onClick={this.communityOneClick}>Community 1</button>
-            <button onClick={this.communityTwoClick}>Community 2</button>
-            <button onClick={this.communityThreeClick}>Community 3</button>
-        <div id="panel"> 
-          <h2>COLOR AND SIZING LEGEND</h2>
-              <div id='panel-details'>
-                <div className='panel-line'>
-                  <img src={circle} className='icons' alt="icon"></img>
-                  <p> Patient Data</p>
-                </div>
-                <div className='panel-line'>
-                  <img src={x} className='icons' alt="icon"></img>
-                  <p> Outpost Location</p>
-                </div>
-                <div className='panel-line'>
-                  <img src={diamond} className='icons' alt="icon"></img>
-                  <p> Healthworker Data</p>
+              <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+              <button onClick={this.communityOneClick}>Community 1</button>
+              <button onClick={this.communityTwoClick}>Community 2</button>
+              <button onClick={this.communityThreeClick}>Community 3</button>
+            <div id="panel"> 
+              <h2>COLOR AND SIZING LEGEND</h2>
+                  <div id='panel-details'>
+                    <div className='panel-line'>
+                      <img src={circle} className='icons' alt="icon"></img>
+                      <p> Patient Data</p>
+                    </div>
+                    <div className='panel-line'>
+                      <img src={x} className='icons' alt="icon"></img>
+                      <p> Outpost Location</p>
+                    </div>
+                    <div className='panel-line'>
+                      <img src={diamond} className='icons' alt="icon"></img>
+                      <p> Healthworker Data</p>
+                    </div>
                 </div>
               </div>
             </div>
-          </div>
       </div>
       )
     } 
