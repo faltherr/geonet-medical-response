@@ -89,20 +89,17 @@ class PatientPopup extends Component {
           }],
           actions: [{
             title: "Edit Patient",
-            id: `${patient.id}`, 
             patient: patient,
             className: "esri-icon-user" }]
           }
 
-      // Edit Patient 
+        // Edit Patient 
         let { showEditModal, setState } = this
         let { patientGraphics } = this.state
         let { graphics } = this.props.mapView
       
         this.props.mapView.popup && this.props.mapView.popup.on('trigger-action', event => {
           if (event.action.title === "Edit Patient") {
-            // this.props.setCurrentPatient(patient)
-
             let patient = event.action.patient
             let { uid } = event.target.content.graphic
 
@@ -112,7 +109,6 @@ class PatientPopup extends Component {
                 currentGraphic = graphic
               }
             })
-            
             showEditModal(patient, currentGraphic)
           }
         })
@@ -146,7 +142,6 @@ showEditModal = (patient, graphic) => {
 hideEditModal = () => { this.setState({ showModal: false })}
 
   render () {
-    // console.log(this.props.mapView.graphics)
     return (
       <div>
         { this.state.showModal

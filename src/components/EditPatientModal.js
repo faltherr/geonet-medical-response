@@ -44,12 +44,10 @@ class EditPatientModal extends Component {
       }]
 
       this.props.setCurrentPatient(patient)
-
       graphic.popupTemplate.content = content
   }
 
   render () {
-    // console.log('patient',this.state.patient)
     return (
       <div className="outer-modal" onClick={this.props.hideModal}>
         <div className="inner-modal" onClick={ (e) => {e.stopPropagation()}}>
@@ -70,6 +68,9 @@ class EditPatientModal extends Component {
 }
 
 let mapStateToProps = state => {
-  return { currentPatient: state.patients.currentPatient }
+  return { 
+    currentPatient: state.patients.currentPatient 
+  }
 }
+
 export default connect(mapStateToProps, { updatePatient, setCurrentPatient })(EditPatientModal)
