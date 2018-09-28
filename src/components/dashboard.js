@@ -58,21 +58,21 @@ class Dashboard extends Component {
       const legend = new Legend({
         view: mapView,
         container: panel
-     })
-     //basemap toggle 
-     const toggle = new BasemapToggle({
-       view: mapView,
-       nextBasemap: "hybrid"
-     })
+      })
+      //basemap toggle 
+      const toggle = new BasemapToggle({
+        view: mapView,
+        nextBasemap: "hybrid"
+      })
 
-    //button that opens legend 
-    const buttonWidget = document.createElement("div")
-    buttonWidget.id = "buttonWidget"
-    buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
-    buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
+      //button that opens legend 
+      const buttonWidget = document.createElement("div")
+      buttonWidget.id = "buttonWidget"
+      buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
+      buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
 
-    buttonWidget.addEventListener("click", function () {
-      const expanded = panel.classList.contains("panel-expanded")
+      buttonWidget.addEventListener("click", function () {
+        const expanded = panel.classList.contains("panel-expanded")
         if (expanded) {
           panel.classList.remove("panel-expanded")
         } else {

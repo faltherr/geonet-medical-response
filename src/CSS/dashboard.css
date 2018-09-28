@@ -13,6 +13,12 @@ html {
   z-index: 1;
   text-align: center;
 }
+
+.dashboard-button {
+  cursor: pointer;
+  border-radius: 4px
+}
+
 /* .wrapper {
  display: grid;
  grid-template-rows: 5% 15% auto;
@@ -28,10 +34,10 @@ height: 91.95vh;
 width:100vw
 }
 
-.charts {
-  /* width: 30vw; */
+/* .charts {
+  width: 30vw;
 
-}
+} */
 /* .header {
   grid-area: header;
   background: #B93D3D;

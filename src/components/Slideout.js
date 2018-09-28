@@ -3,12 +3,15 @@ import Slider from 'react-slide-out';
 import 'react-slide-out/lib/index.css';
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
+import hamburgers from 'hamburgers';
 
 const styles = {
   fontFamily: 'sans-serif',
   padding: '15px',
-  color: '#D8DBE7'
+  display: 'flex',
+  justifyContent: 'flex-end'
 };
+
 
 
 class Slideout extends Component{
@@ -28,10 +31,14 @@ class Slideout extends Component{
       isOpen: false
     });
   }
-  render () {
+  render() {
     return (
       <div style={styles}>
-        <button onClick={this.openSlider}>Open Slider</button>
+        <button class="hamburger hamburger--slider-r" type="button" onClick={this.openSlider}>
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
         <Slider
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
@@ -41,7 +48,7 @@ class Slideout extends Component{
             <LineCharts />
           </Slider>
       </div>
-      );
+    );
   };
 }
 
