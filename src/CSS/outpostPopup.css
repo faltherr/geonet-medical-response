@@ -4,6 +4,7 @@
   font-family: Arial, Helvetica, sans-serif;
   opacity: 2;
   border: none;
+  z-index: 4;
 }
 .esri-popup__main-container span {
   display: flex;
