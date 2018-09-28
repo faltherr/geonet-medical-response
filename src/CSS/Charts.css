@@ -6,3 +6,24 @@
 .pie-chart {
   padding: 0px
 }
+
+.SlideModal__header.js-slideModalHeader {
+  background-color: #252429 !important ;
+}
+.SlideModal__title {
+  color: #D8DBE7 !important
+}
+
+.recharts-surface {
+  background-color: #01101B !important;
+}
+
+.h-overflowAuto {
+  background-color: #01101B !important;
+}
+.SlideModal__footer {
+  display: flex;
+  justify-content: center;
+  background-color: #252429 !important ;
+  color: #48484A !important
+}

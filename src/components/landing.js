@@ -24,10 +24,10 @@ class Landing extends Component {
         <div className="landing-main-container">
           <div className="landing-box">
             <div className="landing-logo">
-              <img src={require("../logo_transparent.png")} style={{ height: '350px', width: '350px', marginTop: '30px' }} alt="" />
+              <img src={require("../logo_transparent.png")} style={{ height: '200px', width: '200px' }} alt="" />
             </div>
             <div className="landing-name">
-              {/* <h1>GeoNet Medical Response</h1> */}
+              <h1>GeoNet Medical Response</h1>
             </div>
             <div>
               <button className="landing-button" onClick={this.login}>Admin Login</button>

@@ -6,8 +6,10 @@ import LineCharts from '../components/LineCharts'
 
 const styles = {
   fontFamily: 'sans-serif',
-  padding: '15px'
+  padding: '15px',
+  color: '#D8DBE7'
 };
+
 
 class Slideout extends Component{
   constructor() {
@@ -31,19 +33,12 @@ class Slideout extends Component{
       <div style={styles}>
         <button onClick={this.openSlider}>Open Slider</button>
         <Slider
-          title='DATA!'
-          footer={
-            <div style={{padding: '0px'}}>
-              <button onClick={this.closeSlider}>Close Slider</button>
-            </div>
-          }
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
-      
             <h3>HIV Status and Family Planning</h3>
             <PieCharts/>
             <h3>Maternal and Neonatal Mortality Rates</h3>
-            <LineCharts/>
+            <LineCharts />
           </Slider>
       </div>
       );
