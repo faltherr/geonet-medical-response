@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getOutpostGraphic, getOutposts } from '../redux/reducers/outpostReducer'
+import { getOutpostGraphic, getOutposts , deleteOutpost} from '../redux/reducers/outpostReducer'
 import { loadModules } from 'esri-loader'
 import '../CSS/outpostPopup.css'
 
@@ -39,7 +39,6 @@ componentDidUpdate(prevProps) {
           // console.log(ptBuff)
           
           // Add the symbol styling here
-
           let markerSymbol = {
               type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
               url: require('./symbols/hut_white_outline_filled.png'),
@@ -65,9 +64,13 @@ componentDidUpdate(prevProps) {
           <span><h4>Location:  ${outpost.location}</h4></span>
           <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
               `
+        }],
+        actions: [{
+          title: "Delete Outpost",
+          outpost: outpost.id,
+          className: "esri-icon-trash" 
         }]
       }
-     
       const outpostGraphic = new Graphic ({
         geometry: pointGeometry,
         symbol: markerSymbol,
@@ -79,14 +82,23 @@ componentDidUpdate(prevProps) {
         symbol: fillSymbol
       })
 
-      this.props.mapView.graphics.add(outpostGraphic)
-      this.props.mapView.graphics.add(ptBufferGraphic)
-      
-         
-        })
+      this.props.mapView.popup.on('trigger-action', event => {
+        if (event.action.title === "Delete Outpost") {
+         if(outpost.id === +event.action.outpost) {
+           console.log(outpostGraphic, ptBufferGraphic)
+           this.props.mapView.graphics.remove(outpostGraphic)
+           this.props.mapView.graphics.remove(outpostGraphic.popupTemplate.content)
+           this.props.mapView.graphics.remove(ptBufferGraphic)
+         } 
+          this.props.deleteOutpost(event.action.outpost)
+        }
       })
-    }
+        this.props.mapView.graphics.add(outpostGraphic)
+        this.props.mapView.graphics.add(ptBufferGraphic)
+      })
+    })
   }
+}
 
     render() {
       return (
@@ -106,4 +118,4 @@ let mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {getOutpostGraphic, getOutposts })(OutpostPopup)
+export default connect(mapStateToProps, {getOutpostGraphic, getOutposts, deleteOutpost })(OutpostPopup)

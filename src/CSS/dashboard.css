@@ -7,7 +7,7 @@ html {
 }
 #optionsDiv {
   position: absolute;
-  bottom: 17px;
+  bottom: 19.5%;
   width: 100%;
   padding: 20px 0;
   z-index: 1;
@@ -30,7 +30,7 @@ html {
 } */
 
 .map {
-height: 91.95vh;
+height: 75vh;
 width:100vw
 }
 
@@ -135,4 +135,7 @@ width:100vw
 .esri-widget.esri-component.esri-widget-button.esri-interactive {
   padding: 5px;
 }
-
+.esri-component esri-basemap-toggle esri-widget {
+  
+  margin: 40px;
+}
