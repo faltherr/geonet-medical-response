@@ -58,21 +58,21 @@ class Dashboard extends Component {
       const legend = new Legend({
         view: mapView,
         container: panel
-     })
-     //basemap toggle 
-     const toggle = new BasemapToggle({
-       view: mapView,
-       nextBasemap: "hybrid"
-     })
+      })
+      //basemap toggle 
+      const toggle = new BasemapToggle({
+        view: mapView,
+        nextBasemap: "hybrid"
+      })
 
-    //button that opens legend 
-    const buttonWidget = document.createElement("div")
-    buttonWidget.id = "buttonWidget"
-    buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
-    buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
+      //button that opens legend 
+      const buttonWidget = document.createElement("div")
+      buttonWidget.id = "buttonWidget"
+      buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
+      buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
 
-    buttonWidget.addEventListener("click", function () {
-      const expanded = panel.classList.contains("panel-expanded")
+      buttonWidget.addEventListener("click", function () {
+        const expanded = panel.classList.contains("panel-expanded")
         if (expanded) {
           panel.classList.remove("panel-expanded")
         } else {
@@ -151,7 +151,7 @@ class Dashboard extends Component {
     // let {map, mapView, legend} = this.props
     return (
       <div className='wrapper'>
-        <div style={{background: '#01101B'}}>
+        <div style={{ background: '#01101B' }}>
           <Slideout />
         </div>
         <PatientPopup />
@@ -159,10 +159,10 @@ class Dashboard extends Component {
         <HealthworkerPopup />
         <div className="map" id="mapDiv"></div>
         <div id="optionsDiv">
-          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-          <button onClick={this.communityOneClick}>Community 1</button>
-          <button onClick={this.communityTwoClick}>Community 2</button>
-          <button onClick={this.communityThreeClick}>Community 3</button>
+          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.sierraLeonClick}>Sierra Leone</button>
+          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.communityOneClick}>Community 1</button>
+          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.communityTwoClick}>Community 2</button>
+          <button className="dashboard-button" style={{backgroundColor: 'gray'}}onClick={this.communityThreeClick}>Community 3</button>
           <div id="panel">
             <h2>COLOR AND SIZING LEGEND</h2>
             <div id='panel-details'>

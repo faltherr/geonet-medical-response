@@ -3,13 +3,16 @@ import Slider from 'react-slide-out';
 import 'react-slide-out/lib/index.css';
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
+import hamburgers from 'hamburgers';
 
 const styles = {
   fontFamily: 'sans-serif',
-  padding: '15px'
+  padding: '15px',
+  display: 'flex',
+  justifyContent: 'flex-end'
 };
 
-class Slideout extends Component{
+class Slideout extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,27 +29,31 @@ class Slideout extends Component{
       isOpen: false
     });
   }
-  render () {
+  render() {
     return (
       <div style={styles}>
-        <button onClick={this.openSlider}>Open Slider</button>
+        <button class="hamburger hamburger--slider-r" type="button" onClick={this.openSlider}>
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
         <Slider
           title='DATA!'
           footer={
-            <div style={{padding: '0px'}}>
+            <div style={{ padding: '0px' }}>
               <button onClick={this.closeSlider}>Close Slider</button>
             </div>
           }
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
-      
-            <h3>HIV Status and Family Planning</h3>
-            <PieCharts/>
-            <h3>Maternal and Neonatal Mortality Rates</h3>
-            <LineCharts/>
-          </Slider>
+
+          <h3>HIV Status and Family Planning</h3>
+          <PieCharts />
+          <h3>Maternal and Neonatal Mortality Rates</h3>
+          <LineCharts />
+        </Slider>
       </div>
-      );
+    );
   };
 }
 
