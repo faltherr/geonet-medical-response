@@ -46,7 +46,7 @@
 }
 
 .landing-button {
-  /* margin-top: 15px; */
+  margin-top: 25px;
   width: 175px;
   height: 40px;
   border-radius: 5px;
@@ -64,17 +64,20 @@
 }
 
 .landing-name {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
   word-spacing: 2px;
   letter-spacing: 1px
 }
 
 .landing-mission {
-  font-family: 'Raleway', sans-serif;
-  font-size: 21px;
+  margin-top: 20px;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 18px;
   text-align: center;
-  letter-spacing: 1.2px;
+  font-weight: lighter;
+  letter-spacing: 1px;
   -webkit-animation: fadein 2s;
+  padding: 10px;
 }
 
 @-webkit-keyframes fadein {
