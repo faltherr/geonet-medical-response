@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
+import alert from './symbols/alert.gif'
+
 import EditPatientModal from '../components/EditPatientModal'
 
 class PatientPopup extends Component {
@@ -52,23 +54,35 @@ class PatientPopup extends Component {
         let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
         let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
-       
         let color
-        if (monthsUntilDueDate <= 3 ) {
-          color = require('./symbols/woman_lime.png')
-        } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
-          color =  require('./symbols/woman_green.png')
-        } else {
-          color = require('./symbols/woman_aqua.png')
-        }
+        let width
+        let height
 
-        let markerSymbol = {
-          type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
-          url: color,
-          contentType: 'image/png',
-          width: "28px",
-          height: "28px"
-        };
+          if (patient.alert === true){
+            color = alert
+            width = "70px"
+            height = "70px"
+          } else if (monthsUntilDueDate <= 3 ) {
+            color = require('./symbols/woman_lime.png')
+            width = "28px"
+            height = "28px"
+          } else if ( monthsUntilDueDate > 3 && monthsUntilDueDate <= 6 ) {
+            color =  require('./symbols/woman_green.png')
+            width = "28px"
+            height = "28px"
+          } else {
+            color = require('./symbols/woman_aqua.png')
+            width = "28px"
+            height = "28px"
+          }
+
+          let markerSymbol = {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: color,
+            // contentType: 'image/png',
+            width: width,
+            height: height,
+          };
 
         const PopupTemplate = {
           title: `Patient Information`,
@@ -90,7 +104,8 @@ class PatientPopup extends Component {
           actions: [{
             title: "Edit Patient",
             patient: patient,
-            className: "esri-icon-user" }]
+            className: "esri-icon-user" 
+          }]
           }
 
         // Edit Patient 
