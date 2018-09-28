@@ -25,7 +25,7 @@ export default class About extends Component {
                         <div label='Mission' className='tab-header'>
                             <h1 className='description-titles'>Our Mission:</h1>
                             <h3 className='description-text'> {description.mission} </h3>
-                            <img style={{maxWidth: '400px', maxHeight:'350px', borderRadius: '5px', alignContent: 'center'}}src={'https://www.goodfreephotos.com/albums/sierra-leone/mother-carrying-baby-on-back-in-sierra-leone.jpg'}></img>
+                            {/* <img style={{maxWidth: '400px', maxHeight:'350px', borderRadius: '5px', alignContent: 'center'}}src={'https://www.goodfreephotos.com/albums/sierra-leone/mother-carrying-baby-on-back-in-sierra-leone.jpg'}></img> */}
                         </div>
                         <div label='Description'>
                             <h1 className='description-titles'>About Us:</h1>

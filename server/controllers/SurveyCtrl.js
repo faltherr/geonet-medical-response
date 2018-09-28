@@ -14,10 +14,10 @@ module.exports = {
   },
   updateSurvey: (req, res) => {
     let {id} = req.params
-    let {name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed} = req.body
+    let {name, phone, location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed} = req.body
     let db = req.app.get('db')
     
-    db.update_survey([id, name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed])
+    db.update_survey([id, name, phone, location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed])
     .then(results => {
       res.status(200).send(results)
     })

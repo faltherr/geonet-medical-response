@@ -8,7 +8,6 @@ import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
-
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'
 import diamond from '../imgs/diamond.png'
@@ -17,8 +16,9 @@ import Slideout from './Slideout';
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
-  componentDidMount() {
 
+  componentDidMount() {
+    
     loadModules(['esri/Map',
       'esri/views/MapView',
       'esri/views/SceneView',
@@ -85,24 +85,24 @@ class Dashboard extends Component {
       mapView.ui.add(toggle, "top-left")
       mapView.ui.add(buttonWidget, "top-right")
 
-
       //  mapView.GoTo // zooming feature
       const speedOption = {
         speedFactor: 0.3,
-        //easing: "out-quint"
+        easing: "ease-in-out"
       }
+
       mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
         tilt: 40,
-        zoom: 9
+        zoom: 9, 
+        speedFactor: 0.3
       }, speedOption)
     })
   }
   // buttons for different community zooms
   sierraLeonClick = () => {
-    let { mapView } = this.props
-    mapView.goTo({
+    this.props.mapView.goTo({
       target: [-11.618979, 9.128167],
       heading: 0,
       tilt: 0,
@@ -111,58 +111,38 @@ class Dashboard extends Component {
     })
   }
 
-  communityOneClick = () => {
-    let { mapView } = this.props
-    mapView.goTo({
-      target: [-12.161192, 9.03311],
-      heading: 10,
-      tilt: 0,
-      zoom: 11,
-      speedFactor: 1,
-      easing: "out-quint"
-    })
+  communityClick = (long, lat) => {
+    this.props.mapView.goTo({
+      target: [+long, +lat],
+      heading: 40,
+      tilt: 10,
+      zoom: 12
+    }, this.communityClickOption)
   }
-
-  communityTwoClick = () => {
-    let { mapView } = this.props
-    mapView.goTo({
-      target: [-11.384337, 9.54637],
-      heading: 30,
-      tilt: 0,
-      zoom: 12,
-      speedFactor: 0.2,
-      easing: "out-quint"
-    })
-  }
-
-  communityThreeClick = () => {
-    let { mapView } = this.props
-    mapView.goTo({
-      target: [-12.097854, 8.543189],
-      heading: 20,
-      tilt: 0,
-      zoom: 13,
-      speedFactor: 0.2,
-      easing: "out-quint"
-    })
+  communityClickOption = {
+    speedFactor: 0.3,
+    easing: "out-quint"
   }
 
   render() {
     // let {map, mapView, legend} = this.props
+    let outpostButtons = []
+    this.props.outpostsData.map( outpost => {
+      outpostButtons.push (
+        <button onClick={ () => this.communityClick(outpost.longitude, outpost.latitude) }>Community {outpost.id }</button>
+      )
+    })
+
     return (
       <div className='wrapper'>
-        <div style={{ background: '#01101B' }}>
-          <Slideout />
-        </div>
+        <div style={{background: '#01101B'}}><Slideout/></div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv"></div>
         <div id="optionsDiv">
-          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.sierraLeonClick}>Sierra Leone</button>
-          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.communityOneClick}>Community 1</button>
-          <button className="dashboard-button" style={{backgroundColor: 'gray'}} onClick={this.communityTwoClick}>Community 2</button>
-          <button className="dashboard-button" style={{backgroundColor: 'gray'}}onClick={this.communityThreeClick}>Community 3</button>
+          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+            { outpostButtons }
           <div id="panel">
             <h2>COLOR AND SIZING LEGEND</h2>
             <div id='panel-details'>
@@ -189,7 +169,8 @@ class Dashboard extends Component {
 let mapStateToProps = state => {
   return {
     map: state.map.map,
-    mapView: state.map.mapView
+    mapView: state.map.mapView, 
+    outpostsData: state.outposts.outpostsData
   }
 }
 export default connect(mapStateToProps, { getMap })(Dashboard)

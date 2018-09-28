@@ -12,7 +12,9 @@ const styles = {
   justifyContent: 'flex-end'
 };
 
-class Slideout extends Component {
+
+
+class Slideout extends Component{
   constructor() {
     super();
     this.state = {
@@ -38,20 +40,13 @@ class Slideout extends Component {
           </span>
         </button>
         <Slider
-          title='DATA!'
-          footer={
-            <div style={{ padding: '0px' }}>
-              <button onClick={this.closeSlider}>Close Slider</button>
-            </div>
-          }
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
-
-          <h3>HIV Status and Family Planning</h3>
-          <PieCharts />
-          <h3>Maternal and Neonatal Mortality Rates</h3>
-          <LineCharts />
-        </Slider>
+            <h3>HIV Status and Family Planning</h3>
+            <PieCharts/>
+            <h3>Maternal and Neonatal Mortality Rates</h3>
+            <LineCharts />
+          </Slider>
       </div>
     );
   };
