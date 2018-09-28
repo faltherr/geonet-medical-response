@@ -1,6 +1,6 @@
 .about-page-container{
     /* background-image: url('../images/pablo-garcia-saldana.jpg'); */
-    background: #02111C;
+    background: #252527;
     background-position: center;
     background-size: cover; 
     width: 100vw;
@@ -13,7 +13,7 @@
 }
 
 .description-container{
-    height: 98%;
+    height: 96%;
     width: 80%;
     background-color: rgb(42,42,40, 0.92);
     border-radius: 20px;
