@@ -3,6 +3,8 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import PieCharts from './PieCharts';
 import Charts from '../CSS/Charts.css';
+import NewDataMenu from '../components/newDataMenu'
+
 class LineCharts extends Component {
   constructor() {
     super()
@@ -56,7 +58,8 @@ class LineCharts extends Component {
   render() {
     return (
       <div>
-        <div className="charts-container">
+        <NewDataMenu/>
+        {/* <div className="charts-container">
         <LineChart width={600} height={300} data={this.state.data1}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <XAxis dataKey="date" />
@@ -77,6 +80,7 @@ class LineCharts extends Component {
           <Line type="monotone" dataKey="Deaths (Per 1,000 Live Births)" stroke="green" activeDot={{ r: 8 }} />
         </LineChart>
         </div>
+        <PieCharts /> */}
       </div>
     );
   }
