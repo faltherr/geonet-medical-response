@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
+
 import '../CSS/Landing.css'
 
 class Landing extends Component {
@@ -20,7 +22,7 @@ class Landing extends Component {
     return (
       <div>
         <div className="landing-main-container">
-          <div className="landing-container">
+          <div className="landing-box">
             <div className="landing-logo">
               <img src={require("../logo_transparent.png")} style={{ height: '200px', width: '200px' }} alt="" />
             </div>
@@ -34,6 +36,9 @@ class Landing extends Component {
               <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>
             </div>
           </div>
+          <Link to= '/about'>
+            <button className='about-button'>About Us</button>
+          </Link>
         </div>
       </div>
     );

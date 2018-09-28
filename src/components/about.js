@@ -23,18 +23,19 @@ export default class About extends Component {
 
                     <Tabs>
                         <div label='Mission' className='tab-header'>
-                            <h3 className='description-titles'>Our Mission:</h3>
-                            <p className='description-text'> {description.mission} </p>
+                            <h1 className='description-titles'>Our Mission:</h1>
+                            <h3 className='description-text'> {description.mission} </h3>
+                            {/* <img style={{maxWidth: '400px', maxHeight:'350px', borderRadius: '5px', alignContent: 'center'}}src={'https://www.goodfreephotos.com/albums/sierra-leone/mother-carrying-baby-on-back-in-sierra-leone.jpg'}></img> */}
                         </div>
                         <div label='Description'>
-                            <h3 className='description-titles'>About Us:</h3>
+                            <h1 className='description-titles'>About Us:</h1>
                             <p className='description-text'> {description.description_p1} </p>
                             <p className='description-text'> {description.description_p2} </p>
                             <p className='description-text'> {description.description_p3} </p>
                             <p className='description-text'> {description.description_p4} </p>
                         </div>
                         <div label='How does it work?'>
-                            <h3 className='description-titles'>How does it work? </h3>
+                            <h1 className='description-titles'>How does it work? </h1>
                             <p className='description-text'>{description.howItWorks}</p>
                             <div className='flow-chart-container'>
                                 <img src={healthGrids_demo} alt='flow' className='flowchart' />

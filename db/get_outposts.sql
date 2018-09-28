@@ -1,2 +1,3 @@
 SELECT *
-FROM outposts;
+FROM outposts
+ORDER BY id ASC;

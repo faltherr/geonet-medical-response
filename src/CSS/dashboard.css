@@ -7,17 +7,22 @@ html {
 }
 #optionsDiv {
   position: absolute;
-  bottom: 17px;
+  bottom: 19.5%;
   width: 100%;
   padding: 20px 0;
   z-index: 1;
   text-align: center;
 }
+
+.dashboard-button {
+  cursor: pointer;
+  border-radius: 4px
+}
+
 /* .wrapper {
  display: grid;
  grid-template-rows: 5% 15% auto;
  grid-template-areas: 
-  "header"
    "sidebar"
    "map";
   height: 100vh;
@@ -25,11 +30,15 @@ html {
 } */
 
 .map {
-height: 100vh;
+height: 75vh;
 width:100vw
 }
 
-.header {
+/* .charts {
+  width: 30vw;
+
+} */
+/* .header {
   grid-area: header;
   background: #B93D3D;
 }
@@ -39,11 +48,11 @@ width:100vw
   color: white;
 }
 .data {
-  /* grid-area: data; */
+  grid-area: data;
   background-color: #710909;
   color:white;
   width: 100%;
-}
+} */
 #panel {
   display: flex;
   justify-content: flex-start;
@@ -177,4 +186,8 @@ li.tab-list-item{
 
 .add-new-button:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.esri-component esri-basemap-toggle esri-widget {
+  margin: 40px;
 }

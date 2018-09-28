@@ -45,6 +45,14 @@ app.get('/api/currentUser', (req, res) => {
   res.send(req.session.user)
 })
 
+//Users/Admins
+
+
+app.get('/api/logout', (req, res) => {
+  req.session.destroy()
+  res.sendStatus(200)
+})
+
 // PatientsCtrl
 app.get('/api/patients', PatientCtrl.getPatients)
 app.get('/api/patients/:id', PatientCtrl.getPatient)
@@ -58,6 +66,7 @@ app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
 
 // OutpostCtrl 
 app.get('/api/outposts', OutpostCtrl.getOutposts)
+app.delete('/api/outposts/:id', OutpostCtrl.delete)
 
 // SurveysCtrl 
 app.post('/api/surveys', SurveyCtrl.addSurvey)

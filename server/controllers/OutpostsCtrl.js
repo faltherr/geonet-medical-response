@@ -10,5 +10,13 @@ module.exports = {
       console.log(err)
       res.status(500).send('Something went wrong with getting outposts')
     })
+  }, 
+  delete : (req, res) => {
+    const db = req.app.get('db')
+    const {id} = req.params
+    console.log( 'Whats up', id)
+    db.delete_outposts([id]).then(response => {
+      res.status(200).send({id})
+    })
   }
 }
