@@ -1,9 +1,9 @@
 module.exports = {
   addSurvey: (req,res) => {
     let db = req.app.get('db')
-    let {name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed} = req.body
+    let {name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, completed} = req.body
 
-    db.add_survey([name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, alert, completed])
+    db.add_survey([name, phone,location, latitude, longitude, age, famplan, hiv, parity, duedate, completed])
     .then(results => {
       res.status(200).send(results)
     })

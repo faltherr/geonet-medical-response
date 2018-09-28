@@ -3,24 +3,36 @@ import Tabs from './tabs/tabs'
 import '../CSS/dashboard.css'
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import {connect} from 'react-redux'
+import axios from 'axios'
+import {getHealthworkers} from '../redux/reducers/healthworkersReducer'
+import {addPatientSurvey} from '../redux/reducers/patientsReducer'
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default class NewDataMenu extends Component {
+class NewDataMenu extends Component {
     constructor() {
         super()
         this.state = {
             patientName: '',
             patientPhone: '',
             patientAddress: '',
+            patientLatitude: '',
+            patientLongitude: '',
             patientAge: '',
             patientFamPlan: '',
             patientHIV: '',
             patientParity: '',
             patientDueDate: moment(),
-            // startDate: moment()
+            patientAssignedHW: ''
         }
     }
+
+    componentDidMount(){
+        this.props.getHealthworkers()
+        console.log('Due date formatted', this.state.patientDueDate.format('YYYY/MM/d'))
+    }
+
 
     handleChange = (e) => {
         let change = {}
@@ -36,18 +48,43 @@ export default class NewDataMenu extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-
-        alert(this.state.patientName);
+        
+        axios.get(`https://api.what3words.com/v2/forward?addr=${this.state.patientAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then( response =>{
+            console.log('W3W response', response.status)
+            if (+response.data.geometry.lng<-13.307377 || +response.data.geometry.lng>-10.256908 || +response.data.geometry.lat>10.0316 || +response.data.geometry.lat<6.791397){
+                alert("You're selected address is not in Sierra Leone. Please enter a new valid address.")
+            } else {
+                this.setState({
+                    patientLatitude: response.data.geometry.lat,
+                    patientLongitude: response.data.geometry.lng
+                })
+                addPatientSurvey(this.state)
+            }
+        }).catch(err =>{
+            // console.log(err.response.status)
+            alert("The address you entered is not valid. Please enter a valid address or check the console for more details.")
+            console.log('Error', err)
+        })
     }
 
     render() {
         console.log(this.state)
+        console.log(this.props.healthWorkers)
         // let parityDropDownOptions = function => (){for(let i = 0; i<=20; i++){
 
         // }}
         let dropdownOption = []
         for (let i = 0; i <= 20; i++) {
             dropdownOption.push(<option key={i} value={i}>{i}</option>)
+        }
+        let HWOption = []
+        if (this.props.healthWorkers){
+            for (let i = 0; i < this.props.healthWorkers.length; i++) {
+                let name = this.props.healthWorkers[i].name
+                let id = this.props.healthWorkers[i].id
+                console.log(id)
+                HWOption.push(<option key={id} value={name}>{name}</option>)
+            }
         }
         return (
             <div className='add-menu-container'>
@@ -57,7 +94,7 @@ export default class NewDataMenu extends Component {
                         <form onSubmit={this.handleSubmit}>
                             <div className='form-input'><h4>Name:</h4><input name='patientName' onChange={this.handleChange} /></div>
                             <div className='form-input'><h4>Phone:</h4><input name='patientPhone' onChange={this.handleChange} /></div>
-                            <div className='form-input'><h4>Address:</h4><input name='patientAddress' onChange={this.handleChange} /></div>
+                            <div className='form-input'><h4>Address: <a href='https://map.what3words.com/mills.oilier.glitches'>What3Words Map</a> </h4><input name='patientAddress' onChange={this.handleChange} /></div>
                             <div className='form-input'><h4>Age:</h4><input name='patientAge' onChange={this.handleChange} value={this.state.patientAge} /></div>
                             {/* <div className='form-input'><h4>Did the patient use family planning?</h4><input name='patientFamPlan'onChange={this.handleChange} value={this.state.patientFamPlan}/></div> */}
                             <div className='form-input'><h4>Did the patient use family planning?</h4>
@@ -120,9 +157,21 @@ export default class NewDataMenu extends Component {
                                 {/* <input name='patientDueDate'onChange={this.handleChange} value={this.state.patientDueDate}/> */}
                                  <DatePicker
                                     name = 'patientDueDate'
-                                    selected={this.state.startDate}
+                                    dateFormat="YYYY/MM/DD"
+                                    selected={this.state.patientDueDate}
                                     onChange={this.handleDatePickerChange}
+                                    filterDate={(date) => {
+                                        // This limits the ability of the user to select a past due date or a date > 10 months in the future
+                                        return moment().subtract(1, 'days') < date && moment().add(10, 'months') > date
+                                    }}
                                 />
+                            </div>
+                            <div className='form-input'><h4>Who is the patient's health worker?</h4>
+                                {/* <input name='patientParity'onChange={this.handleChange} value={this.state.patientParity}/> */}
+                                <select name='patientAssignedHW' onChange={this.handleChange} value={this.state.value}>
+                                    <option value="">Select An Option</option>
+                                    {HWOption}
+                                </select>
                             </div>
                             <button className='add-new-button' type='submit'>Submit</button>
                         </form>
@@ -138,4 +187,12 @@ export default class NewDataMenu extends Component {
         )
     }
 }
+
+function mapStateToProps(state){
+    return{
+        healthWorkers: state.healthworkers.healthworkersData
+    }
+}
+
+export default connect(mapStateToProps, {getHealthworkers, addPatientSurvey})(NewDataMenu)
 
