@@ -90,7 +90,8 @@ class PatientPopup extends Component {
           actions: [{
             title: "Edit Patient",
             patient: patient,
-            className: "esri-icon-user" }]
+            className: "esri-icon-user" 
+          }]
           }
 
         // Edit Patient 

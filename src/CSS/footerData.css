@@ -1,0 +1,27 @@
+.footer-wrapper {
+  background-color: #202020;
+  height: 200px;
+}
+
+.data-containers {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+#patient-data, 
+#service-area,
+#due-this-month,
+#healthworker-data {
+  background-color: lightgrey;
+  height: 150px;
+  width: 200px;
+  margin: 10px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+
+
+
+

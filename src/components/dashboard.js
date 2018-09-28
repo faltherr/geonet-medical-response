@@ -11,7 +11,8 @@ import LineCharts from '../components/LineCharts'
 import circle from '../imgs/circle.png'
 import x from '../imgs/x.png'
 import diamond from '../imgs/diamond.png'
-import Slideout from './Slideout';
+import Slideout from './Slideout'
+import FooterData from './FooterData'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
@@ -59,11 +60,12 @@ class Dashboard extends Component {
         view: mapView,
         container: panel
      })
-     //basemap toggle 
-     const toggle = new BasemapToggle({
-       view: mapView,
-       nextBasemap: "hybrid"
-     })
+
+      //basemap toggle 
+        const toggle = new BasemapToggle({
+          view: mapView,
+          nextBasemap: "hybrid"
+      })
 
     //button that opens legend 
     const buttonWidget = document.createElement("div")
@@ -79,17 +81,18 @@ class Dashboard extends Component {
           panel.classList.add("panel-expanded")
         }
       })
-
       this.props.getMap(mapObj)
-      mapView.ui.add(legend, "top-right")
+
       mapView.ui.add(toggle, "top-left")
+      mapView.ui.add(legend, "top-right")
       mapView.ui.add(buttonWidget, "top-right")
 
+      // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
-      const speedOption = {
-        speedFactor: 0.3,
-        easing: "ease-in-out"
-      }
+      // const speedOption = {
+      //   speedFactor: 0.3,
+      //   easing: "ease-in-out"
+      // }
 
       mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
@@ -97,7 +100,7 @@ class Dashboard extends Component {
         tilt: 40,
         zoom: 9, 
         speedFactor: 0.3
-      }, speedOption)
+      })
     })
   }
   // buttons for different community zooms
@@ -120,17 +123,20 @@ class Dashboard extends Component {
     }, this.communityClickOption)
   }
   communityClickOption = {
-    speedFactor: 0.3,
-    easing: "out-quint"
+    // speedFactor: 0.1,
+    easing: "ease-in"
   }
 
   render() {
     // let {map, mapView, legend} = this.props
     let outpostButtons = []
+    
     this.props.outpostsData.map( outpost => {
+      if ( outpost.id != 0 ) {
       outpostButtons.push (
-        <button onClick={ () => this.communityClick(outpost.longitude, outpost.latitude) }>Community {outpost.id }</button>
+        <button onClick={ () => this.communityClick(outpost.longitude, outpost.latitude) }>Community {outpost.id}</button>
       )
+      }
     })
 
     return (
@@ -140,9 +146,11 @@ class Dashboard extends Component {
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv"></div>
-        <div id="optionsDiv">
-          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-            { outpostButtons }
+            <div id="optionsDiv">
+              <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+                { outpostButtons }
+            </div>
+        
           <div id="panel">
             <h2>COLOR AND SIZING LEGEND</h2>
             <div id='panel-details'>
@@ -160,7 +168,7 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
-        </div>
+        <FooterData />
       </div>
     )
   }
