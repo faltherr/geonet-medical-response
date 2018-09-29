@@ -34,9 +34,7 @@ class NewDataMenu extends Component {
             hcwLatitude: '',
             hcwLongitude: '',
             outpostName: '',
-            outpostAddress: '',
-            hcwLatitude: '',
-            hcwLongitude: ''            
+            outpostAddress: ''          
         }
     }
 

@@ -3,7 +3,7 @@ import Slider from 'react-slide-out';
 import 'react-slide-out/lib/index.css';
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
-import hamburgers from 'hamburgers';
+// import hamburgers from 'hamburgers';
 
 const styles = {
   fontFamily: 'sans-serif',

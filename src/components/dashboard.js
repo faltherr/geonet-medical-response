@@ -6,8 +6,8 @@ import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
-import PieCharts from '../components/PieCharts'
-import LineCharts from '../components/LineCharts'
+// import PieCharts from '../components/PieCharts'
+// import LineCharts from '../components/LineCharts'
 import circle from '../images/circle.png'
 import x from '../images/x.png'
 import diamond from '../images/diamond.png'
@@ -147,10 +147,11 @@ class Dashboard extends Component {
     let outpostButtons = []
 
     this.props.outpostsData.map(outpost => {
-      if (outpost.id != 0) {
+      if (outpost.id !== 0) {
         outpostButtons.push(
           <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)}>Community {outpost.id}</button>
         )
+        // return outpostButtons
       }
     })
 

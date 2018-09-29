@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import '../CSS/editPatientModal.css'
-import axios from 'axios'
+// import axios from 'axios'
 import { updatePatient, setCurrentPatient } from '../redux/reducers/patientsReducer'
 import { connect } from 'react-redux'
 import moment from 'moment'
