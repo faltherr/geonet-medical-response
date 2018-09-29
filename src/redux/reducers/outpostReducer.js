@@ -4,6 +4,7 @@ const FULFILLED = '_FULFILLED'
 const GET_OUTPOSTS = 'GET_OUTPOSTS'
 const GET_OUTPOSTGRAPHIC = 'GET_OUTPOSTGRAPHIC'
 const DELETE_OUTPOST = 'DELETE_OUTPOST'
+const ADD_OUTPOST = 'ADD_OUTPOST'
 
 let initialState = {
   outpostsData: [],
@@ -16,6 +17,8 @@ export default function reducer (state = initialState, action) {
       return {...state, outpostsData: action.payload}
     case GET_OUTPOSTGRAPHIC:
       return {...state, outpostGraphic: action.payload}
+    case ADD_OUTPOST + FULFILLED:
+      return {...state, outpostData: action.payload}
     case DELETE_OUTPOST + FULFILLED: 
       let { id } = action.payload
       let newOutpostsData = state.outpostsData.filter (outposts => {
@@ -52,5 +55,23 @@ export function deleteOutpost (id) {
   return {
     type: DELETE_OUTPOST,
     payload: deleted
+  }
+}
+
+export function addOutpost (state) {
+
+  let outpostData ={
+    name: state.outpostName,
+    location: state.outpostAddress,
+    latitude: state.outpostLatitude,
+    longitude: state.outpostLongitude,
+  }
+
+  let outposts = axios.post('api/outposts', outpostData).then(response => {
+    return response.data
+  })
+  return {
+    type: ADD_OUTPOST,
+    payload: outposts
   }
 }

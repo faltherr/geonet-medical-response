@@ -13,13 +13,21 @@ import x from '../images/x.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
+import NewDataMenu from './NewDataMenu'
+import Modal from 'react-responsive-modal';
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
+  constructor() {
+    super()
+    this.state = {
+      openModal: false
+    }
+  }
 
   componentDidMount() {
-    
+
     loadModules(['esri/Map',
       'esri/views/MapView',
       'esri/views/SceneView',
@@ -97,7 +105,7 @@ class Dashboard extends Component {
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
         tilt: 40,
-        zoom: 9, 
+        zoom: 9,
         speedFactor: 0.3
       })
     })
@@ -126,47 +134,62 @@ class Dashboard extends Component {
     easing: "ease-in"
   }
 
+  onOpenModal = () => {
+    this.setState({ openModal: true });
+  };
+
+  onCloseModal = () => {
+    this.setState({ openModal: false });
+  };
+
   render() {
     // let {map, mapView, legend} = this.props
     let outpostButtons = []
-    
-    this.props.outpostsData.map( outpost => {
-      if ( outpost.id != 0 ) {
-      outpostButtons.push (
-        <button onClick={ () => this.communityClick(outpost.longitude, outpost.latitude) }>Community {outpost.id}</button>
-      )
+
+    this.props.outpostsData.map(outpost => {
+      if (outpost.id != 0) {
+        outpostButtons.push(
+          <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)}>Community {outpost.id}</button>
+        )
       }
     })
 
     return (
       <div className='wrapper'>
-        <div style={{background: '#01101B'}}><Slideout/></div>
+        <button onClick={() => this.onOpenModal()}>Add New Data</button>
+        <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
+          <div className="new-data-modal">
+            <NewDataMenu closeModal={this.onCloseModal}/>
+          </div>
+        </Modal>
+
+        <div style={{ background: '#01101B' }}><Slideout /></div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv"></div>
-            <div className='esri-attribution__sources esri-interactive'>
-              <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-                { outpostButtons }
+        <div className='esri-attribution__sources esri-interactive'>
+          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+          {outpostButtons}
+        </div>
+
+        <div id="panel">
+          <h2>COLOR AND SIZING LEGEND</h2>
+          <div id='panel-details'>
+            <div className='panel-line'>
+              <img src={circle} className='icons' alt="icon"></img>
+              <p> Patient Data</p>
             </div>
-        
-          <div id="panel">
-            <h2>COLOR AND SIZING LEGEND</h2>
-            <div id='panel-details'>
-              <div className='panel-line'>
-                <img src={circle} className='icons' alt="icon"></img>
-                <p> Patient Data</p>
-              </div>
-              <div className='panel-line'>
-                <img src={x} className='icons' alt="icon"></img>
-                <p> Outpost Location</p>
-              </div>
-              <div className='panel-line'>
-                <img src={diamond} className='icons' alt="icon"></img>
-                <p> Healthworker Data</p>
-              </div>
+            <div className='panel-line'>
+              <img src={x} className='icons' alt="icon"></img>
+              <p> Outpost Location</p>
+            </div>
+            <div className='panel-line'>
+              <img src={diamond} className='icons' alt="icon"></img>
+              <p> Healthworker Data</p>
             </div>
           </div>
+        </div>
         <FooterData />
       </div>
     )
@@ -176,7 +199,7 @@ class Dashboard extends Component {
 let mapStateToProps = state => {
   return {
     map: state.map.map,
-    mapView: state.map.mapView, 
+    mapView: state.map.mapView,
     outpostsData: state.outposts.outpostsData
   }
 }
