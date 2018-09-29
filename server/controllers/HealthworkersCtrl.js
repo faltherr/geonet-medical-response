@@ -26,9 +26,9 @@ module.exports = {
   },
   addHealthworker: (req,res) => {
     let db = req.app.get('db')
-    let {name, phone, active, email} = req.body
+    let {name, phone, outpost_id, email, latitude, longitude, location} = req.body
 
-    db.add_healthworker([name, phone, active, email])
+    db.add_healthworker([name, phone, outpost_id, email, latitude, longitude, location])
     .then(results => {
       res.status(200).send(results)
     })
