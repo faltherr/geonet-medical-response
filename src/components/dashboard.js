@@ -35,7 +35,8 @@ class Dashboard extends Component {
       'esri/widgets/BasemapToggle',
       'esri/layers/GraphicsLayer',
       "esri/geometry/SpatialReference",
-    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference]) => {
+      "esri/geometry/geometryEngine"
+    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference, geometryEngine]) => {
 
       const map = new Map({
         basemap: 'streets-night-vector'
@@ -155,6 +156,8 @@ class Dashboard extends Component {
       }
     })
 
+    console.log(27482347238482, this.props.currentPatientGraphic)
+
     return (
       <div className='wrapper'>
         <button onClick={() => this.onOpenModal()}>Add New Data</button>
@@ -201,7 +204,8 @@ let mapStateToProps = state => {
   return {
     map: state.map.map,
     mapView: state.map.mapView,
-    outpostsData: state.outposts.outpostsData
+    outpostsData: state.outposts.outpostsData,
+    currentPatientGraphic: state.patients.currentPatient
   }
 }
 export default connect(mapStateToProps, { getMap })(Dashboard)

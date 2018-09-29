@@ -39,14 +39,69 @@ class PatientPopup extends Component {
     }
     if (true) {
       loadModules([
-        'esri/Graphic'
-      ]).then(([Graphic]) => {
+        'esri/Graphic',
+        "esri/geometry/geometryEngine",
+        'esri/tasks/support/DistanceParameters',
+        'esri/tasks/GeometryService',
+        "esri/geometry/Point",
+        "esri/geometry/SpatialReference",
+        "esri/geometry/Multipoint"
+      ]).then(([Graphic, geometryEngine, DistanceParameters, GeometryService, Point, SpatialReference, Multipoint]) => {
       patientsData.forEach( patient => {
-        const point = {
+        const point = new Point ({
           type: "point",
           longitude: patient.longitude,
-          latitude: patient.latitude
-        }
+          latitude: patient.latitude,
+          spatialReference: new SpatialReference({ wkid: 3857 })
+        })
+
+        const DemoPoint = new Point({
+          type: "point",
+          longitude: '-11.744942',
+          latitude: '8.742467',
+          spatialReference: new SpatialReference({ wkid: 3857 })
+        })
+
+        // console.log(4737483883883, point)
+
+        // let distParams = new DistanceParameters()
+        // distParams.distanceUnit = GeometryService.UNIT_KILOMETER
+        // distParams.geometry1 = point
+        // distParams.geometry2 = DemoPoint
+        // distParams.geodesic = true;  
+
+        // GeometryService.distance(distParams, function(distance) {  
+        //   console.log('Distance between 2 points', distance) 
+        //   });  
+
+
+
+      // console.log(this.props.healthworkerPointGeometry)
+
+      let healthWorkerMultipoint = new Multipoint({
+        type: "multipoint",
+        points: this.props.healthworkerPointGeometry,
+        spatialReference: new SpatialReference({ wkid: 3857 })
+      })
+      let nearestHWLocation
+      nearestHWLocation = geometryEngine.nearestCoordinate(healthWorkerMultipoint, point)
+      console.log("!!@!!!!!!!!#@#", nearestHWLocation)
+
+        // Calculate distance between
+        // let distanceArr = []
+        // this.props.healthworkerPointGeometry.forEach(element => {
+        //   let distanceBetween
+        //   distanceBetween = geometryEngine.distance(element, point, 9036)
+        //   distanceArr.push(distanceBetween)
+
+        // })
+        // distanceArr.sort((function(a, b){return a-b}))
+        // let closestHealthworker = distanceArr[0]
+        // console.log(`The closest health worker is ${closestHealthworker} kilometers from patient`)
+
+
+
+
 
         // date formatting 
         let todayUnformatted = new Date()
@@ -178,7 +233,8 @@ let mapStateToProps = state => {
   return {
     patientsData: state.patients.patientsData,
     patientGraphic: state.patients.patientGraphic,
-    mapView: state.map.mapView
+    mapView: state.map.mapView,
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)
