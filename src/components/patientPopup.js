@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
-import alert from './symbols/alert.gif'
+import alert from './symbols/woman_alert_9.png'
 
 import EditPatientModal from '../components/EditPatientModal'
 

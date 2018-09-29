@@ -13,7 +13,6 @@ const styles = {
 };
 
 
-
 class Slideout extends Component{
   constructor() {
     super();
