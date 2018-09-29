@@ -109,9 +109,9 @@ class PatientPopup extends Component {
           }
 
         // Edit Patient 
-        let { showEditModal, setState } = this
+        let { showEditModal} = this
         let { patientGraphics } = this.state
-        let { graphics } = this.props.mapView
+        // let { graphics } = this.props.mapView
       
         this.props.mapView.popup && this.props.mapView.popup.on('trigger-action', event => {
           if (event.action.title === "Edit Patient") {
