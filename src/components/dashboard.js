@@ -145,7 +145,7 @@ class Dashboard extends Component {
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv"></div>
-            <div id="optionsDiv">
+            <div className='esri-attribution__sources esri-interactive'>
               <button onClick={this.sierraLeonClick}>Sierra Leone</button>
                 { outpostButtons }
             </div>
