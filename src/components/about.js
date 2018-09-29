@@ -17,7 +17,7 @@ export default class About extends Component {
             <div className='about-page-container'>
                 <div className='description-container'>
                     {/* <div className="about-tabs">
-                        <button className="tablinks" onClick="openInfo(event, 'What')">What is GeoNet Health Services?</button>
+                        <button className="tablinks" onClick="openInfo(event, 'What')">What is GeoNet Medical Response? </button>
                         <button className="tablinks" onClick="openInfor(event, 'How')">How does it work?</button>
                     </div> */}
 
