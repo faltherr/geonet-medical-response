@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
-import alert from './symbols/alert.gif'
+import alert from './symbols/woman_alert_9.png'
 
 import EditPatientModal from '../components/EditPatientModal'
 
@@ -109,9 +109,9 @@ class PatientPopup extends Component {
           }
 
         // Edit Patient 
-        let { showEditModal, setState } = this
+        let { showEditModal} = this
         let { patientGraphics } = this.state
-        let { graphics } = this.props.mapView
+        // let { graphics } = this.props.mapView
       
         this.props.mapView.popup && this.props.mapView.popup.on('trigger-action', event => {
           if (event.action.title === "Edit Patient") {

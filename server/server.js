@@ -67,6 +67,7 @@ app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
 // OutpostCtrl 
 app.get('/api/outposts', OutpostCtrl.getOutposts)
 app.delete('/api/outposts/:id', OutpostCtrl.delete)
+app.post('/api/outposts/', OutpostCtrl.addOutpost)
 
 // SurveysCtrl 
 app.post('/api/surveys', SurveyCtrl.addSurvey)

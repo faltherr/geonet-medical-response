@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action) {
     case ADD_NEW_SURVEY + FULFILLED:
       return { ...state, patientsData: action.payload }
     case UPDATE_PATIENT + FULFILLED: 
-      return {... state, patientsData: action.payload }
+      return {...state, patientsData: action.payload }
     case SET_CURRENT_PATIENT:
       return { ...state, currentPatient: action.payload }
     default:
