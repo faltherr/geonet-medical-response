@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import PieCharts from './PieCharts';
 import Charts from '../CSS/Charts.css';
-import NewDataMenu from '../components/NewDataMenu'
+import NewDataMenu from './NewDataMenu'
 
 class LineCharts extends Component {
   constructor() {
