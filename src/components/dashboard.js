@@ -15,6 +15,7 @@ import Slideout from './Slideout'
 import FooterData from './FooterData'
 import NewDataMenu from './NewDataMenu'
 import Modal from 'react-responsive-modal';
+import * as turf from '@turf/turf'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
@@ -109,8 +110,152 @@ class Dashboard extends Component {
         zoom: 9,
         speedFactor: 0.3
       })
+
     })
   }
+
+  componentDidUpdate = (prevProps) => {
+
+    let {healthworkerData, patientData} = this.props
+    
+    let patientGeoJson = []
+    patientData.forEach(patient => {
+      patientGeoJson.push(turf.point([patient.latitude, patient.longitude, {"name": patient.name}]))
+    })
+
+    let healthworkerGeoJson = []
+    healthworkerData.forEach(healthworker =>{
+      // healthworkerGeoJson.push([healthworker.latitude, healthworker.longitude, {"name": healthworker.name}])
+      healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, {"name": healthworker.name}]))
+    })
+    console.log(healthworkerGeoJson)
+
+    let hwPoints = turf.featureCollection(healthworkerGeoJson)
+    console.log('HW Points', hwPoints)
+
+    patientGeoJson.forEach(patient =>{
+      let nearest = turf.nearestPoint(patient, hwPoints)
+      console.log(nearest)    
+    })
+
+  //   var targetPoint = turf.point([28.965797, 41.010086], {"marker-color": "#0F0"});
+  //   var points = turf.featureCollection([
+  //   turf.point([28.973865, 41.011122]),
+  //   turf.point([28.948459, 41.024204]),
+  //   turf.point([28.938674, 41.013324])
+  // ]);
+
+  // console.log("Points", points)
+
+  // var nearest = turf.nearestPoint(targetPoint, points);
+  // console.log(nearest)
+
+  
+  }
+
+    // console.log(777777777777777777777777777)
+    // if (healthworkerData.length !== prevProps.healthworkerData.length){
+    // loadModules([
+    //   "esri/geometry/geometryEngineAsync",
+    //   "esri/geometry/Point",
+    //   "esri/geometry/SpatialReference"
+    // ]).then(([geometryEngineAsync, Point, SpatialReference]) => {
+      //********************* Code block to calculate nearest HW ******************************************/
+
+      // Calculate distance between patient and nearest HCW
+      
+      // patientData.forEach(patient =>{
+
+      //   const point = new Point ({
+      //     type: "point",
+      //     longitude: patient.longitude,
+      //     latitude: patient.latitude,
+      //     spatialReference: new SpatialReference({ wkid: 3857 })
+      //   })
+
+      //   let distanceArr = []
+      //   for (let i =0; i < healthworkerPointGeometry.length; i++){
+      //     // console.log(this.props.healthworkerPointGeometry[i])
+      //     geometryEngineAsync.distance(this.props.healthworkerPointGeometry[i], point, 9036).then(response =>{
+      //       let dist = response
+      //       let healthworkerName 
+      //       healthworkerName= healthworkerData[i].name
+      //       // console.log(healthworkerName)
+      //       let obj = {}
+      //       obj = {
+      //         distance: dist,
+      //         name: healthworkerName
+      //       }
+      //       distanceArr.push(obj)
+      //     })
+      //   }
+      //   console.log('Distance array2', distanceArr)
+        
+      // })
+      
+
+      // console.log('healthworker geometry', healthworkerPointGeometry.length)
+
+      // for (let i =0; i < patientData.length; i++ ){
+      //   for (let j= 0; j<healthworkerData.length; j++){
+      //     let distanceArr
+      //     if (distanceArr){
+      //       geometryEngineAsync.distance(healthworkerPointGeometry[j], patientPointGeometry[i], 9036).then(response=>{
+
+      //     }
+      //   }
+
+      //     let distance = response
+      //   // console.log(distanceBetween)
+      //   let healthworkerName
+      //   healthworkerName = this.props.healthworkerData.name
+        
+      //   // console.log(healthworkerName)
+      //   let obj = {}
+      //   obj = {
+      //     distance: distance,
+      //     name: healthworkerName
+      //   }
+      //   distanceArr.push(obj)
+      // })
+      // }
+        
+  
+        
+        // Function built to sort the distance array
+        
+        // function dynamicSort(property) {
+        //   var sortOrder = 1;
+        //   if (property[0] === "-") {
+        //     sortOrder = -1;
+        //     property = property.substr(1);
+        //   }
+        //   return function (a, b) {
+        //     var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        //     return result * sortOrder;
+        //   }
+        // }
+        
+        // let sortedArr
+        // sortedArr = distanceArr.sort(dynamicSort("distance"))
+        // console.log('This is the sorted array!!!!!', sortedArr)
+
+        // let patient = this.props.patientData[j].name
+        
+        // let sortedArr = distanceArr.distance.sort((function(a, b){return a-b}))
+        // let closestHealthworker = sortedArr
+        // console.log('patient', patient)
+        // console.log('distanceArr', distanceArr)
+        // console.log('This is the distance from nearest HW', sortedArr[0].distance)
+        // console.log('This is the name of the nearest HW', sortedArr[0].name)
+
+
+      //***********************************************************************************/
+    // })
+  
+
+
+
   // buttons for different community zooms
   sierraLeonClick = () => {
     this.props.mapView.goTo({
@@ -150,20 +295,22 @@ class Dashboard extends Component {
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
         outpostButtons.push(
-          <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)}>Community {outpost.id}</button>
+          <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)} key={outpost.id}>Community {outpost.id}</button>
         )
-        // return outpostButtons
+
       }
+      return outpostButtons
     })
 
-    console.log(27482347238482, this.props.currentPatientGraphic)
+    // console.log(27482347238482, this.props.currentPatientGraphic)
+
 
     return (
       <div className='wrapper'>
         <button onClick={() => this.onOpenModal()}>Add New Data</button>
         <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
           <div className="new-data-modal">
-            <NewDataMenu closeModal={this.onCloseModal}/>
+            <NewDataMenu closeModal={this.onCloseModal} />
           </div>
         </Modal>
 
@@ -205,7 +352,11 @@ let mapStateToProps = state => {
     map: state.map.map,
     mapView: state.map.mapView,
     outpostsData: state.outposts.outpostsData,
-    currentPatientGraphic: state.patients.currentPatient
+    currentPatientGraphic: state.patients.currentPatient,
+    patientPointGeometry: state.patients.patientPointGeometry,
+    patientData: state.patients.patientsData,
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
+    healthworkerData: state.healthworkers.healthworkersData
   }
 }
 export default connect(mapStateToProps, { getMap })(Dashboard)

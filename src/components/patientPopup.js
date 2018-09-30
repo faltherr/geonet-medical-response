@@ -31,7 +31,7 @@ class PatientPopup extends Component {
   
   createGraphics = (props) => {
     let { patientsData } = props
-    console.log(11111111, patientsData)
+    // console.log(11111111, patientsData)
     if (this.props.mapView.graphics) {
       this.state.patientGraphics.forEach(graphic => {
         this.props.mapView.graphics.remove(graphic)
@@ -55,58 +55,61 @@ class PatientPopup extends Component {
           spatialReference: new SpatialReference({ wkid: 3857 })
         })
 
-        const DemoPoint = new Point({
-          type: "point",
-          longitude: '-11.744942',
-          latitude: '8.742467',
-          spatialReference: new SpatialReference({ wkid: 3857 })
-        })
-
-        // console.log(4737483883883, point)
-
-        // let distParams = new DistanceParameters()
-        // distParams.distanceUnit = GeometryService.UNIT_KILOMETER
-        // distParams.geometry1 = point
-        // distParams.geometry2 = DemoPoint
-        // distParams.geodesic = true;  
-
-        // GeometryService.distance(distParams, function(distance) {  
-        //   console.log('Distance between 2 points', distance) 
-        //   });  
+        this.props.patientPointGeometry.push(point)   
 
 
 
-      // console.log(this.props.healthworkerPointGeometry)
+//********************* Code block to calculate nearest HW ******************************************/
 
-      let healthWorkerMultipoint = new Multipoint({
-        type: "multipoint",
-        points: this.props.healthworkerPointGeometry,
-        spatialReference: new SpatialReference({ wkid: 3857 })
-      })
-      let nearestHWLocation
-      nearestHWLocation = geometryEngine.nearestCoordinate(healthWorkerMultipoint, point)
-      console.log("!!@!!!!!!!!#@#", nearestHWLocation)
+      // console.log(patient)
+      // Calculate distance between patient and nearest HCW
+      // let distanceArr = []
 
-        // Calculate distance between
-        // let distanceArr = []
-        // this.props.healthworkerPointGeometry.forEach(element => {
-        //   let distanceBetween
-        //   distanceBetween = geometryEngine.distance(element, point, 9036)
-        //   distanceArr.push(distanceBetween)
+      //   for (let i =0; i < this.props.healthworkerPointGeometry.length; i++){
+      //     // console.log(this.props.healthworkerPointGeometry[i])
+      //     let distanceBetween
+      //     distanceBetween = geometryEngine.distance(this.props.healthworkerPointGeometry[i], point, 9036)
+      //     // console.log(distanceBetween)
+      //     let healthworkerName 
+      //     healthworkerName= this.props.healthworkerData[i].name
+      //     // console.log(healthworkerName)
+      //     let obj = {}
+      //     obj = {
+      //       distance: distanceBetween,
+      //       name: healthworkerName
+      //     }
+      //     distanceArr.push(obj)
+      //   }
 
-        // })
-        // distanceArr.sort((function(a, b){return a-b}))
-        // let closestHealthworker = distanceArr[0]
-        // console.log(`The closest health worker is ${closestHealthworker} kilometers from patient`)
+      //   function dynamicSort(property) {
+      //       var sortOrder = 1;
+      //       if(property[0] === "-") {
+      //           sortOrder = -1;
+      //           property = property.substr(1);
+      //       }
+      //       return function (a,b) {
+      //           var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      //           return result * sortOrder;
+      //       }
+      //   }
 
+      //   let sortedArr 
+      //   sortedArr = distanceArr.sort(dynamicSort("distance"))
 
+      //     console.log('distanceArr', distanceArr)
+      //     // let sortedArr = distanceArr.distance.sort((function(a, b){return a-b}))
+      //     // let closestHealthworker = sortedArr
+      //     console.log('patient', patient.name)
+      //     console.log('This is the distance from nearest HW', sortedArr[0].distance)
+      //     console.log('This is the name of the nearest HW', sortedArr[0].name)
 
+//***********************************************************************************/
 
 
         // date formatting 
         let todayUnformatted = new Date()
-        let today = moment(todayUnformatted).format('YYYY/MM/DD')
-        let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
+        let today = moment(todayUnformatted)
+        let dueDateFormatted = moment(patient.duedate)
         let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
         let color
@@ -234,7 +237,10 @@ let mapStateToProps = state => {
     patientsData: state.patients.patientsData,
     patientGraphic: state.patients.patientGraphic,
     mapView: state.map.mapView,
-    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
+    healthworkerData: state.healthworkers.healthworkersData,
+    patientPointGeometry: state.patients.patientPointGeometry
+
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)

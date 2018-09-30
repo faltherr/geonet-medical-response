@@ -33,9 +33,9 @@ class Slideout extends Component{
   render() {
     return (
       <div style={styles}>
-        <button class="hamburger hamburger--slider-r" type="button" onClick={this.openSlider}>
-          <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
+        <button className="hamburger hamburger--slider-r" type="button" onClick={this.openSlider}>
+          <span className="hamburger-box">
+            <span className="hamburger-inner"></span>
           </span>
         </button>
         <Slider

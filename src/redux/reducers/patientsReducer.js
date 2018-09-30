@@ -11,7 +11,8 @@ const SET_CURRENT_PATIENT = 'SET_CURRENT_PATIENT'
 let initialState = {
   patientsData: [],
   patientGraphic: {},
-  currentPatient: {}
+  currentPatient: {},
+  patientPointGeometry: []
 }
 
 export default function reducer(state = initialState, action) {

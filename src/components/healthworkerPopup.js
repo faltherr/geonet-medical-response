@@ -91,7 +91,7 @@ class HealthworkerPopup extends Component {
   hideEditModal = () => { this.setState({ showModal: false})}
 
   render () {
-    console.log(77777777777, this.props.healthworkerPointGeometry)
+    // console.log(77777777777, this.props.healthworkerPointGeometry)
     return (
       <div>
         {
