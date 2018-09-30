@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/reducers/patientsReducer'
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
-import alert from './symbols/woman_alert_9.png'
+import alert from './symbols/woman_alert_10.png'
 
 import EditPatientModal from '../components/EditPatientModal'
 
@@ -60,8 +60,8 @@ class PatientPopup extends Component {
 
           if (patient.alert === true){
             color = alert
-            width = "70px"
-            height = "70px"
+            width = "35px"
+            height = "35px"
           } else if (monthsUntilDueDate <= 3 ) {
             color = require('./symbols/woman_lime.png')
             width = "28px"

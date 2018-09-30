@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
 import { loadModules, loadCss } from 'esri-loader'
 import '../CSS/dashboard.css'
+import '../CSS/Charts.css'
+import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
+import {ToastContainer, toast} from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
-// import PieCharts from '../components/PieCharts'
-// import LineCharts from '../components/LineCharts'
-import circle from '../images/circle.png'
-import x from '../images/x.png'
+import limePatient from '../components/symbols/woman_lime.png'
+import greenPatient from '../components/symbols/woman_green.png'
+import aquaPatient from '../components/symbols/woman_aqua.png'
+import pinkPatient from '../components/symbols/woman_alert_10.png'
+import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './NewDataMenu'
+import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -88,6 +92,18 @@ class Dashboard extends Component {
           panel.classList.add("panel-expanded")
         }
       })
+
+      //button that opens slider
+      const buttonWidget2 = document.createElement("div")
+      buttonWidget2.id = "buttonWidget2"
+      buttonWidget2.className = "esri-widget esri-component esri-widget-button esri-interactive"
+      buttonWidget2.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
+
+      buttonWidget2.addEventListener("click", function() {
+        const expanded = panel.classList.contains("panel")
+      })
+
+
       this.props.getMap(mapObj)
 
       mapView.ui.add(toggle, "top-left")
@@ -142,6 +158,13 @@ class Dashboard extends Component {
     this.setState({ openModal: false });
   };
 
+  //Toast for alert when patient texts 'emergency'
+  notify = () => {
+    toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
+      position: toast.POSITION.BOTTOM_LEFT
+    })
+  }
+  
   render() {
     // let {map, mapView, legend} = this.props
     let outpostButtons = []
@@ -163,12 +186,20 @@ class Dashboard extends Component {
             <NewDataMenu closeModal={this.onCloseModal}/>
           </div>
         </Modal>
+        <div>
+          <button onClick={() => this.notify()}>Alert Test</button>
+          <ToastContainer style={{marginBottom: '150px'}} autoClose={false}/>
+        </div>
 
-        <div style={{ background: '#01101B' }}><Slideout /></div>
+        <div style={{ background: '#01101B' }}>
+          <Slideout/>
+        </div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />
-        <div className="map" id="mapDiv"></div>
+        <div className="map" id="mapDiv">
+          <button style={{position:'absolute', zIndex: '100', right: '10px', top: '200px'}}>HERE</button>
+        </div>
         <div className='esri-attribution__sources esri-interactive'>
           <button onClick={this.sierraLeonClick}>Sierra Leone</button>
           {outpostButtons}
@@ -178,16 +209,28 @@ class Dashboard extends Component {
           <h2>COLOR AND SIZING LEGEND</h2>
           <div id='panel-details'>
             <div className='panel-line'>
-              <img src={circle} className='icons' alt="icon"></img>
-              <p> Patient Data</p>
+              <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
+              <p>Patient in First Trimester</p>
             </div>
             <div className='panel-line'>
-              <img src={x} className='icons' alt="icon"></img>
+              <img src={greenPatient} className='icons' alt="second trimester icon"></img>
+              <p> Patient in Second Trimester</p>
+            </div>
+            <div className='panel-line'>
+              <img src={limePatient} className='icons' alt="third trimester icon"></img>
+              <p> Patient in Third Trimester</p>
+            </div>
+            <div className='panel-line'>
+              <img src={pinkPatient} className='icons' alt="alert icon"></img>
+              <p>Patient Alert Active</p>
+            </div>
+            <div className='panel-line'>
+              <img src={outpostHut} className='icons' alt="outpost icon"></img>
               <p> Outpost Location</p>
             </div>
             <div className='panel-line'>
               <img src={diamond} className='icons' alt="icon"></img>
-              <p> Healthworker Data</p>
+              <p> Healthworker</p>
             </div>
           </div>
         </div>

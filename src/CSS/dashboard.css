@@ -193,5 +193,5 @@ li.tab-list-item{
 }
 
 .esri-ui-manual-container>.esri-component {
-  display: none;
+  /* display: none; */
 }
