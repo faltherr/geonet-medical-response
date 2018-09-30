@@ -37,13 +37,13 @@ class Dashboard extends Component {
       'esri/layers/GraphicsLayer',
       "esri/geometry/SpatialReference",
       "esri/geometry/geometryEngine"
-    ]).then(([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference, geometryEngine]) => {
+    ]).then(async ([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference, geometryEngine]) => {
 
-      const map = new Map({
+      const map = await new Map({
         basemap: 'streets-night-vector'
       })
 
-      const mapView = new SceneView({
+      const mapView = await new SceneView({
         container: 'mapDiv',
         map,
         center: [-11.271115, 8.568134],
@@ -66,12 +66,12 @@ class Dashboard extends Component {
 
       // legend and rendering
       const panel = document.getElementById("panel")
-      const legend = new Legend({
+      const legend = await new Legend({
         view: mapView,
         container: panel
       })
       //basemap toggle 
-      const toggle = new BasemapToggle({
+      const toggle = await new BasemapToggle({
         view: mapView,
         nextBasemap: "hybrid"
       })
@@ -90,11 +90,11 @@ class Dashboard extends Component {
           panel.classList.add("panel-expanded")
         }
       })
-      this.props.getMap(mapObj)
+      await this.props.getMap(mapObj)
 
-      mapView.ui.add(toggle, "top-left")
-      mapView.ui.add(legend, "top-right")
-      mapView.ui.add(buttonWidget, "top-right")
+      await mapView.ui.add(toggle, "top-left")
+      await mapView.ui.add(legend, "top-right")
+      await mapView.ui.add(buttonWidget, "top-right")
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
@@ -103,7 +103,7 @@ class Dashboard extends Component {
       //   easing: "ease-in-out"
       // }
 
-      mapView.goTo({
+      await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
         tilt: 40,
@@ -111,149 +111,52 @@ class Dashboard extends Component {
         speedFactor: 0.3
       })
 
-    })
-  }
+      // Script to determine the distance between each patient and a health worker using Turf
 
-  componentDidUpdate = (prevProps) => {
+      let { healthworkerData, patientData } = this.props
 
-    let {healthworkerData, patientData} = this.props
-    
-    let patientGeoJson = []
-    patientData.forEach(patient => {
-      patientGeoJson.push(turf.point([patient.latitude, patient.longitude, {"name": patient.name}]))
-    })
+      // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
+      let patientGeoJson = []
+      patientData.forEach(patient => {
+        patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+      })
 
-    let healthworkerGeoJson = []
-    healthworkerData.forEach(healthworker =>{
-      // healthworkerGeoJson.push([healthworker.latitude, healthworker.longitude, {"name": healthworker.name}])
-      healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, {"name": healthworker.name}]))
-    })
-    console.log(healthworkerGeoJson)
+      // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
+      let healthworkerGeoJson = []
+      healthworkerData.forEach(healthworker => {
+        healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+      })
 
-    let hwPoints = turf.featureCollection(healthworkerGeoJson)
-    console.log('HW Points', hwPoints)
+      // This turns the individual health worker points into a collection interpretable by turf
+      let hwPoints = turf.featureCollection(healthworkerGeoJson)
 
-    patientGeoJson.forEach(patient =>{
-      let nearest = turf.nearestPoint(patient, hwPoints)
-      console.log(nearest)    
-    })
-
-  //   var targetPoint = turf.point([28.965797, 41.010086], {"marker-color": "#0F0"});
-  //   var points = turf.featureCollection([
-  //   turf.point([28.973865, 41.011122]),
-  //   turf.point([28.948459, 41.024204]),
-  //   turf.point([28.938674, 41.013324])
-  // ]);
-
-  // console.log("Points", points)
-
-  // var nearest = turf.nearestPoint(targetPoint, points);
-  // console.log(nearest)
-
-  
-  }
-
-    // console.log(777777777777777777777777777)
-    // if (healthworkerData.length !== prevProps.healthworkerData.length){
-    // loadModules([
-    //   "esri/geometry/geometryEngineAsync",
-    //   "esri/geometry/Point",
-    //   "esri/geometry/SpatialReference"
-    // ]).then(([geometryEngineAsync, Point, SpatialReference]) => {
-      //********************* Code block to calculate nearest HW ******************************************/
-
-      // Calculate distance between patient and nearest HCW
+      // Here we build an object that contains the returned geometries from a nearest point calculation and push it to a new array
       
-      // patientData.forEach(patient =>{
+      let patientHWArr = []
 
-      //   const point = new Point ({
-      //     type: "point",
-      //     longitude: patient.longitude,
-      //     latitude: patient.latitude,
-      //     spatialReference: new SpatialReference({ wkid: 3857 })
-      //   })
+      patientGeoJson.forEach(patient => {
+        let patientName = patient.geometry.coordinates[2].name
+        // console.log(patientName) 
+        let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
+        // console.log("Nearest point object", nearest)
+        let patientToHWDistance = {}
+        patientToHWDistance.patientName = patientName
+        patientToHWDistance.nearestHWLat = nearest.geometry.coordinates[0]
+        patientToHWDistance.nearestHWLon = nearest.geometry.coordinates[1]
+        patientToHWDistance.nearestHWName = nearest.geometry.coordinates[2].name
+        patientToHWDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
+        // console.log(patientToHWDistance)
+        patientHWArr.push(patientToHWDistance)
+      })
+      console.log('111111113273782798', patientHWArr)
 
-      //   let distanceArr = []
-      //   for (let i =0; i < healthworkerPointGeometry.length; i++){
-      //     // console.log(this.props.healthworkerPointGeometry[i])
-      //     geometryEngineAsync.distance(this.props.healthworkerPointGeometry[i], point, 9036).then(response =>{
-      //       let dist = response
-      //       let healthworkerName 
-      //       healthworkerName= healthworkerData[i].name
-      //       // console.log(healthworkerName)
-      //       let obj = {}
-      //       obj = {
-      //         distance: dist,
-      //         name: healthworkerName
-      //       }
-      //       distanceArr.push(obj)
-      //     })
-      //   }
-      //   console.log('Distance array2', distanceArr)
-        
-      // })
-      
-
-      // console.log('healthworker geometry', healthworkerPointGeometry.length)
-
-      // for (let i =0; i < patientData.length; i++ ){
-      //   for (let j= 0; j<healthworkerData.length; j++){
-      //     let distanceArr
-      //     if (distanceArr){
-      //       geometryEngineAsync.distance(healthworkerPointGeometry[j], patientPointGeometry[i], 9036).then(response=>{
-
-      //     }
-      //   }
-
-      //     let distance = response
-      //   // console.log(distanceBetween)
-      //   let healthworkerName
-      //   healthworkerName = this.props.healthworkerData.name
-        
-      //   // console.log(healthworkerName)
-      //   let obj = {}
-      //   obj = {
-      //     distance: distance,
-      //     name: healthworkerName
-      //   }
-      //   distanceArr.push(obj)
-      // })
-      // }
-        
-  
-        
-        // Function built to sort the distance array
-        
-        // function dynamicSort(property) {
-        //   var sortOrder = 1;
-        //   if (property[0] === "-") {
-        //     sortOrder = -1;
-        //     property = property.substr(1);
-        //   }
-        //   return function (a, b) {
-        //     var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        //     return result * sortOrder;
-        //   }
-        // }
-        
-        // let sortedArr
-        // sortedArr = distanceArr.sort(dynamicSort("distance"))
-        // console.log('This is the sorted array!!!!!', sortedArr)
-
-        // let patient = this.props.patientData[j].name
-        
-        // let sortedArr = distanceArr.distance.sort((function(a, b){return a-b}))
-        // let closestHealthworker = sortedArr
-        // console.log('patient', patient)
-        // console.log('distanceArr', distanceArr)
-        // console.log('This is the distance from nearest HW', sortedArr[0].distance)
-        // console.log('This is the name of the nearest HW', sortedArr[0].name)
+      //This ends the async call to ArcGIS online
+    })
 
 
-      //***********************************************************************************/
-    // })
-  
 
+
+  }
 
 
   // buttons for different community zooms

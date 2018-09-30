@@ -57,55 +57,6 @@ class PatientPopup extends Component {
 
         this.props.patientPointGeometry.push(point)   
 
-
-
-//********************* Code block to calculate nearest HW ******************************************/
-
-      // console.log(patient)
-      // Calculate distance between patient and nearest HCW
-      // let distanceArr = []
-
-      //   for (let i =0; i < this.props.healthworkerPointGeometry.length; i++){
-      //     // console.log(this.props.healthworkerPointGeometry[i])
-      //     let distanceBetween
-      //     distanceBetween = geometryEngine.distance(this.props.healthworkerPointGeometry[i], point, 9036)
-      //     // console.log(distanceBetween)
-      //     let healthworkerName 
-      //     healthworkerName= this.props.healthworkerData[i].name
-      //     // console.log(healthworkerName)
-      //     let obj = {}
-      //     obj = {
-      //       distance: distanceBetween,
-      //       name: healthworkerName
-      //     }
-      //     distanceArr.push(obj)
-      //   }
-
-      //   function dynamicSort(property) {
-      //       var sortOrder = 1;
-      //       if(property[0] === "-") {
-      //           sortOrder = -1;
-      //           property = property.substr(1);
-      //       }
-      //       return function (a,b) {
-      //           var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-      //           return result * sortOrder;
-      //       }
-      //   }
-
-      //   let sortedArr 
-      //   sortedArr = distanceArr.sort(dynamicSort("distance"))
-
-      //     console.log('distanceArr', distanceArr)
-      //     // let sortedArr = distanceArr.distance.sort((function(a, b){return a-b}))
-      //     // let closestHealthworker = sortedArr
-      //     console.log('patient', patient.name)
-      //     console.log('This is the distance from nearest HW', sortedArr[0].distance)
-      //     console.log('This is the name of the nearest HW', sortedArr[0].name)
-
-//***********************************************************************************/
-
-
         // date formatting 
         let todayUnformatted = new Date()
         let today = moment(todayUnformatted)
