@@ -13,8 +13,8 @@ import x from '../images/x.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './NewDataMenu'
-import Modal from 'react-responsive-modal';
+import NewDataMenu from './newDataMenu'
+import Modal from 'react-responsive-modal'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
@@ -164,7 +164,7 @@ class Dashboard extends Component {
           </div>
         </Modal>
 
-        <div style={{ background: '#01101B' }}><Slideout /></div>
+        <div style={{ background: '#01101B' }}><Slideout/></div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />

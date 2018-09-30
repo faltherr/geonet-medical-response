@@ -31,7 +31,7 @@ class PatientPopup extends Component {
   
   createGraphics = (props) => {
     let { patientsData } = props
-    console.log(11111111, patientsData)
+    // console.log(11111111, patientsData)
     if (this.props.mapView.graphics) {
       this.state.patientGraphics.forEach(graphic => {
         this.props.mapView.graphics.remove(graphic)
@@ -50,8 +50,8 @@ class PatientPopup extends Component {
 
         // date formatting 
         let todayUnformatted = new Date()
-        let today = moment(todayUnformatted).format('YYYY/MM/DD')
-        let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
+        let today = moment(todayUnformatted).format('MM/DD/YYYY')
+        let dueDateFormatted = moment(patient.duedate).format('MM/DD/YYYY')
         let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
         let color
@@ -92,7 +92,7 @@ class PatientPopup extends Component {
               <span><h4>Name: ${patient.name}</h4></span>
               <span><h4>Location: ${patient.location}</h4></span>
               <span><h4>Age:  ${patient.age}</h4></span>
-              <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+              <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
               <span><h4>Phone:  ${patient.phone}</h4></span>
               <span><h4>Family Plan:  ${patient.famplan}</h4></span>
               <span><h4>HIV Status:  ${patient.hiv}</h4></span>
