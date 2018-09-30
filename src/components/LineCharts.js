@@ -78,7 +78,6 @@ class LineCharts extends Component {
           <Line type="monotone" dataKey="Deaths (Per 1,000 Live Births)" stroke="green" activeDot={{ r: 8 }} />
         </LineChart>
         </div>
-        <PieCharts />
       </div>
     );
   }

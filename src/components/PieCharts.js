@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PieChart, Pie, Tooltip, Legend } from 'recharts';
 import { connect } from 'react-redux';
 import { getPatients } from '../redux/reducers/patientsReducer';
+import '../CSS/Charts.css'
 
 class PieCharts extends Component {
   constructor(props) {

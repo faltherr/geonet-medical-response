@@ -1,10 +1,12 @@
 .charts-container {
   display: flex;
   flex-direction: column;
+  color: #D8DBE7;
 }
 
 .pie-chart {
-  padding: 0px
+  padding: 0px;
+  color: #D8DBE7 !important
 }
 
 .SlideModal__header.js-slideModalHeader {
@@ -16,6 +18,7 @@
 
 .recharts-surface {
   background-color: #01101B !important;
+  color: #D8DBE7 !important
 }
 
 .h-overflowAuto {

@@ -57,7 +57,7 @@
     list-style: none;
     margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
-    color: white;
+    color: white !important;
     cursor: pointer;
   }
   

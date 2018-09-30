@@ -192,6 +192,6 @@ li.tab-list-item{
   margin: 40px;
 }
 
-/* .esri-ui-manual-container>.esri-component {
-  display: none;
-} */
+.esri-ui-manual-container>.esri-component {
+  /* display: none; */
+}
