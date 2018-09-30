@@ -24,8 +24,10 @@ module.exports = {
                 //******** Should the respond function be different for an emergency? So that we message patient AND HCW?*/
                 
                 respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordianting a response for your address, ${emergencyResponse[0].location}`)
-            })
+                res.send(emergencyResponse[0].name, emergencyResponse[0].location)
+            }).then(() => {
 
+            })
         // This is the registration functionality
         } else if (Body.toLowerCase().match(/^.*(register|start).*$/)) {
             db.checkPhoneNumber(From).then(checkPhoneNumber => {
