@@ -7,6 +7,9 @@ import { ENGINE_METHOD_DIGESTS } from 'constants';
 import { CallContext } from 'twilio/lib/rest/api/v2010/account/call';
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal'
+import NewDataMenu from './NewDataMenu'
+import Modal from 'react-responsive-modal';
+
 
 class FooterData extends Component {
   
@@ -41,7 +44,8 @@ class FooterData extends Component {
   render () {
     let { patientsData, healthworkersData, outpostsData } = this.props
     const calculated = this.distance(+patientsData.latitude, +patientsData.longitude, +outpostsData.latitude, +outpostsData.longitude)
-
+    let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element=>{
+                     return <p key={element}>{element}</p>
     return (
       <div className="footer-wrapper">
         <div className="data-containers">
@@ -65,13 +69,12 @@ class FooterData extends Component {
 
               <div id='service-area'>
                 <h4>Patients outside of service area</h4> 
-                  {
-                   patientsData.map( patient => {
-                      let distanceArray = []
-                      // let calulated = this.distance(patient.latitude, patient.longitude, outpostsData.latitude, outpostsData.longitude)
-                        // return <p>{distanceArray.push(calulated)}</p>
-                    })
-                  }
+                  
+                     <div id='patient-data'><p>Current Patient Alerts</p>
+            </div>
+            <div id='service-area'>
+              <p>Patients outside of service area</p>
+              {patientsOutsideServiceArea}
               </div>
 
               <div id='healthworker-data'>
@@ -83,6 +86,7 @@ class FooterData extends Component {
                       }
                     })
                   }
+   
             </div>
 
             <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
