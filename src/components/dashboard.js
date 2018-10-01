@@ -17,9 +17,10 @@ import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './NewDataMenu'
+import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
+
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
@@ -237,7 +238,7 @@ class Dashboard extends Component {
       target: [-11.618979, 9.128167],
       heading: 0,
       tilt: 0,
-      zoom: 9,
+      zoom: 8,
       speedFactor: 0.1
     })
   }
@@ -251,8 +252,8 @@ class Dashboard extends Component {
     }, this.communityClickOption)
   }
   communityClickOption = {
-    // speedFactor: 0.1,
-    easing: "ease-in"
+    speedFactor: 2,
+    easing: "ease-in-out"
   }
 
   //Toast for alert when patient texts 'emergency'
