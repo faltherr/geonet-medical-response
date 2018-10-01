@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import Slider from 'react-slide-out';
 import 'react-slide-out/lib/index.css';
 import '../CSS/Charts.css'
+import '../CSS/slideout.css'
 import PieCharts from '../components/PieCharts'
 import LineCharts from '../components/LineCharts'
-// import hamburgers from 'hamburgers';
 
 const styles = {
   fontFamily: 'sans-serif',
-  padding: '15px',
-  display: 'flex',
-  justifyContent: 'flex-end'
+  zIndex: 100
 };
 
 
@@ -25,6 +23,7 @@ class Slideout extends Component{
     this.setState({
       isOpen: true
     });
+    console.log("firefire")
   }
   closeSlider = () => {
     this.setState({
@@ -34,11 +33,7 @@ class Slideout extends Component{
   render() {
     return (
       <div style={styles}>
-        <button class="hamburger hamburger--slider-r" type="button" onClick={this.openSlider}>
-          <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-          </span>
-        </button>
+        <button class="slider-button" type="button" onClick={this.openSlider}><i class="fas fa-bars"></i></button>
         <Slider
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
