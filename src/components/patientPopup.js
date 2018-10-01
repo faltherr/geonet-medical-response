@@ -101,7 +101,7 @@ class PatientPopup extends Component {
               <span><h4>Name: ${patient.name}</h4></span>
               <span><h4>Location: ${patient.location}</h4></span>
               <span><h4>Age:  ${patient.age}</h4></span>
-              <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+              <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
               <span><h4>Phone:  ${patient.phone}</h4></span>
               <span><h4>Family Plan:  ${patient.famplan}</h4></span>
               <span><h4>HIV Status:  ${patient.hiv}</h4></span>

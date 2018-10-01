@@ -59,7 +59,7 @@ class HealthworkerPopup extends Component {
               `
         }],
         actions: [{
-          title: "Edit HealthWorker",
+          title: "Edit Healthworker",
           id: `${healthworker.id}`, 
           className: "esri-icon-user" }]
       }
