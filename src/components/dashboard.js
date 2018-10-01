@@ -17,7 +17,7 @@ import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './NewDataMenu'
+import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
 
@@ -212,7 +212,7 @@ class Dashboard extends Component {
             // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
             if (patient.healthworker_name !== patientDistArr[i].nearestHWName){
               newPatientAssignement.push(patient.name)
-              console.log('Patients not assigned to nearest HW:', patient)
+              // console.log('Patients not assigned to nearest HW:', patient)
             }
           }
         }
