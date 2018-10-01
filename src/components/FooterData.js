@@ -18,7 +18,7 @@ class FooterData extends Component {
     this.props.mapView.goTo({
       target: [+long, +lat],
       heading: 0,
-      tilt: 10,
+      tilt: 0,
       zoom: 20
     }, this.clickOption)
   }

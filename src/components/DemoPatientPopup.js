@@ -48,6 +48,7 @@ class DemoPatientPopup extends Component {
         "esri/geometry/Multipoint"
       ]).then(([Graphic, geometryEngine, DistanceParameters, GeometryService, Point, SpatialReference, Multipoint]) => {
       patientsData.forEach( patient => {
+        if(patient.latitude && patient.longitude){
         const point = new Point ({
           type: "point",
           longitude: patient.longitude,
@@ -149,6 +150,7 @@ class DemoPatientPopup extends Component {
           patientGraphics: [ ...this.state.patientGraphics, patientGraphic ]
         })
         this.props.mapView.graphics && this.props.mapView.graphics.add(patientGraphic)
+      }
       })
     })
   }

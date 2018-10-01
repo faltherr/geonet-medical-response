@@ -27,7 +27,7 @@ componentDidUpdate(prevProps) {
         // You need to maintain the order of the modules that you import so that the variable name you set in the .then references the correct module
       ]).then(([Graphic, GraphicsLayer, PictureMarkerSymbol, geometryEngine, Point, webMercatorUtils, SpatialReference, BufferParameters]) => {
         outpostsData.forEach( outpost => {
-
+          if (outpost.latitude && outpost.longitude){
           let pointGeometry = new Point({
             type: "point",
             longitude: outpost.longitude,
@@ -95,6 +95,8 @@ componentDidUpdate(prevProps) {
       })
         this.props.mapView.graphics.add(outpostGraphic)
         this.props.mapView.graphics.add(ptBufferGraphic)
+      
+    }
       })
     })
   }
