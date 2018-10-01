@@ -7,7 +7,8 @@ const ADD_HEALTHWORKER = 'ADD_HEALTHWORKER'
 
 let initialState = {
   healthworkerGraphic: {},
-  healthworkersData: []
+  healthworkersData: [],
+  healthworkerPointGeometry: []
 }
 
 export default function reducer (state = initialState, action) {

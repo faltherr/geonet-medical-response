@@ -20,16 +20,21 @@ class HealthworkerPopup extends Component {
   if ((!prevProps.mapView.graphics && this.props.mapView.graphics && healthworkersData) || (!prevProps.healthworkersData.length && this.props.healthworkersData.length && this.props.mapView.graphics)) {
 
   loadModules([
-    'esri/Graphic'
-  ]).then(([Graphic]) => {
+    'esri/Graphic',
+    "esri/geometry/Point",
+    "esri/geometry/SpatialReference"
+  ]).then(([Graphic, Point, SpatialReference]) => {
       healthworkersData.forEach( healthworker => {
 
-      const point = {
+      const point = new Point({
         type: "point", // autocasts as new Point()
         longitude: healthworker.longitude,
-        latitude: healthworker.latitude
-      }
-         
+        latitude: healthworker.latitude,
+        spatialReference: new SpatialReference({ wkid: 3857 }),
+      })
+
+      this.props.healthworkerPointGeometry.push(point)   
+
       const markerSymbol = {
         type: "simple-marker", 
         style: 'diamond',
@@ -54,7 +59,7 @@ class HealthworkerPopup extends Component {
               `
         }],
         actions: [{
-          title: "Edit HealthWorker",
+          title: "Edit Healthworker",
           id: `${healthworker.id}`, 
           className: "esri-icon-user" }]
       }
@@ -86,6 +91,7 @@ class HealthworkerPopup extends Component {
   hideEditModal = () => { this.setState({ showModal: false})}
 
   render () {
+    // console.log(77777777777, this.props.healthworkerPointGeometry)
     return (
       <div>
         {
@@ -107,7 +113,8 @@ let mapStateToProps = state => {
   return {
     healthworkersData: state.healthworkers.healthworkersData, 
     mapView: state.map.mapView,
-    healthworkerGraphic: state.healthworkers.healthworkerGraphic
+    healthworkerGraphic: state.healthworkers.healthworkerGraphic,
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry
   }
 }
 

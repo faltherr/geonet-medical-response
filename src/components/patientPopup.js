@@ -31,7 +31,7 @@ class PatientPopup extends Component {
   
   createGraphics = (props) => {
     let { patientsData } = props
-    console.log(11111111, patientsData)
+    // console.log(11111111, patientsData)
     if (this.props.mapView.graphics) {
       this.state.patientGraphics.forEach(graphic => {
         this.props.mapView.graphics.remove(graphic)
@@ -39,19 +39,28 @@ class PatientPopup extends Component {
     }
     if (true) {
       loadModules([
-        'esri/Graphic'
-      ]).then(([Graphic]) => {
+        'esri/Graphic',
+        "esri/geometry/geometryEngine",
+        'esri/tasks/support/DistanceParameters',
+        'esri/tasks/GeometryService',
+        "esri/geometry/Point",
+        "esri/geometry/SpatialReference",
+        "esri/geometry/Multipoint"
+      ]).then(([Graphic, geometryEngine, DistanceParameters, GeometryService, Point, SpatialReference, Multipoint]) => {
       patientsData.forEach( patient => {
-        const point = {
+        const point = new Point ({
           type: "point",
           longitude: patient.longitude,
-          latitude: patient.latitude
-        }
+          latitude: patient.latitude,
+          spatialReference: new SpatialReference({ wkid: 3857 })
+        })
+
+        this.props.patientPointGeometry.push(point)   
 
         // date formatting 
         let todayUnformatted = new Date()
-        let today = moment(todayUnformatted).format('YYYY/MM/DD')
-        let dueDateFormatted = moment(patient.duedate).format('YYYY/MM/DD')
+        let today = moment(todayUnformatted)
+        let dueDateFormatted = moment(patient.duedate)
         let monthsUntilDueDate = moment(dueDateFormatted).diff(moment(today), 'months', true)
 
         let color
@@ -92,7 +101,7 @@ class PatientPopup extends Component {
               <span><h4>Name: ${patient.name}</h4></span>
               <span><h4>Location: ${patient.location}</h4></span>
               <span><h4>Age:  ${patient.age}</h4></span>
-              <span><h4>Due Date:  ${moment(patient.duedate).format('YYYY/MM/DD')}</h4></span>
+              <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
               <span><h4>Phone:  ${patient.phone}</h4></span>
               <span><h4>Family Plan:  ${patient.famplan}</h4></span>
               <span><h4>HIV Status:  ${patient.hiv}</h4></span>
@@ -178,7 +187,11 @@ let mapStateToProps = state => {
   return {
     patientsData: state.patients.patientsData,
     patientGraphic: state.patients.patientGraphic,
-    mapView: state.map.mapView
+    mapView: state.map.mapView,
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
+    healthworkerData: state.healthworkers.healthworkersData,
+    patientPointGeometry: state.patients.patientPointGeometry
+
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)
