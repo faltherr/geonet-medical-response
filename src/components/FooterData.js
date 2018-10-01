@@ -3,12 +3,9 @@ import '../CSS/footerData.css'
 import { connect } from 'react-redux'
 import { getPatients } from '../redux/reducers/patientsReducer'
 import * as moment from 'moment'
-import { ENGINE_METHOD_DIGESTS } from 'constants';
-import { CallContext } from 'twilio/lib/rest/api/v2010/account/call';
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal'
-import NewDataMenu from './NewDataMenu'
-import Modal from 'react-responsive-modal';
+
 
 
 class FooterData extends Component {
@@ -16,15 +13,6 @@ class FooterData extends Component {
     state = {
       openModal: false
     }
-  
-  distance = (lat1, lon1, lat2, lon2) => {
-    let p = Math.PI/180    
-    let c = Math.cos;
-    let a = 0.5 - c((Number(lat2) - Number(lat1)) * p)/2 + 
-            c(Number(lat1) * p) * c(Number(lat2)* p) * 
-            (1 - c((Number(lon2) - Number(lon1)) * p))/2
-    return 12742 * Math.asin(Math.sqrt(a)) // 2 * R; R = 6371 km
-  }
 
   handleClick = (long, lat) => {
     this.props.mapView.goTo({
@@ -42,10 +30,12 @@ class FooterData extends Component {
   onCloseModal = () => { this.setState({ openModal: false }) }
 
   render () {
-    let { patientsData, healthworkersData, outpostsData } = this.props
-    const calculated = this.distance(+patientsData.latitude, +patientsData.longitude, +outpostsData.latitude, +outpostsData.longitude)
-    let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element=>{
-                     return <p key={element}>{element}</p>
+    let { patientsData, healthworkersData} = this.props
+    
+    let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element => {
+      return <p key={element}>{element}</p>
+    })
+
     return (
       <div className="footer-wrapper">
         <div className="data-containers">
@@ -55,48 +45,47 @@ class FooterData extends Component {
               { 
                 patientsData.map(patient => {
                   let todayUnformatted = new Date()
-                  let today = moment(todayUnformatted).format('MM/DD/YYYY')
-                  let dueDateFormatted = moment(patient.duedate).format('MM/DD/YYYY')
+                  let today = moment(todayUnformatted)
+                  let dueDateFormatted = moment(patient.duedate)
                   let dueThisMonth = moment(dueDateFormatted).diff(moment(today), 'days', true)
-                  let clickable = []
+                  
                     
                     if (dueThisMonth <= 31 && dueThisMonth >= 1) {
-                      return <p onClick={ () => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p> 
-                    } 
+                      return <p key={patient.id} onClick={ () => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p> 
+                    } else {
+                      return null
+                    }
                 })
               }
           </div>
 
-              <div id='service-area'>
-                <h4>Patients outside of service area</h4> 
-                  
-                     <div id='patient-data'><p>Current Patient Alerts</p>
-            </div>
-            <div id='service-area'>
-              <p>Patients outside of service area</p>
+          <div id='service-area'>
+            <h4>Patients outside of service area</h4>
               {patientsOutsideServiceArea}
-              </div>
+          </div>
+              
+          <div id='healthworker-data'>
+            <h4>Heathworkers in the Field</h4>
+                {
+                  healthworkersData.map( healthworker => {
+                    if (healthworker.in_field === true) {
+                      return <p key={healthworker.id} onClick={ () => {this.handleClick(healthworker.longitude, healthworker.latitude)}}>{healthworker.name}</p>
+                    } else {
+                      return null
+                    }
+                  })
+                }
+          </div>
 
-              <div id='healthworker-data'>
-                <h4>Heathworkers in the Field</h4>
-                  {
-                    healthworkersData.map( healthworker => {
-                      if (healthworker.in_field === true) {
-                        return <p onClick={ () => {this.handleClick(healthworker.longitude, healthworker.latitude)}}>{healthworker.name}</p>
-                      }
-                    })
-                  }
-   
-            </div>
-
-            <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
+          <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
             <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
               <div className="new-data-modal">
                 <NewDataMenu closeModal={this.onCloseModal}/>
               </div>
             </Modal>
-        </div>
+        
       </div>
+    </div>
     )
   }
 }

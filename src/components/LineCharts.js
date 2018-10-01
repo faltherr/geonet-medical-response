@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
-import PieCharts from './PieCharts';
+// import PieCharts from './PieCharts';
 // import Charts from '../CSS/Charts.css';
 
 class LineCharts extends Component {
@@ -20,7 +20,7 @@ class LineCharts extends Component {
         var date = maternal[0].series[i].end
         var stringDate = +date.substring(0, 4)
         var mortality = maternal[0].series[i].value
-        dates.push({ date: stringDate, ["Deaths (Per 100,000 Live Births)"]: mortality })
+        dates.push({ date: stringDate, "Deaths (Per 100,000 Live Births)": mortality })
       }
     }
     return dates
@@ -33,7 +33,7 @@ class LineCharts extends Component {
         var date = children[0].series[i].end
         var stringDate = +date.substring(0, 4)
         var mortality = children[0].series[i].value
-        dates.push({ date: stringDate, ["Deaths (Per 1,000 Live Births)"]: mortality })
+        dates.push({ date: stringDate, "Deaths (Per 1,000 Live Births)" : mortality })
       }
     }
     return dates
