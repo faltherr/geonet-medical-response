@@ -1,5 +1,6 @@
 const surveyQs = require('../data/survey_questions')
 const axios = require('axios')
+const moment = require('moment')
 
 module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, respond) {
 
@@ -20,7 +21,7 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
 
     //** The first null index should be identified as the value we want to insert into the table
     let firstNullIndex = objectArr.indexOf(null)
-    
+
     //** Question to fill holds the key of the object at the first null value
     //** We will add this value to the database
     let questionToFill = Object.keys(clone)[firstNullIndex]
@@ -84,18 +85,51 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
             })
         }
     } else if (questionToFill === 'duedate') {
-        let dateMatcher = /^([2][0][1-2][0-9])(\/|\-|\.)(0[1-9]|1[0-2]|[0-12])(\/|\-|\.)([0-31]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/
+        let dateMatcher = /^([2][0][1-2][0-9])(\/|\-|\.)(0[1-9]|1[0-2]|[0-91-2])(\/|\-|\.)([0-31]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/
         if (Body.match(dateMatcher)) {
             // console.log('Your date is correct')
             let year = Body.match(dateMatcher)[1]
             let month = Body.match(dateMatcher)[3]
             let day = Body.match(dateMatcher)[5]
             let fullDueDate = `${year}/${month}/${day}`
+            let fullDateAsDate = new Date(fullDueDate)
+            let dateChecker = moment(fullDueDate, "YYYY/MM/DD").isValid()
 
-            let newObj = {}
-            newObj[questionToFill] = fullDueDate;
-            db.survey.update({ phone: From }, newObj).then(function (error, updatedDatabase) { })
-            objectArr[firstNullIndex] = fullDueDate
+            let today = new Date()
+            today.setHours(0, 0, 0, 0)
+
+            function monthDiff(d1, d2) {
+                var months;
+                months = (d2.getFullYear() - d1.getFullYear()) * 12;
+                months -= d1.getMonth() + 1;
+                months += d2.getMonth();
+                return months <= 0 ? 0 : months;
+            }
+
+            monthsTillDue = monthDiff(today, fullDateAsDate)
+
+            if (dateChecker) {
+                if (monthsTillDue < 10) {
+                    let newObj = {}
+                    newObj[questionToFill] = fullDueDate;
+                    db.survey.update({ phone: From }, newObj).then(function (error, updatedDatabase) { })
+                    objectArr[firstNullIndex] = fullDueDate
+                } else {
+                    validResponse = false
+                    surveyQs.forEach(element => {
+                        if (questionToFill in element) {
+                            return respond(`Invalid response. Please re-enter a date within the next 9 months. ${Object.values(element)[0]}`)
+                        }
+                    })
+                }
+            } else {
+                validResponse = false
+                surveyQs.forEach(element => {
+                    if (questionToFill in element) {
+                        return respond(`Please re-enter a valid answer. ${Object.values(element)[0]}`)
+                    }
+                })
+            }
         } else {
             validResponse = false
             surveyQs.forEach(element => {
@@ -118,8 +152,8 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
 
             // Add the 3words api get request request here! Check for latitude/longitude bounds for Sierra Leone
 
-            await axios.get(`https://api.what3words.com/v2/forward?addr=${fullAddress}&key=${process.env.w3w_key}`).then( res => {
-                    if(!res.data.geometry) {
+            await axios.get(`https://api.what3words.com/v2/forward?addr=${fullAddress}&key=${process.env.w3w_key}`).then(res => {
+                if (!res.data.geometry) {
                     // return respond(`Address not found. Please enter a valid three word address in the format word1.word2.word3.`)
                     surveyQs.forEach(element => {
                         validResponse = false
@@ -127,25 +161,25 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
                             return respond(`Address not found. Please re-enter a valid answer. ${Object.values(element)[0]}`)
                         }
                     })
-                    } else if( +res.data.geometry.lng<-13.307377 || +res.data.geometry.lng>-10.256908 || +res.data.geometry.lat>10.0316 || +res.data.geometry.lat<6.791397) {
-                        validResponse = false
-                        return respond(`The address you entered was not in Sierra Leone. Please double check and send a message in the format 'word1.word2.word3'.`)
-                    } else {
-                        // This fills the longitude cell
-                        let lngObj = {}
-                        lngObj['longitude']=res.data.geometry.lng
-                        db.survey.update({ phone: From }, lngObj)
-                        //This fills the latitude cell
-                        let latObj = {}
-                        latObj['latitude']=res.data.geometry.lat
-                        db.survey.update({ phone: From }, latObj)
-                        //This fills the location cell
-                        let newObj = {}
-                        newObj[questionToFill] = fullAddress;
-                        db.survey.update({ phone: From }, newObj)
-                        objectArr[firstNullIndex] = fullAddress
-                    }
-                })
+                } else if (+res.data.geometry.lng < -13.307377 || +res.data.geometry.lng > -10.256908 || +res.data.geometry.lat > 10.0316 || +res.data.geometry.lat < 6.791397) {
+                    validResponse = false
+                    return respond(`The address you entered was not in Sierra Leone. Please double check and send a message in the format 'word1.word2.word3'.`)
+                } else {
+                    // This fills the longitude cell
+                    let lngObj = {}
+                    lngObj['longitude'] = res.data.geometry.lng
+                    db.survey.update({ phone: From }, lngObj)
+                    //This fills the latitude cell
+                    let latObj = {}
+                    latObj['latitude'] = res.data.geometry.lat
+                    db.survey.update({ phone: From }, latObj)
+                    //This fills the location cell
+                    let newObj = {}
+                    newObj[questionToFill] = fullAddress;
+                    db.survey.update({ phone: From }, newObj)
+                    objectArr[firstNullIndex] = fullAddress
+                }
+            })
         } else {
             validResponse = false
             surveyQs.forEach(element => {
@@ -174,14 +208,14 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
 
     function sendQuestion() {
         // null count identifies any unfilled cells in the survey
-        let nullCount = objectArr.filter(function (value) {return value === null }).length
+        let nullCount = objectArr.filter(function (value) { return value === null }).length
         // This is labeled "Next Null" because the first null value has been inserted into the database and the objectArr is updated
         // Basically the next null is the first null after the object arr from earlier was updated on a successful question entry
         let nextNullIndex = objectArr.indexOf(null)
 
         // When null count is equal to 0 the survey is completed
-        if (nullCount === 0){
-            db.survey.update({ phone: From }, {completed:true})
+        if (nullCount === 0) {
+            db.survey.update({ phone: From }, { completed: true })
             respond('Survey has been completed. Message us if there is an emergency with "emergency".')
         } else {
             let questionToSend = Object.keys(clone)[nextNullIndex]
@@ -196,7 +230,7 @@ module.exports = async function surveyLogic(surveyNumberCheck, Body, From, db, r
     // Here we invoke the function that decides whether to send the next question of mark the survey as completed.
     // We do this based on the variable valid response defined at the top of the file
 
-    if (validResponse){
+    if (validResponse) {
         sendQuestion()
     } else {
         return null
