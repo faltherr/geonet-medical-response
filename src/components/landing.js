@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { logout } from '../redux/reducers/verifiedUser';
+import { connect } from 'react-redux';
 
 import '../CSS/Landing.css'
 
@@ -29,14 +31,15 @@ class Landing extends Component {
             <div className="landing-name">
               <h1>GeoNet Medical Response</h1>
             </div>
-            <div>
+            <div className="landing-button-container">
               <button className="landing-button" onClick={this.login}>Admin Login</button>
+              <Link to="/demo-dashboard"><button className="landing-guest-button">Continue As A Guest</button></Link>
             </div>
             <div className="landing-mission">
               <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>
             </div>
           </div>
-          <Link to= '/about'>
+          <Link to='/about'>
             <button className='about-button'>About Us</button>
           </Link>
         </div>
@@ -45,4 +48,8 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+// let mapStateToProps = state => {
+//   user: state.user.user
+// }
+
+export default connect(null, { logout })(Landing);
