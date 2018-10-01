@@ -2,9 +2,23 @@ import React, { Component } from 'react';
 import '../CSS/footerData.css'
 import { connect } from 'react-redux'
 import { getPatients } from '../redux/reducers/patientsReducer'
+import NewDataMenu from './newDataMenu'
+import Modal from 'react-responsive-modal';
 
 class FooterData extends Component {
-  
+  constructor() {
+    super()
+    this.state = {
+      openModal: false
+    }
+  }
+  onOpenModal = () => {
+    this.setState({ openModal: true });
+  };
+
+  onCloseModal = () => {
+    this.setState({ openModal: false });
+  };
   render () {
     return (
       <div className="footer-wrapper">
@@ -23,8 +37,13 @@ class FooterData extends Component {
             </div>
             <div id='due-this-month'><p>Expecting This Month</p></div>
             <div id='healthworker-data'><p>Heathworkers in the Field</p></div>
-            
-        </div>
+            <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
+            <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
+              <div className="new-data-modal">
+                <NewDataMenu closeModal={this.onCloseModal}/>
+              </div>
+            </Modal>
+          </div>
       </div>
     )
   }
