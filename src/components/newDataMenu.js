@@ -159,7 +159,7 @@ class NewDataMenu extends Component {
                         <form id="create-form" onSubmit={this.handleSubmit}>
                             <div className='form-input'><h4>Name:</h4><input name='patientName' onChange={this.handleChange} /></div>
                             <div className='form-input'><h4>Phone:</h4><input name='patientPhone' onChange={this.handleChange} /></div>
-                            <div className='form-input'><h4>Address: <a href='https://map.what3words.com/mills.oilier.glitches'>What3Words Map</a> </h4><input name='patientAddress' onChange={this.handleChange} /></div>
+                            <div className='form-input'><h4>Address: </h4> <p>Use the<a href='https://map.what3words.com/mills.oilier.glitches' target='_blank' rel="noopener noreferrer">What3Words Map</a> to find a new address </p><input name='patientAddress' onChange={this.handleChange} /></div>
                             <div className='form-input'><h4>Age:</h4><input name='patientAge' onChange={this.handleChange} value={this.state.patientAge} /></div>
                             {/* <div className='form-input'><h4>Did the patient use family planning?</h4><input name='patientFamPlan'onChange={this.handleChange} value={this.state.patientFamPlan}/></div> */}
                             <div className='form-input'><h4>Did the patient use family planning?</h4>
