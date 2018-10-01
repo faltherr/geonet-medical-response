@@ -28,7 +28,6 @@ class Dashboard extends Component {
   constructor() {
     super()
     this.state = {
-      openModal: false,
       patientsAtRisk: [],
       patientsAwaitingAssignment : [],
       patientLocationData: []
@@ -282,14 +281,6 @@ class Dashboard extends Component {
 
     return (
       <div className='wrapper'>
-        <button onClick={() => this.onOpenModal()}>Add New Data</button>
-        <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
-          <div className="new-data-modal">
-            <NewDataMenu closeModal={this.onCloseModal} />
-          </div>
-        </Modal>
-
-        <div style={{ background: '#01101B' }}><Slideout /></div>
         <div>
           <button onClick={() => this.notify()}>Alert Test</button>
           <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>

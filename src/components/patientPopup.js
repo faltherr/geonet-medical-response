@@ -166,6 +166,7 @@ showEditModal = (patient, graphic) => {
 hideEditModal = () => { this.setState({ showModal: false })}
 
   render () {
+    console.log('jjdkfajdfjk',this.props.patientsData)
     return (
       <div>
         { this.state.showModal

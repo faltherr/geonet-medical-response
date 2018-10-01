@@ -58,9 +58,9 @@ class PieCharts extends Component {
       // this.props.patientsData.length ?
         <div className='pie-chart'>
           <PieChart width={600} height={400}>
-            <Pie dataKey= "" data={this.state.data1} cx={200} cy={200} outerRadius={60} fill="#8884d8"
+            <Pie dataKey= "value" data={this.state.data1} cx={200} cy={200} outerRadius={60} fill="#8884d8"
             />
-            <Pie dataKey= "" data={this.state.data2} cx={200} cy={200} outerRadius={90} innerRadius={70} fill="#82ca9d" label />
+            <Pie dataKey= "value" data={this.state.data2} cx={200} cy={200} outerRadius={90} innerRadius={70} fill="#82ca9d" label />
             <Tooltip />
             <Legend width={250} iconType="square" wrapperStyle={{right:10, top: 150}} />
           </PieChart>
