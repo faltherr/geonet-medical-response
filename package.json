@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "proxy": "http://localhost:8443",
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "chart.js": "^2.7.2",

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../CSS/footerData.css'
 import { connect } from 'react-redux'
 import { getPatients } from '../redux/reducers/patientsReducer'
-import NewDataMenu from './newDataMenu'
+import NewDataMenu from './NewDataMenu'
 import Modal from 'react-responsive-modal';
 
 class FooterData extends Component {
@@ -20,6 +20,9 @@ class FooterData extends Component {
     this.setState({ openModal: false });
   };
   render () {
+    let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element=>{
+      return <p key={element}>{element}</p>
+    })
     return (
       <div className="footer-wrapper">
         <div className="data-containers">
@@ -27,13 +30,7 @@ class FooterData extends Component {
             </div>
             <div id='service-area'>
               <p>Patients outside of service area</p>
-              {/* {
-                patientsData.map( patient => {
-                  if (patient.duedate) {
-
-                  }
-                })
-              } */}
+              {patientsOutsideServiceArea}
             </div>
             <div id='due-this-month'><p>Expecting This Month</p></div>
             <div id='healthworker-data'><p>Heathworkers in the Field</p></div>
