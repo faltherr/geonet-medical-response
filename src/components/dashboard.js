@@ -125,13 +125,21 @@ class Dashboard extends Component {
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
       patientData.forEach(patient => {
-        patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+        if (patient.latitude && patient.longitude){
+          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+        } else {
+          return null
+        }
       })
 
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+        if (healthworker.latitude && healthworker.longitude){
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+        } else{
+          return null
+        }
       })
 
       // This turns the individual health worker points into a collection interpretable by turf
@@ -143,7 +151,7 @@ class Dashboard extends Component {
       // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
       let outpostGeoJson = []
       outpostsData.forEach(outpost => {
-        if(outpost.latitude){
+        if(outpost.latitude && outpost.longitude){
           outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
         } else{
           return null
