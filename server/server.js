@@ -59,6 +59,7 @@ app.get('/api/patients/:id', PatientCtrl.getPatient)
 app.get('/api/healthworkers', HealthworkersCtrl.getHealthworkers)
 app.post('/api/healthworkers', HealthworkersCtrl.addHealthworker)
 app.get('/api/healthworkers/:id', HealthworkersCtrl.getHealthworker)
+app.put('/api/healthworkers/:id', HealthworkersCtrl.updateHealthworker)
 
 // OutpostCtrl 
 app.get('/api/outposts', OutpostCtrl.getOutposts)

@@ -45,6 +45,11 @@
   box-sizing: border-box;
 }
 
+.landing-button-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .landing-button {
   margin-top: 25px;
   width: 175px;
@@ -56,6 +61,24 @@
   font-size: 20px;
   cursor: pointer;
   font-family: 'Raleway', sans-serif;
+}
+
+.landing-guest-button {
+  margin-top: 25px;
+  width: 175px;
+  height: 40px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  background: #51495D;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+}
+
+.landing-guest-button:hover {
+  color: #51495D;
+  background-color: white;
 }
 
 .landing-button:hover {
