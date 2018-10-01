@@ -114,7 +114,7 @@ class Dashboard extends Component {
       await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
-        tilt: 40,
+        tilt: 0,
         zoom: 9,
         speedFactor: 0.3
       })
@@ -254,8 +254,8 @@ class Dashboard extends Component {
   communityClick = (long, lat) => {
     this.props.mapView.goTo({
       target: [+long, +lat],
-      heading: 40,
-      tilt: 10,
+      heading: 0,
+      tilt: 0,
       zoom: 12
     }, this.communityClickOption)
   }

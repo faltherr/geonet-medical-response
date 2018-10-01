@@ -25,6 +25,7 @@ class HealthworkerPopup extends Component {
     "esri/geometry/SpatialReference"
   ]).then(([Graphic, Point, SpatialReference]) => {
       healthworkersData.forEach( healthworker => {
+        if(healthworker.latitude && healthworker.longitude){
 
       const point = new Point({
         type: "point", // autocasts as new Point()
@@ -78,7 +79,7 @@ class HealthworkerPopup extends Component {
         popupTemplate: PopupTemplate
       })
           this.props.mapView.graphics.add(healthworkerGraphic)
-        })
+        }})
       })
     }  
   }

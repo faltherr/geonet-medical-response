@@ -42,8 +42,12 @@ module.exports = {
                         }
                     })
                 } else {
-                    db.addPhone(From).then(addedNumbers => {
-                        return respond(`Your number has been added. Please complete our survey. ${surveyQs[0].name}`)
+                    db.addPhone(From).then( () => {
+                        db.sms_get_survey_id(From).then(grabbedSurveyID=>{
+                            db.sms_add_patient_hw_connection(grabbedSurveyID[0].id).then( () => {
+                                return respond(`Your number has been added. Please complete our survey. ${surveyQs[0].name}`)
+                            })
+                        })
                     })
                 }
             })
