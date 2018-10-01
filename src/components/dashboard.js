@@ -211,7 +211,7 @@ class Dashboard extends Component {
             // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
             if (patient.healthworker_name !== patientDistArr[i].nearestHWName){
               newPatientAssignement.push(patient.name)
-              console.log('Patients not assigned to nearest HW:', patient)
+              // console.log('Patients not assigned to nearest HW:', patient)
             }
           }
         }
