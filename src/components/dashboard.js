@@ -17,18 +17,11 @@ import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './newDataMenu'
-import Modal from 'react-responsive-modal';
+
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
 class Dashboard extends Component {
-  constructor() {
-    super()
-    this.state = {
-      openModal: false
-    }
-  }
 
   componentDidMount() {
 
@@ -93,17 +86,6 @@ class Dashboard extends Component {
         }
       })
 
-      //button that opens slider
-      const buttonWidget2 = document.createElement("div")
-      buttonWidget2.id = "buttonWidget2"
-      buttonWidget2.className = "esri-widget esri-component esri-widget-button esri-interactive"
-      buttonWidget2.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
-
-      buttonWidget2.addEventListener("click", function() {
-        const expanded = panel.classList.contains("panel")
-      })
-
-
       this.props.getMap(mapObj)
 
       mapView.ui.add(toggle, "top-left")
@@ -150,14 +132,6 @@ class Dashboard extends Component {
     easing: "ease-in"
   }
 
-  onOpenModal = () => {
-    this.setState({ openModal: true });
-  };
-
-  onCloseModal = () => {
-    this.setState({ openModal: false });
-  };
-
   //Toast for alert when patient texts 'emergency'
   notify = () => {
     toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
@@ -180,25 +154,15 @@ class Dashboard extends Component {
 
     return (
       <div className='wrapper'>
-        <button onClick={() => this.onOpenModal()}>Add New Data</button>
-        <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
-          <div className="new-data-modal">
-            <NewDataMenu closeModal={this.onCloseModal}/>
-          </div>
-        </Modal>
         <div>
           <button onClick={() => this.notify()}>Alert Test</button>
-          <ToastContainer style={{marginBottom: '150px'}} autoClose={false}/>
-        </div>
-
-        <div style={{ background: '#01101B' }}>
-          <Slideout/>
+          <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>
         </div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv">
-          <button style={{position:'absolute', zIndex: '100', right: '10px', top: '200px'}}>HERE</button>
+          <Slideout/>
         </div>
         <div className='esri-attribution__sources esri-interactive'>
           <button onClick={this.sierraLeonClick}>Sierra Leone</button>
