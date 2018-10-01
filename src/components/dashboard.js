@@ -132,7 +132,7 @@ class Dashboard extends Component {
       target: [-11.618979, 9.128167],
       heading: 0,
       tilt: 0,
-      zoom: 9,
+      zoom: 8,
       speedFactor: 0.1
     })
   }
@@ -146,8 +146,8 @@ class Dashboard extends Component {
     }, this.communityClickOption)
   }
   communityClickOption = {
-    // speedFactor: 0.1,
-    easing: "ease-in"
+    speedFactor: 2,
+    easing: "ease-in-out"
   }
 
   onOpenModal = () => {
