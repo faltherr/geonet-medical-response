@@ -7,7 +7,6 @@ const express = require('express')
     , HealthworkersCtrl = require('./controllers/HealthworkersCtrl')
     , OutpostCtrl = require('./controllers/OutpostsCtrl')
     , SurveyCtrl = require('./controllers/SurveyCtrl')
-    , What3wordsCtrl = require('./controllers/What3WordsCtrl')
     , sms_controller = require ('./controllers/sms_controller')
     , urlencoded = require('body-parser').urlencoded
 
@@ -15,7 +14,7 @@ require ('dotenv').config()
 
 const app = express()
 const port = 8443
-const {CONNECTION_STRING, WHAT3WORDS_SECRET} = process.env
+const {CONNECTION_STRING} = process.env
 
 
 app.use(session({
@@ -35,9 +34,6 @@ massive(CONNECTION_STRING).then(db => {
   console.log('db is connected')
 })
 
-
-//WHAT3WORDS
-// app.get(`https://api.what3words.com/v2/forward?key=${WHAT3WORDS_SECRET}`)
 
 //AuthCtrl
 app.get('/auth/callback', AuthCtrl.auth)

@@ -1,0 +1,7 @@
+.slider-button {
+  position:absolute;
+  z-index: 100;
+  right: 14px;
+  top: 85px;
+  cursor: pointer;
+}

@@ -103,7 +103,8 @@ width:100vw
 .esri-widget.esri-component.esri-widget-button.esri-interactive{
   color: #48484A;
   background-color: #fff;
-  padding: 5px
+  padding: 5px;
+  cursor: pointer;
 }
 .esri-attribution__sources.esri-interactive button {
   background-color: #303030;
@@ -193,5 +194,5 @@ li.tab-list-item{
 }
 
 .esri-ui-manual-container>.esri-component {
-  display: none;
+  /* display: none; */
 }
