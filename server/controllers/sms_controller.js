@@ -23,8 +23,8 @@ module.exports = {
                 //******** Should I add this into the massaging response? */
                 //******** Should the respond function be different for an emergency? So that we message patient AND HCW?*/
                 
-                respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordianting a response for your address, ${emergencyResponse[0].location}`)
-                res.send(emergencyResponse[0].name, emergencyResponse[0].location)
+                respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordinating a response for your address, ${emergencyResponse[0].location}`)
+                // res.send(emergencyResponse[0].name, emergencyResponse[0].location)
             }).then(() => {
 
             })
