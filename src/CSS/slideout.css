@@ -8,3 +8,10 @@
   border: none;
   color: white;
 }
+
+.slideout-subheader-question-container{
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
