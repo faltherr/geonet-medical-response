@@ -127,7 +127,7 @@ class Dashboard extends Component {
       let patientGeoJson = []
       patientData.forEach(patient => {
         if (patient.latitude && patient.longitude){
-          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
         } else {
           return null
         }
@@ -137,7 +137,7 @@ class Dashboard extends Component {
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
         if (healthworker.latitude && healthworker.longitude){
-          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
         } else{
           return null
         }
@@ -168,13 +168,16 @@ class Dashboard extends Component {
 
       patientGeoJson.forEach(patient => {
         let patientName = patient.geometry.coordinates[2].name
+        let patientPhone = patient.geometry.coordinates[2].patientPhone
         // console.log(patientName) 
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
         let patientDistance = {}
         patientDistance.patientName = patientName
+        patientDistance.patientPhone = patientPhone
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
+        patientDistance.nearestHWPhone = nearest.geometry.coordinates[2].hw_phone
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
         patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
@@ -263,7 +266,7 @@ class Dashboard extends Component {
   }
   
   render() {
-    // console.log('patient location data', this.state.patientLocationData)
+    console.log('patient location data', this.state.patientLocationData)
     let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
