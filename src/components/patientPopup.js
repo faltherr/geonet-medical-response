@@ -4,8 +4,8 @@ import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/redu
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
 import alert from './symbols/woman_alert_10.png'
-
 import EditPatientModal from '../components/EditPatientModal'
+import '../CSS/patientPopup.css'
 
 class PatientPopup extends Component {
     constructor () {
@@ -86,7 +86,7 @@ class PatientPopup extends Component {
           }
 
           let markerSymbol = {
-            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            type: "picture-marker",
             url: color,
             // contentType: 'image/png',
             width: width,

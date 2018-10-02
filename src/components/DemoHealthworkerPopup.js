@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { loadModules } from 'esri-loader'
 import { connect } from 'react-redux' 
 import { getHealthworkerGraphic, getHealthworkers } from '../redux/reducers/healthworkersReducer'
-import DemoEditHealthworkerModal from './DemoEditHealthworkerModal'
+// import DemoEditHealthworkerModal from './DemoEditHealthworkerModal'
 
 class DemoHealthworkerPopup extends Component {
   state = {
@@ -25,6 +25,7 @@ class DemoHealthworkerPopup extends Component {
     "esri/geometry/SpatialReference"
   ]).then(([Graphic, Point, SpatialReference]) => {
       healthworkersData.forEach( healthworker => {
+        if (healthworker.latitude && healthworker.longitude){
 
       const point = new Point({
         type: "point", // autocasts as new Point()
@@ -78,6 +79,7 @@ class DemoHealthworkerPopup extends Component {
         popupTemplate: PopupTemplate
       })
           this.props.mapView.graphics.add(healthworkerGraphic)
+        }
         })
       })
     }  

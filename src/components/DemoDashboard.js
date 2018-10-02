@@ -4,7 +4,7 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import { ToastContainer, toast } from 'react-toastify'
+import {toast} from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import DemoPatientPopup from '../components/DemoPatientPopup'
 import DemoOutpostPopup from '../components/DemoOutpostPopup'
@@ -17,8 +17,8 @@ import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import DemoFooterData from './DemoFooterData'
-import DemoNewDataMenu from './DemoNewDataMenu'
-import Modal from 'react-responsive-modal';
+// import DemoNewDataMenu from './DemoNewDataMenu'
+// import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
 
 
@@ -125,6 +125,7 @@ class DemoDashboard extends Component {
 
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
+  
       patientData.forEach(patient => {
         patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
       })
@@ -132,7 +133,9 @@ class DemoDashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
+        if (healthworker.latitude && healthworker.longitude){
         healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+      }
       })
 
       // This turns the individual health worker points into a collection interpretable by turf

@@ -104,7 +104,7 @@ class Dashboard extends Component {
 
       await mapView.ui.add(toggle, "top-left")
       await mapView.ui.add(legend, "top-right")
-      await mapView.ui.add(buttonWidget, "top-right")
+      await mapView.ui.add(buttonWidget, "bottom-left")
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
@@ -116,9 +116,9 @@ class Dashboard extends Component {
       await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
-        tilt: 40,
+        tilt: 0,
         zoom: 9,
-        speedFactor: 0.3
+        speedFactor: 0.2
       })
 
       // Script to determine the distance between each patient and a health worker using Turf
@@ -128,8 +128,8 @@ class Dashboard extends Component {
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
       patientData.forEach(patient => {
-        if (patient.latitude && patient.longitude) {
-          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+        if (patient.latitude && patient.longitude){
+          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
         } else {
           return null
         }
@@ -138,9 +138,9 @@ class Dashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        if (healthworker.latitude && healthworker.longitude) {
-          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
-        } else {
+        if (healthworker.latitude && healthworker.longitude){
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
+        } else{
           return null
         }
       })
@@ -170,13 +170,16 @@ class Dashboard extends Component {
 
       patientGeoJson.forEach(patient => {
         let patientName = patient.geometry.coordinates[2].name
+        let patientPhone = patient.geometry.coordinates[2].patientPhone
         // console.log(patientName) 
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
         let patientDistance = {}
         patientDistance.patientName = patientName
+        patientDistance.patientPhone = patientPhone
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
+        patientDistance.nearestHWPhone = nearest.geometry.coordinates[2].hw_phone
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
         patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
@@ -233,25 +236,14 @@ class Dashboard extends Component {
       this.setState({
         patientsAwaitingAssignment: newPatientAssignement
       })
-
       //This ends the async call to ArcGIS online
     })
-
-    if (this.props.login) {
-
-    }
-
-
-
   }
-
 
   // buttons for different community zooms
   sierraLeonClick = () => {
     this.props.mapView.goTo({
       target: [-11.618979, 9.128167],
-      heading: 0,
-      tilt: 0,
       zoom: 8,
       speedFactor: 0.1
     })
@@ -260,8 +252,6 @@ class Dashboard extends Component {
   communityClick = (long, lat) => {
     this.props.mapView.goTo({
       target: [+long, +lat],
-      heading: 40,
-      tilt: 10,
       zoom: 12
     }, this.communityClickOption)
   }
@@ -278,17 +268,15 @@ class Dashboard extends Component {
   }
 
   render() {
-    // let {map, mapView, legend} = this.props
-    let outpostButtons = []
-
+    console.log('patient location data', this.state.patientLocationData)
+    let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
-        outpostButtons.push(
+        communityButtons.push(
           <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)} key={outpost.id}>Community {outpost.id}</button>
         )
-
       }
-      return outpostButtons
+      return communityButtons
     })
 
     console.log(27482347238482, this.props.adminLoggedIn)
@@ -317,7 +305,7 @@ class Dashboard extends Component {
           </div>
           <div className='esri-attribution__sources esri-interactive'>
             <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-            {outpostButtons}
+            {communityButtons}
           </div>
 
           <div id="panel">
