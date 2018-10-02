@@ -2,6 +2,9 @@
   position:absolute;
   z-index: 100;
   right: 14px;
-  top: 85px;
+  top: 20px;
   cursor: pointer;
+  background-color: #30303000;
+  border: none;
+  color: white;
 }

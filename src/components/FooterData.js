@@ -5,13 +5,14 @@ import { getPatients } from '../redux/reducers/patientsReducer'
 import * as moment from 'moment'
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal'
-
+import AssignPatientModal from './AssignPatientModal'
 
 
 class FooterData extends Component {
   
     state = {
-      openModal: false
+      openModal: false, 
+      assignPatientModal: false
     }
 
   handleClick = (long, lat) => {
@@ -29,9 +30,11 @@ class FooterData extends Component {
   onOpenModal = () => { this.setState({ openModal: true }) }
   onCloseModal = () => { this.setState({ openModal: false }) }
 
+  assignPatientModalOpen = () => { this.setState({ assignPatientModal: true})}
+  assignPatientModalClosed = () => { this.setState({ assignPatientModal: false})}
+
   render () {
     let { patientsData, healthworkersData} = this.props
-    
     let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element => {
       return <p key={element}>{element}</p>
     })
@@ -75,6 +78,34 @@ class FooterData extends Component {
                     }
                   })
                 }
+          </div>
+          
+          <div id='unassigned-data'>
+            <h4>Unassigned Patients</h4>
+                {
+                  patientsData.map( patient => {
+                    if (patient.healthworker_id === null || patient.healthworker_id === 1){
+                      return (
+                        <div id="patient-names">
+                          <p key={patient.id}
+                             onClick={ () => this.assignPatientModalOpen()}>{patient.name}
+                          </p>
+                          {
+                            this.state.assignPatientModal && 
+                              <AssignPatientModal 
+                                open={this.assignPatientModalOpen}
+                                close={this.assignPatientModalClosed}
+                                patient={patient}
+                              />
+
+                          }
+                        </div>
+                      )
+                    }
+                  })
+                }
+                
+            
           </div>
 
           <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
