@@ -4,7 +4,7 @@ import { getOutpostGraphic, getOutposts , deleteOutpost} from '../redux/reducers
 import { loadModules } from 'esri-loader'
 import '../CSS/outpostPopup.css'
 
-class OutpostPopup extends Component {
+class DemoOutpostPopup extends Component {
 
 componentDidMount () {
   this.props.getOutposts()
@@ -28,6 +28,7 @@ componentDidUpdate(prevProps) {
       ]).then(([Graphic, GraphicsLayer, PictureMarkerSymbol, geometryEngine, Point, webMercatorUtils, SpatialReference, BufferParameters]) => {
         outpostsData.forEach( outpost => {
           if (outpost.latitude && outpost.longitude){
+
           let pointGeometry = new Point({
             type: "point",
             longitude: outpost.longitude,
@@ -66,9 +67,7 @@ componentDidUpdate(prevProps) {
               `
         }],
         actions: [{
-          title: "Delete Outpost",
-          outpost: outpost.id,
-          className: "esri-icon-trash" 
+          outpost: outpost.id
         }]
       }
       const outpostGraphic = new Graphic ({
@@ -95,8 +94,7 @@ componentDidUpdate(prevProps) {
       })
         this.props.mapView.graphics.add(outpostGraphic)
         this.props.mapView.graphics.add(ptBufferGraphic)
-      
-    }
+      }
       })
     })
   }
@@ -120,4 +118,4 @@ let mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {getOutpostGraphic, getOutposts, deleteOutpost })(OutpostPopup)
+export default connect(mapStateToProps, {getOutpostGraphic, getOutposts, deleteOutpost })(DemoOutpostPopup)

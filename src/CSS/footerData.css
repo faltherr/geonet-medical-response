@@ -10,10 +10,11 @@
   top: 0;
 }
 
-#patient-data, 
-#service-area,
+
 #due-this-month,
-#healthworker-data {
+#healthworker-data, 
+#service-area,
+#unassigned-data {
   background-color: lightgrey;
   height: 150px;
   width: 200px;
@@ -23,24 +24,30 @@
   color: #202020;
   overflow: scroll;
 }
-#patient-data > h4,
+
 #service-area > h4,
 #due-this-month > h4,
-#healthworker-data > h4 {
+#healthworker-data > h4, 
+#unassigned-data > h4 {
   background-color: #584E63;
   color: lightgrey;
   height: 30px;
   margin: 0;
+  padding-top: 3px;
   /* position: sticky; */
 }
 
 #due-this-month > p, 
-#healthworker-data > p {
+#healthworker-data > p, 
+#service-area > p,
+#patient-names > p {
   cursor: pointer;
   margin: 5px;
 }
 #due-this-month > p:hover, 
-#healthworker-data > p:hover {
+#healthworker-data > p:hover,
+#service-area > p:hover,
+#patient-names > p:hover {
   color: #745138;
 }
 

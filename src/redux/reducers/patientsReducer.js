@@ -4,10 +4,11 @@ const FULFILLED = '_FULFILLED'
 const GET_PATIENTS = 'GET_PATIENTS'
 const GET_PATIENTGRAPHIC = 'GET_PATIENTGRAPHIC'
 const ADD_NEW_SURVEY = 'ADD_NEW_SURVEY'
-
 const UPDATE_PATIENT = 'UPDATE_PATIENT'
 const SET_CURRENT_PATIENT = 'SET_CURRENT_PATIENT'
 const SET_RETURNED_FALSE = 'SET_RETURNED_FALSE'
+const ASSIGN_HEALTHWORKER_TO_PATIENT = 'ASSIGN_HEALTHWORKER_TO_PATIENT'
+
 
 let initialState = {
   patientsData: [],
@@ -31,6 +32,9 @@ export default function reducer(state = initialState, action) {
       return { ...state, currentPatient: action.payload }
     case SET_RETURNED_FALSE:
       return {...state, returnedData: action.payload}
+    case ASSIGN_HEALTHWORKER_TO_PATIENT + FULFILLED:
+      return { ...state, patientsData: action.payload}
+
     default:
       return state
   }
@@ -70,7 +74,8 @@ export function addPatientSurvey(state) {
     hiv: state.patientHIV,
     parity: state.patientParity,
     duedate: formattedDate,
-    completed: true
+    completed: true,
+    HWID: state.patientAssignedHW,
   }
 
   let newPatientSurvey = axios.post('/api/surveys', patientSurveyData).then(response => {
@@ -104,5 +109,14 @@ export function setReturnedFalse() {
   return {
     type: SET_RETURNED_FALSE,
     payload: false 
+  }
+}
+export function assignHealthworkerToPatient (id) {
+  let assign = axios.put(`/api/patients/${id}`).then( response => {
+    return response.data
+  })
+  return {
+    type: ASSIGN_HEALTHWORKER_TO_PATIENT,
+    payload: assign
   }
 }

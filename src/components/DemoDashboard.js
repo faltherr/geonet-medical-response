@@ -4,12 +4,11 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import {ToastContainer, toast} from 'react-toastify'
-import { getMap} from '../redux/reducers/mapReducer'
-import { getPatients, setReturnedFalse} from '../redux/reducers/patientsReducer'
-import PatientPopup from '../components/patientPopup'
-import OutpostPopup from '../components/outpostPopup'
-import HealthworkerPopup from '../components/healthworkerPopup'
+import {toast} from 'react-toastify'
+import { getMap } from '../redux/reducers/mapReducer'
+import DemoPatientPopup from '../components/DemoPatientPopup'
+import DemoOutpostPopup from '../components/DemoOutpostPopup'
+import DemoHealthworkerPopup from '../components/DemoHealthworkerPopup'
 import limePatient from '../components/symbols/woman_lime.png'
 import greenPatient from '../components/symbols/woman_green.png'
 import aquaPatient from '../components/symbols/woman_aqua.png'
@@ -17,24 +16,22 @@ import pinkPatient from '../components/symbols/woman_alert_10.png'
 import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
-import FooterData from './FooterData'
-import NewDataMenu from './newDataMenu'
-import Modal from 'react-responsive-modal';
+import DemoFooterData from './DemoFooterData'
+// import DemoNewDataMenu from './DemoNewDataMenu'
+// import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
-import axios from 'axios'
 
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
-class Dashboard extends Component {
+class DemoDashboard extends Component {
   constructor() {
     super()
     this.state = {
+      openModal: false,
       patientsAtRisk: [],
       patientsAwaitingAssignment : [],
-      patientLocationData: [],
-      patientsInEmergency: [],
-      alertUpdate: null
+      patientLocationData: []
     }
   }
 
@@ -105,7 +102,7 @@ class Dashboard extends Component {
 
       await mapView.ui.add(toggle, "top-left")
       await mapView.ui.add(legend, "top-right")
-      await mapView.ui.add(buttonWidget, "bottom-left")
+      await mapView.ui.add(buttonWidget, "top-right")
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
@@ -117,9 +114,9 @@ class Dashboard extends Component {
       await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
         heading: 0,
-        tilt: 0,
+        tilt: 40,
         zoom: 9,
-        speedFactor: 0.2
+        speedFactor: 0.3
       })
 
       // Script to determine the distance between each patient and a health worker using Turf
@@ -128,22 +125,17 @@ class Dashboard extends Component {
 
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
+  
       patientData.forEach(patient => {
-        if (patient.latitude && patient.longitude){
-          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
-        } else {
-          return null
-        }
+        patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
       })
 
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
         if (healthworker.latitude && healthworker.longitude){
-          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
-        } else{
-          return null
-        }
+        healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+      }
       })
 
       // This turns the individual health worker points into a collection interpretable by turf
@@ -155,7 +147,7 @@ class Dashboard extends Component {
       // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
       let outpostGeoJson = []
       outpostsData.forEach(outpost => {
-        if(outpost.latitude && outpost.longitude){
+        if(outpost.latitude){
           outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
         } else{
           return null
@@ -171,16 +163,13 @@ class Dashboard extends Component {
 
       patientGeoJson.forEach(patient => {
         let patientName = patient.geometry.coordinates[2].name
-        let patientPhone = patient.geometry.coordinates[2].patientPhone
         // console.log(patientName) 
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
         let patientDistance = {}
         patientDistance.patientName = patientName
-        patientDistance.patientPhone = patientPhone
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
-        patientDistance.nearestHWPhone = nearest.geometry.coordinates[2].hw_phone
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
         patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
@@ -237,59 +226,21 @@ class Dashboard extends Component {
       this.setState({
         patientsAwaitingAssignment: newPatientAssignement
       })
+
       //This ends the async call to ArcGIS online
     })
 
-  //This sets interval for reload of getting patient data
-  
-  // const alertUpdate = setInterval(() => {
-  //     toast.dismiss()
-  //     this.props.getPatients()
-  //   }, 6000)
 
-  } 
-  //END OF COMPONENT DID MOUNT
-    
-
-  componentDidUpdate(){
-  // Checking DB for true alert status and rendering alerts
-    if(this.props.patientData.length && this.props.returnedData){
-
-      let {patientData} = this.props
-      let currentPatientAlerts = []
-      patientData.forEach(patient => {
-        if(patient.alert == true) {
-          currentPatientAlerts.push(patient)
-        }
-      })
-      if(currentPatientAlerts.length){
-        for(let i = 0; i<currentPatientAlerts.length; i++){
-          this.notify(currentPatientAlerts[i])
-        }
-      }
-      console.log('current', currentPatientAlerts)
-      this.props.setReturnedFalse()
-      this.setState({
-        patientsInEmergency: currentPatientAlerts
-      })
-
-    }
 
   }
-  //Toast for alert when patient texts 'emergency'
-  notify = (patient) => {
-    toast.error(`Emergency Alert for ${patient.name}. Assistance is requested at ${patient.location}. Please contact at ${patient.phone} immediately`, {
-      position: toast.POSITION.BOTTOM_LEFT,
-      onClose: () =>{axios.put(`/api/surveys/alert/${patient.id}`, patient).then(response => {
-        response.data
-      })}
-    })
-  }
+
 
   // buttons for different community zooms
   sierraLeonClick = () => {
     this.props.mapView.goTo({
       target: [-11.618979, 9.128167],
+      heading: 0,
+      tilt: 0,
       zoom: 8,
       speedFactor: 0.1
     })
@@ -298,6 +249,8 @@ class Dashboard extends Component {
   communityClick = (long, lat) => {
     this.props.mapView.goTo({
       target: [+long, +lat],
+      heading: 40,
+      tilt: 10,
       zoom: 12
     }, this.communityClickOption)
   }
@@ -306,44 +259,41 @@ class Dashboard extends Component {
     easing: "ease-in-out"
   }
 
- 
+  //Toast for alert when patient texts 'emergency'
+  notify = () => {
+    toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
+      position: toast.POSITION.BOTTOM_LEFT
+    })
+  }
   
   render() {
     // let {map, mapView, legend} = this.props
-    const CloseButton = ({closeIt}) => {
-      return (
-      <i
-      className="marterial-icons"
-      onClick={closeIt}> X
-      </i>
-    )}
     let outpostButtons = []
 
-    console.log('patient location data', this.state.patientLocationData)
-    let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
-        communityButtons.push(
+        outpostButtons.push(
           <button onClick={() => this.communityClick(outpost.longitude, outpost.latitude)} key={outpost.id}>Community {outpost.id}</button>
         )
+
       }
-      return communityButtons
+      return outpostButtons
     })
+
+    // console.log(27482347238482, this.props.currentPatientGraphic)
+
 
     return (
       <div className='wrapper'>
-        <div>
-          <ToastContainer style={{marginBottom: '12%'}} autoClose={false} closeButton={<CloseButton closeIt={this.notify.onClose}/>}/>
-        </div>
-        <PatientPopup />
-        <OutpostPopup />
-        <HealthworkerPopup />
+        <DemoPatientPopup />
+        <DemoOutpostPopup />
+        <DemoHealthworkerPopup />
         <div className="map" id="mapDiv">
           <Slideout/>
         </div>
         <div className='esri-attribution__sources esri-interactive'>
           <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-          {communityButtons}
+          {outpostButtons}
         </div>
 
         <div id="panel">
@@ -375,7 +325,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <FooterData patientsOutsideService={this.state.patientsAtRisk} />
+        <DemoFooterData patientsOutsideService={this.state.patientsAtRisk} />
       </div>
     )
   }
@@ -391,7 +341,6 @@ let mapStateToProps = state => {
     patientData: state.patients.patientsData,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
-    returnedData: state.patients.returnedData
   }
 }
-export default connect(mapStateToProps, { getMap, getPatients, setReturnedFalse})(Dashboard)
+export default connect(mapStateToProps, { getMap })(DemoDashboard)

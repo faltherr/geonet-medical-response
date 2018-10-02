@@ -32,8 +32,6 @@ module.exports = {
       req.session.user = users[0]
       res.redirect('/')
     }
-
-    //check to see if they already exist on database and put them on session
     } catch(error) {
       console.log('we have a problem', error)
       res.redirect('/error')

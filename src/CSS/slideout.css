@@ -2,6 +2,20 @@
   position:absolute;
   z-index: 100;
   right: 14px;
+<<<<<<< HEAD
   top: 10vh;
+=======
+  top: 20px;
+>>>>>>> master
   cursor: pointer;
+  background-color: #30303000;
+  border: none;
+  color: white;
+}
+
+.slideout-subheader-question-container{
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
 }

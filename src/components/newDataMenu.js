@@ -138,7 +138,7 @@ class NewDataMenu extends Component {
             for (let i = 0; i < this.props.healthWorkers.length; i++) {
                 let name = this.props.healthWorkers[i].name
                 let id = this.props.healthWorkers[i].id
-                HWOption.push(<option key={id} value={name}>{name}</option>)
+                HWOption.push(<option key={id} value={id}>{name}</option>)
             }
         }
 

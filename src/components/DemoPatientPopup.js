@@ -4,10 +4,10 @@ import { getPatients, getPatientGraphic, setCurrentPatient } from '../redux/redu
 import { loadModules } from 'esri-loader'
 import * as moment from 'moment'
 import alert from './symbols/woman_alert_10.png'
-import EditPatientModal from '../components/EditPatientModal'
-import '../CSS/patientPopup.css'
 
-class PatientPopup extends Component {
+import DemoEditPatientModal from '../components/DemoEditPatientModal'
+
+class DemoPatientPopup extends Component {
     constructor () {
       super()
        this.state = {
@@ -48,6 +48,7 @@ class PatientPopup extends Component {
         "esri/geometry/Multipoint"
       ]).then(([Graphic, geometryEngine, DistanceParameters, GeometryService, Point, SpatialReference, Multipoint]) => {
       patientsData.forEach( patient => {
+        if(patient.latitude && patient.longitude){
         const point = new Point ({
           type: "point",
           longitude: patient.longitude,
@@ -86,7 +87,7 @@ class PatientPopup extends Component {
           }
 
           let markerSymbol = {
-            type: "picture-marker",
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
             url: color,
             // contentType: 'image/png',
             width: width,
@@ -149,6 +150,7 @@ class PatientPopup extends Component {
           patientGraphics: [ ...this.state.patientGraphics, patientGraphic ]
         })
         this.props.mapView.graphics && this.props.mapView.graphics.add(patientGraphic)
+      }
       })
     })
   }
@@ -170,7 +172,7 @@ hideEditModal = () => { this.setState({ showModal: false })}
       <div>
         { this.state.showModal
           &&
-          <EditPatientModal 
+          <DemoEditPatientModal 
             show={this.state.show} 
             hideModal={this.hideEditModal}
             patientsData={this.props.patientsData}
@@ -194,4 +196,4 @@ let mapStateToProps = state => {
 
   }
 }
-export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)
+export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(DemoPatientPopup)
