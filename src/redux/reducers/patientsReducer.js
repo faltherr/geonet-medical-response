@@ -70,7 +70,8 @@ export function addPatientSurvey(state) {
     hiv: state.patientHIV,
     parity: state.patientParity,
     duedate: formattedDate,
-    completed: true
+    completed: true,
+    HWID: state.patientAssignedHW,
   }
 
   let newPatientSurvey = axios.post('/api/surveys', patientSurveyData).then(response => {

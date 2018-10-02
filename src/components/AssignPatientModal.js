@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 class AssignPatientModal extends Component {
   render () {
-    let { patient } = this.props
 
     return (
       <div className="outer-assign-modal" onClick={this.props.close}>

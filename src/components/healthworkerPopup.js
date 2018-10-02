@@ -43,6 +43,7 @@ class HealthworkerPopup extends Component {
       'esri/geometry/SpatialReference'
     ]).then(([Graphic, Point, SpatialReference]) => {
       healthworkersData.forEach( healthworker => {
+        if(healthworker.latitude && healthworker.longitude){
         const point = new Point({
           type: "point", 
           longitude: healthworker.longitude,
@@ -117,18 +118,19 @@ class HealthworkerPopup extends Component {
         })
           this.props.mapView.graphics && 
           this.props.mapView.graphics.add(healthworkerGraphic)
-        })
+        }
       })
-    }  
+      })
+  
   }
-  showEditModal = (healthworker, graphic) => {
-    this.setState ({ 
-      showModal: true,
-      currentGraphic: graphic,
-      currentHealthworker: healthworker
-    })
+  // showEditModal = (healthworker, graphic) => {
+  //   this.setState ({ 
+  //     showModal: true,
+  //     currentGraphic: graphic,
+  //     currentHealthworker: healthworker
+  //   })
+  // }
   }
-
   hideEditModal = () => { this.setState({ showModal: false})}
 
   render () {
