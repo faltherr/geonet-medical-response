@@ -53,7 +53,7 @@ width:100vw
   color:white;
   width: 100%;
 } */
-#panel {
+#panel-closed {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -66,9 +66,10 @@ width:100vw
   color: #48484A
 }
 
-#panel.panel-expanded {
-  width: 250px;
-  height: 80vh;
+#panel {
+  margin-top: 80%;
+  width: 200px;
+  height: 450px;
 }
 
 #panel-details {
@@ -80,8 +81,13 @@ width:100vw
   padding-left: 20px;
   padding-right: 20px;
   color: #9E9E9F
-
 }
+#buttonWidget {
+  background-color: #25242900;
+  border: none;
+  color: white;
+}
+
 .icons {
   max-height: 40px;
   max-width: 40px;
@@ -97,7 +103,7 @@ width:100vw
 
 }
 .esri-legend__message {
-  display: none
+  display: none;
 }
 
 .esri-widget.esri-component.esri-widget-button.esri-interactive{
@@ -193,7 +199,22 @@ li.tab-list-item{
 .esri-component esri-basemap-toggle esri-widget {
   margin: 40px;
 }
-
 .esri-ui-manual-container>.esri-component {
-  /* display: none; */
+  color: #202020;
+}
+.esri-ui-manual-container>.esri-component:hover {
+  cursor: pointer;
+}
+
+.esri-attribution__sources.esri-interactive button:hover {
+  cursor: pointer;
+  background-color: lightgrey;
+  color: #303030;
+}
+/* .esri-basemap-thumbnail.esri-basemap-toggle__ */
+
+
+.esri-ui-corner.esri-component {
+  display: flex;
+  /* flexdirection */
 }

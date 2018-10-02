@@ -3,8 +3,8 @@ import '../CSS/footerData.css'
 import { connect } from 'react-redux'
 import { getPatients } from '../redux/reducers/patientsReducer'
 import * as moment from 'moment'
-import DemoNewDataMenu from './DemoNewDataMenu'
-import Modal from 'react-responsive-modal'
+// import DemoNewDataMenu from './DemoNewDataMenu'
+// import Modal from 'react-responsive-modal'
 
 
 
