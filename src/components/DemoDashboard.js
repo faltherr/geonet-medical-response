@@ -4,7 +4,7 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import {ToastContainer, toast} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import DemoPatientPopup from '../components/DemoPatientPopup'
 import DemoOutpostPopup from '../components/DemoOutpostPopup'
@@ -30,7 +30,7 @@ class DemoDashboard extends Component {
     this.state = {
       openModal: false,
       patientsAtRisk: [],
-      patientsAwaitingAssignment : [],
+      patientsAwaitingAssignment: [],
       patientLocationData: []
     }
   }
@@ -140,13 +140,13 @@ class DemoDashboard extends Component {
 
       // Here we calculate the distance to the nearest health outpost
       // We assume that patients outside of the buffers (A 25km radius) are at risk in the event of complications arising during labor
-      
+
       // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
       let outpostGeoJson = []
       outpostsData.forEach(outpost => {
-        if(outpost.latitude){
+        if (outpost.latitude) {
           outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
-        } else{
+        } else {
           return null
         }
       })
@@ -155,7 +155,7 @@ class DemoDashboard extends Component {
       let outpostPoints = turf.featureCollection(outpostGeoJson)
 
       // Here we build an object that contains the returned geometries from a nearest point calculation and push it to a new array
-      
+
       let patientDistArr = []
 
       patientGeoJson.forEach(patient => {
@@ -172,8 +172,8 @@ class DemoDashboard extends Component {
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
         patientDistance.nearestOutpostName = nearestOutpost.geometry.coordinates[2].name
         patientDistance.nearestOutpostDistKM = nearestOutpost.properties.distanceToPoint
-        patientDistance.nearestOutpostLat= nearestOutpost.geometry.coordinates[0]
-        patientDistance.nearestOutpostLon=nearestOutpost.geometry.coordinates[1]
+        patientDistance.nearestOutpostLat = nearestOutpost.geometry.coordinates[0]
+        patientDistance.nearestOutpostLon = nearestOutpost.geometry.coordinates[1]
         // console.log(patientToHWDistance)
         patientDistArr.push(patientDistance)
       })
@@ -184,11 +184,11 @@ class DemoDashboard extends Component {
       })
 
       // Now we can use the above array of objects to alert the nearest healthworker in an emergency, assign the patient to the nearest healthworker, and identify patients outside of sevice areas
-      
+
       let newPatientAtRisk = []
 
-      patientDistArr.forEach(patient =>{
-        if (patient.nearestOutpostDistKM >= 25){
+      patientDistArr.forEach(patient => {
+        if (patient.nearestOutpostDistKM >= 25) {
           newPatientAtRisk.push(patient.patientName)
         } else {
           return null
@@ -198,7 +198,7 @@ class DemoDashboard extends Component {
       // This sets the state of patients who are outside of the service areas
 
       this.setState({
-        patientsAtRisk : newPatientAtRisk
+        patientsAtRisk: newPatientAtRisk
       }
       )
 
@@ -206,11 +206,11 @@ class DemoDashboard extends Component {
 
       patientData.forEach(patient => {
         // console.log(patient)
-        for (let i = 0; i < patientDistArr.length; i++){
-          if (patientDistArr[i].patientName === patient.name){
+        for (let i = 0; i < patientDistArr.length; i++) {
+          if (patientDistArr[i].patientName === patient.name) {
             // console.log("Assigned HW name",patient.healthworker_name)
             // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
-            if (patient.healthworker_name !== patientDistArr[i].nearestHWName){
+            if (patient.healthworker_name !== patientDistArr[i].nearestHWName) {
               newPatientAssignement.push(patient.name)
               // console.log('Patients not assigned to nearest HW:', patient)
             }
@@ -262,7 +262,7 @@ class DemoDashboard extends Component {
       position: toast.POSITION.BOTTOM_LEFT
     })
   }
-  
+
   render() {
     // let {map, mapView, legend} = this.props
     let outpostButtons = []
@@ -286,7 +286,7 @@ class DemoDashboard extends Component {
         <DemoOutpostPopup />
         <DemoHealthworkerPopup />
         <div className="map" id="mapDiv">
-          <Slideout/>
+          <Slideout />
         </div>
         <div className='esri-attribution__sources esri-interactive'>
           <button onClick={this.sierraLeonClick}>Sierra Leone</button>

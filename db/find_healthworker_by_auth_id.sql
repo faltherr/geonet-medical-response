@@ -1,2 +1,2 @@
-select * from healthworkers 
-where auth_id = $1;
+select * from auth0admin 
+where auth0 = $1;

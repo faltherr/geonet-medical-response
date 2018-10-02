@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 let initialState = {
-  adminLoggedIn: false
+  adminLoggedIn: null
 }
 
 const LOGOUT_USER = 'LOGOUT_USER'
