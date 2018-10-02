@@ -39,9 +39,9 @@ class Slideout extends Component{
           onOutsideClick={this.closeSlider}>
             <h3 style={{color: '#D8DBE7'}}>HIV Status and Family Planning</h3>
             <PieCharts/>
-            <h3 style={{color: '#D8DBE7'}}>Maternal and Neonatal Mortality Rates</h3>
+            <h3 style={{color: '#D8DBE7'}}>Maternal Mortality Rates</h3>
             <LineCharts />
-          </Slider>
+        </Slider>
       </div>
     );
   };

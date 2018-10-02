@@ -68,6 +68,7 @@ class LineCharts extends Component {
           <Line type="monotone" dataKey="Deaths (Per 100,000 Live Births)" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
         <br/>
+        <h3 style={{color: '#D8DBE7'}}>Neonatal Mortality Rates</h3>
         <LineChart width={600} height={300} data={this.state.data2}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <XAxis dataKey="date" />

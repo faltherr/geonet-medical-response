@@ -5,7 +5,8 @@ import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
 import {ToastContainer, toast} from 'react-toastify'
-import { getMap } from '../redux/reducers/mapReducer'
+import { getMap} from '../redux/reducers/mapReducer'
+import { getPatients, setReturnedFalse} from '../redux/reducers/patientsReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
@@ -20,6 +21,7 @@ import FooterData from './FooterData'
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
+import axios from 'axios'
 
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -30,7 +32,9 @@ class Dashboard extends Component {
     this.state = {
       patientsAtRisk: [],
       patientsAwaitingAssignment : [],
-      patientLocationData: []
+      patientLocationData: [],
+      patientsInEmergency: [],
+      alertUpdate: null
     }
   }
 
@@ -234,10 +238,51 @@ class Dashboard extends Component {
       //This ends the async call to ArcGIS online
     })
 
+  //This sets interval for reload of getting patient data
+  
+  // const alertUpdate = setInterval(() => {
+  //     toast.dismiss()
+  //     this.props.getPatients()
+  //   }, 6000)
 
+  } 
+  //END OF COMPONENT DID MOUNT
+    
+
+  componentDidUpdate(){
+  // Checking DB for true alert status and rendering alerts
+    if(this.props.patientData.length && this.props.returnedData){
+
+      let {patientData} = this.props
+      let currentPatientAlerts = []
+      patientData.forEach(patient => {
+        if(patient.alert == true) {
+          currentPatientAlerts.push(patient)
+        }
+      })
+      if(currentPatientAlerts.length){
+        for(let i = 0; i<currentPatientAlerts.length; i++){
+          this.notify(currentPatientAlerts[i])
+        }
+      }
+      console.log('current', currentPatientAlerts)
+      this.props.setReturnedFalse()
+      this.setState({
+        patientsInEmergency: currentPatientAlerts
+      })
+
+    }
 
   }
-
+  //Toast for alert when patient texts 'emergency'
+  notify = (patient) => {
+    toast.error(`Emergency Alert for ${patient.name}. Assistance is requested at ${patient.location}. Please contact at ${patient.phone} immediately`, {
+      position: toast.POSITION.BOTTOM_LEFT,
+      onClose: () =>{axios.put(`/api/surveys/alert/${patient.id}`, patient).then(response => {
+        response.data
+      })}
+    })
+  }
 
   // buttons for different community zooms
   sierraLeonClick = () => {
@@ -263,15 +308,17 @@ class Dashboard extends Component {
     easing: "ease-in-out"
   }
 
-  //Toast for alert when patient texts 'emergency'
-  notify = () => {
-    toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
-      position: toast.POSITION.BOTTOM_LEFT
-    })
-  }
+ 
   
   render() {
     // let {map, mapView, legend} = this.props
+    const CloseButton = ({closeIt}) => {
+      return (
+      <i
+      className="marterial-icons"
+      onClick={closeIt}> X
+      </i>
+    )}
     let outpostButtons = []
 
     this.props.outpostsData.map(outpost => {
@@ -290,8 +337,7 @@ class Dashboard extends Component {
     return (
       <div className='wrapper'>
         <div>
-          <button onClick={() => this.notify()}>Alert Test</button>
-          <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>
+          <ToastContainer style={{marginBottom: '12%'}} autoClose={false} closeButton={<CloseButton closeIt={this.notify.onClose}/>}/>
         </div>
         <PatientPopup />
         <OutpostPopup />
@@ -349,6 +395,7 @@ let mapStateToProps = state => {
     patientData: state.patients.patientsData,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
+    returnedData: state.patients.returnedData
   }
 }
-export default connect(mapStateToProps, { getMap })(Dashboard)
+export default connect(mapStateToProps, { getMap, getPatients, setReturnedFalse})(Dashboard)

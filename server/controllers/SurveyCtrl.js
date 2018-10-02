@@ -25,5 +25,18 @@ module.exports = {
       console.log(err)
       res.status(500).send('Something went wrong with updating patient')
     })
+  },
+  updateAlert: (req, res) => {
+    let {id} = req.params
+    let {alert} = req.body
+    let db = req.app.get('db')
+
+    db.alert_stop([id])
+    .then(results => {
+      res.status(200).send(results)
+    }).catch(err => {
+      console.log(err)
+      res.status(500).send('Something went wrong with ending alert')
+    })
   }
 }

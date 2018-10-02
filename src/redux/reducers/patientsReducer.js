@@ -7,18 +7,20 @@ const ADD_NEW_SURVEY = 'ADD_NEW_SURVEY'
 
 const UPDATE_PATIENT = 'UPDATE_PATIENT'
 const SET_CURRENT_PATIENT = 'SET_CURRENT_PATIENT'
+const SET_RETURNED_FALSE = 'SET_RETURNED_FALSE'
 
 let initialState = {
   patientsData: [],
   patientGraphic: {},
   currentPatient: {},
-  patientPointGeometry: []
+  patientPointGeometry: [],
+  returnedData: false
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_PATIENTS + FULFILLED:
-      return { ...state, patientsData: action.payload }
+      return { ...state, patientsData: action.payload, returnedData: true }
     case GET_PATIENTGRAPHIC:
       return { ...state, patientGraphic: action.payload }
     case ADD_NEW_SURVEY + FULFILLED:
@@ -27,6 +29,8 @@ export default function reducer(state = initialState, action) {
       return {...state, patientsData: action.payload }
     case SET_CURRENT_PATIENT:
       return { ...state, currentPatient: action.payload }
+    case SET_RETURNED_FALSE:
+      return {...state, returnedData: action.payload}
     default:
       return state
   }
@@ -93,5 +97,12 @@ export function setCurrentPatient (patient) {
   return {
     type: SET_CURRENT_PATIENT,
     payload: patient
+  }
+}
+
+export function setReturnedFalse() {
+  return {
+    type: SET_RETURNED_FALSE,
+    payload: false 
   }
 }
