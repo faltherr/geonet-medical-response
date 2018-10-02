@@ -4,8 +4,10 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import {ToastContainer, toast} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
+import { logout, getUser } from '../redux/reducers/verifiedUser'
+import { Link } from 'react-router-dom';
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
@@ -30,13 +32,13 @@ class Dashboard extends Component {
     this.state = {
       openModal: false,
       patientsAtRisk: [],
-      patientsAwaitingAssignment : [],
+      patientsAwaitingAssignment: [],
       patientLocationData: []
     }
   }
 
   componentDidMount() {
-
+    this.props.getUser()
     loadModules(['esri/Map',
       'esri/views/MapView',
       'esri/views/SceneView',
@@ -148,13 +150,13 @@ class Dashboard extends Component {
 
       // Here we calculate the distance to the nearest health outpost
       // We assume that patients outside of the buffers (A 25km radius) are at risk in the event of complications arising during labor
-      
+
       // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
       let outpostGeoJson = []
       outpostsData.forEach(outpost => {
-        if(outpost.latitude && outpost.longitude){
+        if (outpost.latitude && outpost.longitude) {
           outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
-        } else{
+        } else {
           return null
         }
       })
@@ -163,7 +165,7 @@ class Dashboard extends Component {
       let outpostPoints = turf.featureCollection(outpostGeoJson)
 
       // Here we build an object that contains the returned geometries from a nearest point calculation and push it to a new array
-      
+
       let patientDistArr = []
 
       patientGeoJson.forEach(patient => {
@@ -183,8 +185,8 @@ class Dashboard extends Component {
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
         patientDistance.nearestOutpostName = nearestOutpost.geometry.coordinates[2].name
         patientDistance.nearestOutpostDistKM = nearestOutpost.properties.distanceToPoint
-        patientDistance.nearestOutpostLat= nearestOutpost.geometry.coordinates[0]
-        patientDistance.nearestOutpostLon=nearestOutpost.geometry.coordinates[1]
+        patientDistance.nearestOutpostLat = nearestOutpost.geometry.coordinates[0]
+        patientDistance.nearestOutpostLon = nearestOutpost.geometry.coordinates[1]
         // console.log(patientToHWDistance)
         patientDistArr.push(patientDistance)
       })
@@ -195,11 +197,11 @@ class Dashboard extends Component {
       })
 
       // Now we can use the above array of objects to alert the nearest healthworker in an emergency, assign the patient to the nearest healthworker, and identify patients outside of sevice areas
-      
+
       let newPatientAtRisk = []
 
-      patientDistArr.forEach(patient =>{
-        if (patient.nearestOutpostDistKM >= 25){
+      patientDistArr.forEach(patient => {
+        if (patient.nearestOutpostDistKM >= 25) {
           newPatientAtRisk.push(patient.patientName)
         } else {
           return null
@@ -209,7 +211,7 @@ class Dashboard extends Component {
       // This sets the state of patients who are outside of the service areas
 
       this.setState({
-        patientsAtRisk : newPatientAtRisk
+        patientsAtRisk: newPatientAtRisk
       }
       )
 
@@ -217,11 +219,11 @@ class Dashboard extends Component {
 
       patientData.forEach(patient => {
         // console.log(patient)
-        for (let i = 0; i < patientDistArr.length; i++){
-          if (patientDistArr[i].patientName === patient.name){
+        for (let i = 0; i < patientDistArr.length; i++) {
+          if (patientDistArr[i].patientName === patient.name) {
             // console.log("Assigned HW name",patient.healthworker_name)
             // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
-            if (patient.healthworker_name !== patientDistArr[i].nearestHWName){
+            if (patient.healthworker_name !== patientDistArr[i].nearestHWName) {
               newPatientAssignement.push(patient.name)
               // console.log('Patients not assigned to nearest HW:', patient)
             }
@@ -264,7 +266,7 @@ class Dashboard extends Component {
       position: toast.POSITION.BOTTOM_LEFT
     })
   }
-  
+
   render() {
     console.log('patient location data', this.state.patientLocationData)
     let communityButtons = []
@@ -277,62 +279,76 @@ class Dashboard extends Component {
       return communityButtons
     })
 
-    return (
-      <div className='wrapper'>
-        <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
-          <div className="new-data-modal">
-            <NewDataMenu closeModal={this.onCloseModal} />
-          </div>
-        </Modal>
+    console.log(27482347238482, this.props.adminLoggedIn)
 
-        <div style={{ background: '#01101B' }}><Slideout /></div>
+    if (this.props.adminLoggedIn) {
+      return (
+        <div className='wrapper'>
+          <button><Link onClick={this.props.logout} to="/">Logout</Link></button>
+          <button onClick={() => this.onOpenModal()}>Add New Data</button>
+          <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
+            <div className="new-data-modal">
+              <NewDataMenu closeModal={this.onCloseModal} />
+            </div>
+          </Modal>
+
+          <div style={{ background: '#01101B' }}><Slideout /></div>
+          <div>
+            <button onClick={() => this.notify()}>Alert Test</button>
+            <ToastContainer style={{ marginBottom: '12%' }} autoClose={false} />
+          </div>
+          <PatientPopup />
+          <OutpostPopup />
+          <HealthworkerPopup />
+          <div className="map" id="mapDiv">
+            <Slideout />
+          </div>
+          <div className='esri-attribution__sources esri-interactive'>
+            <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+            {communityButtons}
+          </div>
+
+          <div id="panel">
+            <h2>COLOR AND SIZING LEGEND</h2>
+            <div id='panel-details'>
+              <div className='panel-line'>
+                <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
+                <p>Patient in First Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={greenPatient} className='icons' alt="second trimester icon"></img>
+                <p> Patient in Second Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={limePatient} className='icons' alt="third trimester icon"></img>
+                <p> Patient in Third Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={pinkPatient} className='icons' alt="alert icon"></img>
+                <p>Patient Alert Active</p>
+              </div>
+              <div className='panel-line'>
+                <img src={outpostHut} className='icons' alt="outpost icon"></img>
+                <p> Outpost Location</p>
+              </div>
+              <div className='panel-line'>
+                <img src={diamond} className='icons' alt="icon"></img>
+                <p> Healthworker</p>
+              </div>
+            </div>
+          </div>
+          <FooterData patientsOutsideService={this.state.patientsAtRisk} />
+        </div>
+      )
+    } else {
+      return (
         <div>
-          <button onClick={() => this.notify()}>Alert Test</button>
-          <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>
-        </div>
-        <PatientPopup />
-        <OutpostPopup />
-        <HealthworkerPopup />
-        <div className="map" id="mapDiv">
-          <Slideout/>
-        </div>
-        <div className='esri-attribution__sources esri-interactive'>
-          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-          {communityButtons}
-        </div>
-
-        <div id="panel">
-          <h2>COLOR AND SIZING LEGEND</h2>
-          <div id='panel-details'>
-            <div className='panel-line'>
-              <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
-              <p>Patient in First Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={greenPatient} className='icons' alt="second trimester icon"></img>
-              <p> Patient in Second Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={limePatient} className='icons' alt="third trimester icon"></img>
-              <p> Patient in Third Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={pinkPatient} className='icons' alt="alert icon"></img>
-              <p>Patient Alert Active</p>
-            </div>
-            <div className='panel-line'>
-              <img src={outpostHut} className='icons' alt="outpost icon"></img>
-              <p> Outpost Location</p>
-            </div>
-            <div className='panel-line'>
-              <img src={diamond} className='icons' alt="icon"></img>
-              <p> Healthworker</p>
-            </div>
+          <div className="denied-container">
+          <button className="denied-button"><Link style={{textDecoration: 'none', color: 'white'}} to="/">Please Login To Gain Access</Link></button>
           </div>
         </div>
-        <FooterData patientsOutsideService={this.state.patientsAtRisk} />
-      </div>
-    )
+      )
+    }
   }
 }
 
@@ -346,6 +362,7 @@ let mapStateToProps = state => {
     patientData: state.patients.patientsData,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
-export default connect(mapStateToProps, { getMap })(Dashboard)
+export default connect(mapStateToProps, { getMap, logout, getUser })(Dashboard)

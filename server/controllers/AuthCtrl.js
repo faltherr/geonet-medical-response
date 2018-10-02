@@ -30,7 +30,7 @@ module.exports = {
     } else {
       let users = await db.create_admin(userInfo)
       req.session.user = users[0]
-      res.redirect('/')
+      res.redirect('http://localhost:3000/#dashboard')
     }
     } catch(error) {
       console.log('we have a problem', error)
