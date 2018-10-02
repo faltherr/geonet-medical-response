@@ -51,15 +51,25 @@ class EditPatientModal extends Component {
     return (
       <div className="outer-modal" onClick={this.props.hideModal}>
         <div className="inner-modal" onClick={ (e) => {e.stopPropagation()}}>
+        
           <h3>Edit Patient Information</h3>
+
             <p>Name:</p><input onChange={ (e) => {this.handleChange(e, 'name')}} value={`${this.state.patient.name}`} />
+
             <p>Phone:</p><input onChange={ (e) => {this.handleChange(e, 'phone')}} value={`${this.state.patient.phone}`}/>
+
             <p>Location:</p><input onChange={ (e) => {this.handleChange(e, 'location')}} value={`${this.state.patient.location}`}/>
+
             <p>Age:</p><input onChange={ (e) => {this.handleChange(e, 'age')}} value={`${this.state.patient.age}`}/>
+
             <p>Family Plan:</p><input onChange={ (e) => {this.handleChange(e, 'famPlan')}} value={`${this.state.patient.famPlan}`}/>
+
             <p>HIV Status:</p><input onChange={ (e) => {this.handleChange(e, 'hiv')}} value={`${this.state.patient.hiv}`}/>
+
             <p>Due Date:</p><input onChange={ (e) => {this.handleChange(e, 'duedate')}} value={`${this.state.patient.duedate}`}/>
+
             <p>Alert:</p><input onChange={ (e) => {this.handleChange(e, 'alert')}} value={`${this.state.patient.alert}`}/>
+
             <button onClick={ () => {this.props.updatePatient(this.state.patient.id, this.state.patient, this.updateGraphic); this.props.hideModal()}}>Save Changes</button>
         </div>
       </div>

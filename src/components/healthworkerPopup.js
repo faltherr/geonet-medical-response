@@ -79,7 +79,8 @@ class HealthworkerPopup extends Component {
         actions: [{
           title: "Edit Healthworker",
           healthworker: healthworker, 
-          className: "esri-icon-user" }]
+          className: "esri-icon-user" 
+        }]
       }
 
       // Edit Healthworker button 

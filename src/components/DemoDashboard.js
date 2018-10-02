@@ -4,7 +4,7 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import {ToastContainer, toast} from 'react-toastify'
+import {toast} from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import DemoPatientPopup from '../components/DemoPatientPopup'
 import DemoOutpostPopup from '../components/DemoOutpostPopup'
@@ -17,8 +17,8 @@ import outpostHut from '../components/symbols/hut_purple.png'
 import diamond from '../images/diamond.png'
 import Slideout from './Slideout'
 import DemoFooterData from './DemoFooterData'
-import DemoNewDataMenu from './DemoNewDataMenu'
-import Modal from 'react-responsive-modal';
+// import DemoNewDataMenu from './DemoNewDataMenu'
+// import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
 
 

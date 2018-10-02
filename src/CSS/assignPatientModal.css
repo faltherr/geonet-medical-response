@@ -1,0 +1,36 @@
+.outer-assign-modal {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.3) ;
+  /* opacity: .09; */
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.inner-assign-modal {
+  height: 300px;
+  width: 600px;
+  background-color: #252429;
+  color: lightgray;
+  z-index: 3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-assign-modal > span {
+  text-transform: capitalize;
+  font-weight: 100;
+  font-size: 24;
+}
+
+.inner-assign-modal > span > input {
+  background-color: lightgray;
+}
