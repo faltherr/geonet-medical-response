@@ -34,20 +34,20 @@
   height: 30px;
   margin: 0;
   padding-top: 3px;
-  /* position: sticky; */
+  
 }
 
 #due-this-month > p, 
 #healthworker-data > p, 
 #service-area > p,
-#patient-names > p {
+#patient-names > span {
   cursor: pointer;
   margin: 5px;
 }
 #due-this-month > p:hover, 
 #healthworker-data > p:hover,
 #service-area > p:hover,
-#patient-names > p:hover {
+#patient-names > span:hover {
   color: #745138;
 }
 

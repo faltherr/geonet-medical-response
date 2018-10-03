@@ -52,8 +52,8 @@ app.get('/api/logout', (req, res) => {
 // PatientsCtrl
 app.get('/api/patients', PatientCtrl.getPatients)
 app.get('/api/patients/:id', PatientCtrl.getPatient)
+app.put('/api/patients/:patient_id/:healthworker_id', PatientCtrl.updatePatientHealthworker)
 // app.post('/api/patients', PatientCtrl.addPatient)
-app.put('/api/patients/:id')
 
 // HealthworkersCtrl 
 app.get('/api/healthworkers', HealthworkersCtrl.getHealthworkers)

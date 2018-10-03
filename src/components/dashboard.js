@@ -102,7 +102,7 @@ class Dashboard extends Component {
 
       await mapView.ui.add(toggle, "top-left")
       await mapView.ui.add(legend, "top-right")
-      await mapView.ui.add(buttonWidget, "bottom-left")
+      // await mapView.ui.add(buttonWidget, "bottom-left")
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
@@ -127,7 +127,8 @@ class Dashboard extends Component {
       let patientGeoJson = []
       patientData.forEach(patient => {
         if (patient.latitude && patient.longitude){
-          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
+          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "id": patient.id,
+          "name": patient.name }]))
         } else {
           return null
         }
@@ -137,7 +138,8 @@ class Dashboard extends Component {
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
         if (healthworker.latitude && healthworker.longitude){
-          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "healthworkerId": healthworker.id, 
+          "name": healthworker.name }]))
         } else{
           return null
         }
@@ -167,14 +169,15 @@ class Dashboard extends Component {
       let patientDistArr = []
 
       patientGeoJson.forEach(patient => {
-        let patientName = patient.geometry.coordinates[2].name
-        // console.log(patientName) 
+        let patientName = patient.geometry.coordinates[2]
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
         let patientDistance = {}
-        patientDistance.patientName = patientName
+        patientDistance.patientId = patientName.id
+        patientDistance.patientName = patientName.name
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
+        patientDistance.nearestHWId = nearest.geometry.coordinates[2].healthworkerId
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
         patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
@@ -284,7 +287,6 @@ class Dashboard extends Component {
 
         <div style={{ background: '#01101B' }}><Slideout /></div>
         <div>
-          <button onClick={() => this.notify()}>Alert Test</button>
           <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>
         </div>
         <PatientPopup />
@@ -327,7 +329,9 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <FooterData patientsOutsideService={this.state.patientsAtRisk} />
+        <FooterData patientsOutsideService={this.state.patientsAtRisk} 
+                    patientsAwaitingAssignment={this.state.patientsAwaitingAssignment}
+                    patientsLocationData={this.state.patientLocationData}/>
       </div>
     )
   }

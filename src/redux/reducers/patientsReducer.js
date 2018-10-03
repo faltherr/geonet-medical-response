@@ -101,8 +101,8 @@ export function setCurrentPatient (patient) {
   }
 }
 
-export function assignHealthworkerToPatient (id) {
-  let assign = axios.put(`/api/patients/${id}`).then( response => {
+export function assignHealthworkerToPatient (patient_id, healthworker_id) {
+  let assign = axios.put(`/api/patients/${patient_id}/${healthworker_id}`).then( response => {
     return response.data
   })
   return {

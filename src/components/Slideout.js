@@ -32,7 +32,7 @@ class Slideout extends Component{
   render() {
     return (
       <div style={styles}>
-        <button className="slider-button" type="button" onClick={this.openSlider}><i className="fas fa-bars fa-4x"></i></button>
+        <button className="slider-button" type="button" onClick={this.openSlider}><i className="fas fa-bars fa-2x"></i></button>
         <Slider
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
