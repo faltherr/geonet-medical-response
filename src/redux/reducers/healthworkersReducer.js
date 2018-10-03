@@ -47,17 +47,17 @@ export function getHealthworkers () {
   }
 }
 
-export function addHCW (state) {
+export function addHCW (props) {
 
   let hcwData ={
-    name: state.hcwName,
-    phone: state.hcwPhone,
-    address: state.hcwAddress,
-    outpost_id: state.hcwOutpost,
-    email: state.hcwEmail,
-    latitude: state.hcwLatitude,
-    longitude: state.hcwLongitude,
-    location: state.hcwAddress
+    name: props.hcwName,
+    phone: props.hcwPhone,
+    address: props.hcwAddress,
+    outpost_id: props.hcwOutpost,
+    email: props.hcwEmail,
+    latitude: props.hcwLatitude,
+    longitude: props.hcwLongitude,
+    location: props.hcwAddress
   }
 
   let outposts = axios.post('/api/healthworkers', hcwData).then(response => {

@@ -6,6 +6,7 @@ import * as moment from 'moment'
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal'
 import AssignPatientModal from './AssignPatientModal'
+import {hideModal, showModal, turnOffGeocoder, hideMask, patientAddressSelectorOff, hcwAddressSelectorOff, outpostAddressSelectorOff} from '../redux/reducers/formReducer'
 
 
 class FooterData extends Component {
@@ -27,8 +28,16 @@ class FooterData extends Component {
       speedFactor: 3
     }
  
-  onOpenModal = () => { this.setState({ openModal: true }) }
-  onCloseModal = () => { this.setState({ openModal: false }) }
+  onOpenModal = () => { this.props.showModal()}
+  onCloseModal = () => { this.props.hideModal()}
+
+  goToModal = (typeOfSelector) => {
+    this.props.showModal()
+    this.props.turnOffGeocoder()
+    this.props.hideMask()
+    let addressType = `${typeOfSelector}AddressSelectorOff`
+    this.props[addressType]()
+  }
 
   assignPatientModalOpen = () => { this.setState({ assignPatientModal: true})}
   assignPatientModalClosed = () => { this.setState({ assignPatientModal: false})}
@@ -39,10 +48,52 @@ class FooterData extends Component {
       return <p key={element}>{element}</p>
     })
 
+    let displayLocation
+
+    if (this.props.patientAddressSelector){
+      displayLocation =(
+      <div>
+      <h3>{this.props.patientAddress}</h3>
+      <p>At latitude {this.props.lat} and longitude {this.props.lon}</p>
+      <button type='button' onClick={()=> this.goToModal('patient')}> Select this address </button>
+      </div>
+      )
+    } else if (this.props.hcwAddressSelector){
+      displayLocation =(
+      <div>
+      <h3>{this.props.hcwAddress}</h3>
+      <p>At latitude {this.props.lat} and longitude {this.props.lon}</p>
+      <button type='button' onClick={()=> this.goToModal('hcw')}> Select this address </button>
+      </div>
+      )
+    } else if (this.props.outpostAddressSelector){
+      displayLocation =(
+      <div>
+      <h3>{this.props.outpostAddress}</h3>
+      <p>At latitude {this.props.lat} and longitude {this.props.lon}</p>
+      <button type='button' onClick={()=> this.goToModal('outpost')}> Select this address </button>
+      </div>
+      )
+    }
+
+    if (this.props.toggleMask){
+      return(
+      <div className="footer-wrapper">
+      <div className='data-containers'>
+        <h2>The selected address is:</h2>
+        
+        {displayLocation}
+        
+      </div>
+      </div>
+      )
+    }else {
+
     return (
       <div className="footer-wrapper">
+
         <div className="data-containers">
-      
+        
           <div id='due-this-month'>
             <h4>Expecting This Month</h4>
               { 
@@ -112,16 +163,16 @@ class FooterData extends Component {
           </div>
 
           <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
-            <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
+            <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
               <div className="new-data-modal">
-                <NewDataMenu closeModal={this.onCloseModal}/>
+                <NewDataMenu/>
               </div>
             </Modal>
         
       </div>
     </div>
-    )
-  }
+    )}
+              }
 }
     
 
@@ -130,7 +181,15 @@ let mapStateToProps = state => {
     patientsData: state.patients.patientsData,
     healthworkersData: state.healthworkers.healthworkersData,
     outpostsData: state.outposts.outpostsData,
-    mapView: state.map.mapView
+    mapView: state.map.mapView,
+    openModal: state.newForm.openModal,
+    toggleMask: state.newForm.toggleMask,
+    patientAddress: state.newForm.patientAddress,
+    hcwAddress: state.newForm.hcwAddress,
+    outpostAddress: state.newForm.outpostAddress,
+    patientAddressSelector: state.newForm.patientAddressSelector,
+    hcwAddressSelector: state.newForm.hcwAddressSelector, 
+    outpostAddressSelector:state.newForm.outpostAddressSelector,
   }
 }
-export default connect(mapStateToProps, {getPatients})(FooterData)
+export default connect(mapStateToProps, {getPatients, hideModal, showModal, turnOffGeocoder, hideMask, patientAddressSelectorOff, hcwAddressSelectorOff, outpostAddressSelectorOff})(FooterData)

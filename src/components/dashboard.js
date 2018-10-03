@@ -4,7 +4,7 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import {ToastContainer, toast} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
@@ -20,6 +20,8 @@ import FooterData from './FooterData'
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
+import axios from 'axios'
+import {clickedPatientAddress, clickedHWAddress, clickedOutpostAddress} from '../redux/reducers/formReducer'
 
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -30,8 +32,10 @@ class Dashboard extends Component {
     this.state = {
       openModal: false,
       patientsAtRisk: [],
-      patientsAwaitingAssignment : [],
-      patientLocationData: []
+      patientsAwaitingAssignment: [],
+      patientLocationData: [],
+      clickLat: '',
+      clickLon: ''
     }
   }
 
@@ -44,8 +48,10 @@ class Dashboard extends Component {
       'esri/widgets/BasemapToggle',
       'esri/layers/GraphicsLayer',
       "esri/geometry/SpatialReference",
-      "esri/geometry/geometryEngine"
-    ]).then(async ([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference, geometryEngine]) => {
+      "esri/geometry/geometryEngine",
+      // "esri/geometry/webMercatorUtils",
+      // "esri/InfoTemplate",
+    ]).then(async ([Map, MapView, SceneView, Legend, BasemapToggle, GraphicsLayer, SpatialReference, geometryEngine, webMercatorUtils, InfoTemplate]) => {
 
       const map = await new Map({
         basemap: 'streets-night-vector'
@@ -119,6 +125,49 @@ class Dashboard extends Component {
         speedFactor: 0.2
       })
 
+      // Function to query the w3w API and return lat/lon
+      let w3wGeocoder = (lat, lon)=>{
+        // Execute a reverse geocode using the clicked location
+        axios.get(`https://api.what3words.com/v2/reverse?coords=${lat}%2C${lon}&key=R7MAUPYF`).then(reverseGeocoding=>{
+        if(this.props.patientAddressSelector){
+          //Set the props of the patient address
+          // console.log('Update the patient input', reverseGeocoding.data.words)
+          this.props.clickedPatientAddress(reverseGeocoding.data.words)
+        } else if (this.props.hcwAddressSelector){
+          console.log('Update the hcw input', reverseGeocoding.data.words)
+          this.props.clickedHWAddress(reverseGeocoding.data.words)
+        } else if (this.props.outpostAddressSelector){
+          console.log('Update the outpost input', reverseGeocoding.data.words)
+          this.props.clickedOutpostAddress(reverseGeocoding.data.words)
+        }
+
+        }).catch(function (error) {
+          // If the promise fails and no result is found, show a generic message
+          "No address was found for this location";
+        });
+      }
+
+      // Conditionally allow this function to fire 
+      let ref = this;
+      mapView.on("click", function (event) {
+        var lat = event.mapPoint.latitude;
+        var lon = event.mapPoint.longitude;
+        // mapView.popup.open({
+        //   // Set the popup's title to the coordinates of the location
+        //   title: "Reverse geocode: [" + lon + ", " + lat + "]",
+        //   location: event.mapPoint // Set the location of the popup to the clicked location
+        // });
+        ref.setState({
+          clickLat: lat,
+          clickLon: lon
+        })
+        if (ref.props.toggleGeoCoder){
+        w3wGeocoder(lat, lon)
+        console.log(lat)
+        console.log(lon)
+      }
+    })
+
       // Script to determine the distance between each patient and a health worker using Turf
 
       let { healthworkerData, patientData, outpostsData } = this.props
@@ -126,7 +175,7 @@ class Dashboard extends Component {
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
       patientData.forEach(patient => {
-        if (patient.latitude && patient.longitude){
+        if (patient.latitude && patient.longitude) {
           patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
         } else {
           return null
@@ -136,9 +185,9 @@ class Dashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        if (healthworker.latitude && healthworker.longitude){
+        if (healthworker.latitude && healthworker.longitude) {
           healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
-        } else{
+        } else {
           return null
         }
       })
@@ -148,13 +197,13 @@ class Dashboard extends Component {
 
       // Here we calculate the distance to the nearest health outpost
       // We assume that patients outside of the buffers (A 25km radius) are at risk in the event of complications arising during labor
-      
+
       // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
       let outpostGeoJson = []
       outpostsData.forEach(outpost => {
-        if(outpost.latitude && outpost.longitude){
+        if (outpost.latitude && outpost.longitude) {
           outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
-        } else{
+        } else {
           return null
         }
       })
@@ -163,7 +212,7 @@ class Dashboard extends Component {
       let outpostPoints = turf.featureCollection(outpostGeoJson)
 
       // Here we build an object that contains the returned geometries from a nearest point calculation and push it to a new array
-      
+
       let patientDistArr = []
 
       patientGeoJson.forEach(patient => {
@@ -183,8 +232,8 @@ class Dashboard extends Component {
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
         patientDistance.nearestOutpostName = nearestOutpost.geometry.coordinates[2].name
         patientDistance.nearestOutpostDistKM = nearestOutpost.properties.distanceToPoint
-        patientDistance.nearestOutpostLat= nearestOutpost.geometry.coordinates[0]
-        patientDistance.nearestOutpostLon=nearestOutpost.geometry.coordinates[1]
+        patientDistance.nearestOutpostLat = nearestOutpost.geometry.coordinates[0]
+        patientDistance.nearestOutpostLon = nearestOutpost.geometry.coordinates[1]
         // console.log(patientToHWDistance)
         patientDistArr.push(patientDistance)
       })
@@ -195,11 +244,11 @@ class Dashboard extends Component {
       })
 
       // Now we can use the above array of objects to alert the nearest healthworker in an emergency, assign the patient to the nearest healthworker, and identify patients outside of sevice areas
-      
+
       let newPatientAtRisk = []
 
-      patientDistArr.forEach(patient =>{
-        if (patient.nearestOutpostDistKM >= 25){
+      patientDistArr.forEach(patient => {
+        if (patient.nearestOutpostDistKM >= 25) {
           newPatientAtRisk.push(patient.patientName)
         } else {
           return null
@@ -209,7 +258,7 @@ class Dashboard extends Component {
       // This sets the state of patients who are outside of the service areas
 
       this.setState({
-        patientsAtRisk : newPatientAtRisk
+        patientsAtRisk: newPatientAtRisk
       }
       )
 
@@ -217,11 +266,11 @@ class Dashboard extends Component {
 
       patientData.forEach(patient => {
         // console.log(patient)
-        for (let i = 0; i < patientDistArr.length; i++){
-          if (patientDistArr[i].patientName === patient.name){
+        for (let i = 0; i < patientDistArr.length; i++) {
+          if (patientDistArr[i].patientName === patient.name) {
             // console.log("Assigned HW name",patient.healthworker_name)
             // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
-            if (patient.healthworker_name !== patientDistArr[i].nearestHWName){
+            if (patient.healthworker_name !== patientDistArr[i].nearestHWName) {
               newPatientAssignement.push(patient.name)
               // console.log('Patients not assigned to nearest HW:', patient)
             }
@@ -264,9 +313,10 @@ class Dashboard extends Component {
       position: toast.POSITION.BOTTOM_LEFT
     })
   }
-  
+
   render() {
-    console.log('patient location data', this.state.patientLocationData)
+    // console.log('patient location data', this.state.patientLocationData)
+    console.log(this.props.toggleGeoCoder)
     let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
@@ -279,7 +329,7 @@ class Dashboard extends Component {
 
     return (
       <div className='wrapper'>
-        <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
+        <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
           <div className="new-data-modal">
             <NewDataMenu closeModal={this.onCloseModal} />
           </div>
@@ -288,13 +338,13 @@ class Dashboard extends Component {
         <div style={{ background: '#01101B' }}><Slideout /></div>
         <div>
           <button onClick={() => this.notify()}>Alert Test</button>
-          <ToastContainer style={{marginBottom: '12%'}} autoClose={false}/>
+          <ToastContainer style={{ marginBottom: '12%' }} autoClose={false} />
         </div>
         <PatientPopup />
         <OutpostPopup />
         <HealthworkerPopup />
         <div className="map" id="mapDiv">
-          <Slideout/>
+          <Slideout />
         </div>
         <div className='esri-attribution__sources esri-interactive'>
           <button onClick={this.sierraLeonClick}>Sierra Leone</button>
@@ -330,7 +380,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <FooterData patientsOutsideService={this.state.patientsAtRisk} />
+        <FooterData patientsOutsideService={this.state.patientsAtRisk} lat={this.state.clickLat} lon={this.state.clickLon} />
       </div>
     )
   }
@@ -346,6 +396,11 @@ let mapStateToProps = state => {
     patientData: state.patients.patientsData,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
+    toggleGeoCoder: state.newForm.toggleGeocoder,
+    openModal: state.newForm.openModal,
+    patientAddressSelector:state.newForm.patientAddressSelector,
+    hcwAddressSelector:state.newForm.hcwAddressSelector, 
+    outpostAddressSelector:state.newForm.outpostAddressSelector,
   }
 }
-export default connect(mapStateToProps, { getMap })(Dashboard)
+export default connect(mapStateToProps, { getMap, clickedPatientAddress, clickedHWAddress, clickedOutpostAddress })(Dashboard)

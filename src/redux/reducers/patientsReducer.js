@@ -53,26 +53,28 @@ export function getPatientGraphic(patientGraphic) {
   }
 }
 
-export function addPatientSurvey(state) {
+export function addPatientSurvey(props) {
 
-  console.log(state)
+  // console.log(state)
   
-  let formattedDate = state.patientDueDate.format('YYYY/MM/d')
+  let formattedDate = props.patientDueDate.format('YYYY/MM/d')
 
+  //Chsnge this to accept all values from props....
   let patientSurveyData = {
-    name: state.patientName,
-    phone: state.patientPhone ,
-    location: state.patientAddress,
-    latitude: state.patientLatitude,
-    longitude: state.patientLongitude,
-    age: state.patientAge,
-    famplan: state.patientFamPlan,
-    hiv: state.patientHIV,
-    parity: state.patientParity,
+    name: props.patientName,
+    phone: props.patientPhone ,
+    location: props.patientAddress,
+    latitude: props.patientLatitude,
+    longitude: props.patientLongitude,
+    age: props.patientAge,
+    famplan: props.patientFamPlan,
+    hiv: props.patientHIV,
+    parity: props.patientParity,
     duedate: formattedDate,
     completed: true,
-    HWID: state.patientAssignedHW,
+    HWID: props.patientAssignedHW,
   }
+  console.log('!!!!!!!!!!!!', patientSurveyData)
 
   let newPatientSurvey = axios.post('/api/surveys', patientSurveyData).then(response => {
     return response.data
