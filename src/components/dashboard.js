@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
+import { getPatients, setReturnedFalse } from '../redux/reducers/patientsReducer'
 import { logout, getUser } from '../redux/reducers/verifiedUser'
 import { Link } from 'react-router-dom';
 import PatientPopup from '../components/patientPopup'
@@ -15,13 +16,14 @@ import limePatient from '../components/symbols/woman_lime.png'
 import greenPatient from '../components/symbols/woman_green.png'
 import aquaPatient from '../components/symbols/woman_aqua.png'
 import pinkPatient from '../components/symbols/woman_alert_10.png'
-import outpostHut from '../components/symbols/hut_purple.png'
-import diamond from '../images/diamond.png'
+import outpostHut from '../components/symbols/hut_white_outline_filled.png'
+import kyle from '../components/symbols/kyle.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
 import NewDataMenu from './newDataMenu'
 import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
+import axios from 'axios'
 
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
@@ -30,10 +32,12 @@ class Dashboard extends Component {
   constructor() {
     super()
     this.state = {
-      openModal: false,
       patientsAtRisk: [],
       patientsAwaitingAssignment: [],
-      patientLocationData: []
+      patientLocationData: [],
+      patientsInEmergency: [],
+      activeAlertIds: [],
+      alertUpdate: null
     }
   }
 
@@ -120,7 +124,6 @@ class Dashboard extends Component {
         zoom: 9,
         speedFactor: 0.2
       })
-
       // Script to determine the distance between each patient and a health worker using Turf
 
       let { healthworkerData, patientData, outpostsData } = this.props
@@ -237,7 +240,69 @@ class Dashboard extends Component {
         patientsAwaitingAssignment: newPatientAssignement
       })
       //This ends the async call to ArcGIS online
+
     })
+
+    //This sets interval for reload of getting patient data
+
+    const alertUpdate = setInterval(() => {
+      // toast.dismiss()
+      this.props.getPatients()
+    }, 10000)
+  }
+  //END OF COMPONENT DID MOUNT
+
+
+  componentDidUpdate() {
+    // Checking DB for true alert status and rendering alerts
+    if (this.props.patientData.length && this.props.returnedData) {
+
+      let { patientData } = this.props
+      let currentPatientAlerts = []
+      patientData.forEach(patient => {
+        if (patient.alert == true) {
+          currentPatientAlerts.push(patient)
+        }
+      })
+      let activeIdCopy = [...this.state.activeAlertIds]
+      if (currentPatientAlerts.length) {
+        for (let i = 0; i < currentPatientAlerts.length; i++) {
+          if (activeIdCopy.indexOf(currentPatientAlerts[i].id) === -1) {
+            activeIdCopy.push(currentPatientAlerts[i].id)
+            this.notify(currentPatientAlerts[i])
+          }
+        }
+        this.setState({
+          activeAlertIds: activeIdCopy
+        })
+      }
+      console.log('current', currentPatientAlerts)
+      this.props.setReturnedFalse()
+      this.setState({
+        patientsInEmergency: currentPatientAlerts
+      })
+    }
+  }
+
+  //Toast for alert when patient texts 'emergency'
+  notify = (patient) => {
+    toast.error(<span style={{ paddingBottom: '15px' }}><h5>Emergency Alert</h5>Patient name: {patient.name} <br />Patient location: {patient.location} <br />Patient contact: {patient.phone}
+    </span>, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        onClose: (e) => {
+          console.log(e)
+          axios.put(`/api/surveys/alert/${patient.id}`, patient).then(response => {
+            // response.data
+            let activeIdCopy = [...this.state.activeAlertIds];
+            let index = activeIdCopy.indexOf(patient.id)
+            activeIdCopy.splice(index, 1)
+            this.setState({
+              activeAlertIds: activeIdCopy
+            })
+          })
+        }
+      })
+
   }
 
   // buttons for different community zooms
@@ -260,15 +325,20 @@ class Dashboard extends Component {
     easing: "ease-in-out"
   }
 
-  //Toast for alert when patient texts 'emergency'
-  notify = () => {
-    toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
-      position: toast.POSITION.BOTTOM_LEFT
-    })
-  }
+
 
   render() {
-    console.log('patient location data', this.state.patientLocationData)
+    // let {map, mapView, legend} = this.props
+    const CloseButton = ({ closeIt }) => {
+      return (
+        <i
+          className="marterial-icons"
+          onClick={closeIt}> X
+      </i>
+      )
+    }
+    let outpostButtons = []
+
     let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
@@ -278,8 +348,6 @@ class Dashboard extends Component {
       }
       return communityButtons
     })
-
-    console.log(27482347238482, this.props.adminLoggedIn)
 
     if (this.props.adminLoggedIn) {
       return (
@@ -292,7 +360,7 @@ class Dashboard extends Component {
               <h3 style={{ color: 'white', fontFamily: 'Raleway' }}>GeoNet Medical Response</h3>
             </div>
             <div className="logout-container">
-              <button className="logout-button"><Link style={{color: 'white', textDecoration: 'none'}}onClick={this.props.logout} to="/">Logout</Link></button>
+              <button className="logout-button"><Link style={{ color: 'white', textDecoration: 'none' }} onClick={this.props.logout} to="/">Logout</Link></button>
             </div>
           </div>
           <PatientPopup />
@@ -310,27 +378,27 @@ class Dashboard extends Component {
             <h2>COLOR AND SIZING LEGEND</h2>
             <div id='panel-details'>
               <div className='panel-line'>
-                <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
-                <p>Patient in First Trimester</p>
-              </div>
-              <div className='panel-line'>
-                <img src={greenPatient} className='icons' alt="second trimester icon"></img>
-                <p> Patient in Second Trimester</p>
+                <img src={pinkPatient} className='icons' alt="alert icon"></img>
+                <p>Patient Alert Active</p>
               </div>
               <div className='panel-line'>
                 <img src={limePatient} className='icons' alt="third trimester icon"></img>
                 <p> Patient in Third Trimester</p>
               </div>
               <div className='panel-line'>
-                <img src={pinkPatient} className='icons' alt="alert icon"></img>
-                <p>Patient Alert Active</p>
+                <img src={greenPatient} className='icons' alt="second trimester icon"></img>
+                <p> Patient in Second Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
+                <p>Patient in First Trimester</p>
               </div>
               <div className='panel-line'>
                 <img src={outpostHut} className='icons' alt="outpost icon"></img>
                 <p> Outpost Location</p>
               </div>
               <div className='panel-line'>
-                <img src={diamond} className='icons' alt="icon"></img>
+                <img src={kyle} className='icons' alt="kyle icon" style={{ minHeight: '50px' }}></img>
                 <p> Healthworker</p>
               </div>
             </div>
@@ -350,6 +418,7 @@ class Dashboard extends Component {
   }
 }
 
+
 let mapStateToProps = state => {
   return {
     map: state.map.map,
@@ -360,7 +429,9 @@ let mapStateToProps = state => {
     patientData: state.patients.patientsData,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
+    returnedData: state.patients.returnedData,
     adminLoggedIn: state.logout.adminLoggedIn
   }
 }
-export default connect(mapStateToProps, { getMap, logout, getUser })(Dashboard)
+
+export default connect(mapStateToProps, { getMap, getPatients, setReturnedFalse, logout, getUser })(Dashboard)
