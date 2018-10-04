@@ -130,7 +130,7 @@ class HealthworkerPopup extends Component {
   hideEditModal = () => { this.setState({ showModal: false})}
 
   render () {
-    console.log(this.state.healthworkerGraphics)
+    // console.log(this.state.healthworkerGraphics)
     return (
       <div>
         {
