@@ -6,6 +6,7 @@ const GET_PATIENTGRAPHIC = 'GET_PATIENTGRAPHIC'
 const ADD_NEW_SURVEY = 'ADD_NEW_SURVEY'
 const UPDATE_PATIENT = 'UPDATE_PATIENT'
 const SET_CURRENT_PATIENT = 'SET_CURRENT_PATIENT'
+const SET_RETURNED_FALSE = 'SET_RETURNED_FALSE'
 const ASSIGN_HEALTHWORKER_TO_PATIENT = 'ASSIGN_HEALTHWORKER_TO_PATIENT'
 
 
@@ -13,13 +14,14 @@ let initialState = {
   patientsData: [],
   patientGraphic: {},
   currentPatient: {},
-  patientPointGeometry: []
+  patientPointGeometry: [],
+  returnedData: false
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_PATIENTS + FULFILLED:
-      return { ...state, patientsData: action.payload }
+      return { ...state, patientsData: action.payload, returnedData: true }
     case GET_PATIENTGRAPHIC:
       return { ...state, patientGraphic: action.payload }
     case ADD_NEW_SURVEY + FULFILLED:
@@ -28,6 +30,8 @@ export default function reducer(state = initialState, action) {
       return {...state, patientsData: action.payload }
     case SET_CURRENT_PATIENT:
       return { ...state, currentPatient: action.payload }
+    case SET_RETURNED_FALSE:
+      return {...state, returnedData: action.payload}
     case ASSIGN_HEALTHWORKER_TO_PATIENT + FULFILLED:
       return { ...state, patientsData: action.payload}
 
@@ -53,26 +57,28 @@ export function getPatientGraphic(patientGraphic) {
   }
 }
 
-export function addPatientSurvey(state) {
+export function addPatientSurvey(props) {
 
-  console.log(state)
+  // console.log(state)
   
-  let formattedDate = state.patientDueDate.format('YYYY/MM/d')
+  let formattedDate = props.patientDueDate.format('YYYY/MM/d')
 
+  //Chsnge this to accept all values from props....
   let patientSurveyData = {
-    name: state.patientName,
-    phone: state.patientPhone ,
-    location: state.patientAddress,
-    latitude: state.patientLatitude,
-    longitude: state.patientLongitude,
-    age: state.patientAge,
-    famplan: state.patientFamPlan,
-    hiv: state.patientHIV,
-    parity: state.patientParity,
+    name: props.patientName,
+    phone: props.patientPhone ,
+    location: props.patientAddress,
+    latitude: props.patientLatitude,
+    longitude: props.patientLongitude,
+    age: props.patientAge,
+    famplan: props.patientFamPlan,
+    hiv: props.patientHIV,
+    parity: props.patientParity,
     duedate: formattedDate,
     completed: true,
-    HWID: state.patientAssignedHW,
+    HWID: props.patientAssignedHW,
   }
+  console.log('!!!!!!!!!!!!', patientSurveyData)
 
   let newPatientSurvey = axios.post('/api/surveys', patientSurveyData).then(response => {
     return response.data
@@ -102,8 +108,7 @@ export function setCurrentPatient (patient) {
 }
 
 export function assignHealthworkerToPatient (patient_id, healthworker_id) {
-  console.log('odalay', patient_id, healthworker_id)
-  let assign = axios.put(`/api/patients/${patient_id}/${healthworker_id}`).then( response => {
+  let assign = axios.put(`/api/patients/${patient_id}/${healthworker_id}`).then(response => {
     return response.data
   })
   return {
@@ -111,3 +116,11 @@ export function assignHealthworkerToPatient (patient_id, healthworker_id) {
     payload: assign
   }
 }
+
+export function setReturnedFalse() {
+  return {
+    type: SET_RETURNED_FALSE,
+    payload: false 
+  }
+}
+

@@ -36,11 +36,27 @@ class Slideout extends Component{
         <Slider
           isOpen={this.state.isOpen}
           onOutsideClick={this.closeSlider}>
+          <h2 style={{color: '#D8DBE7'}}> Sierra Leone Snapshot </h2>
+          <div className='slideout-subheader-question-container'>
+            <h2 style={{color: '#D8DBE7'}}> Indicators of Maternal Health in Study Area </h2>
+            <div className="question-mark">
+              <i className="fas fa-question-circle"style={{color: '#D8DBE7'}} ></i>
+            <div id="info-div">
+              <p>
+              In Sierra Leone there is a unmet need for family planning. In this area the percent of registered women reporting the use of family planning methods is ____.  Identification of the clusters of low access to family planning better equips the GeoNet Medical Response team to target supplies and personnel to the areas of greatest need.
+              </p>
+            </div>
+            </div>
+          </div>
             <h3 style={{color: '#D8DBE7'}}>HIV Status and Family Planning</h3>
             <PieCharts/>
+            <h3 style={{color: '#D8DBE7'}}>Maternal Mortality Rates</h3>
+          <div className='slideout-subheader-question-container'>
+            <h2 style={{color: '#D8DBE7'}}> National Indicators of Maternal Health</h2> <i className="fas fa-question-circle" style={{color: '#D8DBE7'}} ></i>
+          </div>
             <h3 style={{color: '#D8DBE7'}}>Maternal and Neonatal Mortality Rates</h3>
             <LineCharts />
-          </Slider>
+        </Slider>
       </div>
     );
   };

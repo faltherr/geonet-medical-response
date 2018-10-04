@@ -190,7 +190,6 @@ let mapStateToProps = state => {
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
     patientPointGeometry: state.patients.patientPointGeometry
-
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)

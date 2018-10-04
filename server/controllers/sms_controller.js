@@ -1,9 +1,11 @@
 const surveyQs = require('./data/survey_questions')
 const surveyLogic = require('./functions/surveyLogic')
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const twilio = require('twilio')
+const MessagingResponse = twilio.twiml.MessagingResponse
 
 module.exports = {
     emergency: (request, res) => {
+        const client = twilio(process.env.accountSid, process.env.authToken);
 
         // Respond function to convert text to TwiML content to reply to user
 
@@ -11,6 +13,7 @@ module.exports = {
             var twiml = new MessagingResponse();
             twiml.message(message);
             res.type('text/xml');
+            console.log("!!!!!!!!,", twiml)
             res.send(twiml.toString());
         }
 
@@ -19,16 +22,25 @@ module.exports = {
 
         // This is the emergency response functionality
         if (Body.toLowerCase().match(/^.*(emergency).*$/)) {
-            db.alertStatus(From).then(emergencyResponse => {
-                //******** Should I add this into the massaging response? */
-                //******** Should the respond function be different for an emergency? So that we message patient AND HCW?*/
-                
-                respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordinating a response for your address, ${emergencyResponse[0].location}`)
-                // res.send(emergencyResponse[0].name, emergencyResponse[0].location)
-            }).then(() => {
-
+            // db.alertStatus(From).then(emergencyResponse => {
+            db.get_patient_by_phone(From).then(patientData => {
+                console.log("patient data", patientData)
+                // HMMMMM ASYNC????
+                client.messages
+                        .create({
+                            body: `Your patient ${patientData[0].name} has requested assistance at ${patientData[0].location}`,
+                            from: process.env.TwilioSMSPhone,
+                            to: patientData[0].healthworker_phone
+                        }).then(()=>{
+                            db.alertStatus(From).then(emergencyResponse => {
+                                // console.log('Emergency status!!!!', emergencyResponse)
+                                respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordinating a response for your address, ${emergencyResponse[0].location}`)
+                            })
+                        })
             })
-        // This is the registration functionality
+                
+          
+            // This is the registration functionality
         } else if (Body.toLowerCase().match(/^.*(register|start).*$/)) {
             db.checkPhoneNumber(From).then(checkPhoneNumber => {
                 if (checkPhoneNumber.length) {
@@ -42,16 +54,16 @@ module.exports = {
                         }
                     })
                 } else {
-                    db.addPhone(From).then( () => {
-                        db.sms_get_survey_id(From).then(grabbedSurveyID=>{
-                            db.sms_add_patient_hw_connection(grabbedSurveyID[0].id).then( () => {
+                    db.addPhone(From).then(() => {
+                        db.sms_get_survey_id(From).then(grabbedSurveyID => {
+                            db.sms_add_patient_hw_connection(grabbedSurveyID[0].id).then(() => {
                                 return respond(`Your number has been added. Please complete our survey. ${surveyQs[0].name}`)
                             })
                         })
                     })
                 }
             })
-        // This is the survey functionality and check to see if the phone number is already registered
+            // This is the survey functionality and check to see if the phone number is already registered
         } else {
             db.checkPhoneNumber(From).then(surveyNumberCheck => {
                 if (surveyNumberCheck.length === 0) {
@@ -60,7 +72,7 @@ module.exports = {
                     return respond('You already completed the survey. Message us if there is an emergency with "emergency".')
                 } else {
                     // Here we use the imported survey logic function to update DB and ask the correct question
-                        surveyLogic(surveyNumberCheck, Body, From, db, respond)
+                    surveyLogic(surveyNumberCheck, Body, From, db, respond)
                 }
             })
         }

@@ -46,6 +46,7 @@ app.get('/api/currentUser', (req, res) => {
 
 app.get('/api/logout', (req, res) => {
   req.session.destroy()
+  console.log(req.session)
   res.sendStatus(200)
 })
 
@@ -69,6 +70,7 @@ app.post('/api/outposts/', OutpostCtrl.addOutpost)
 // SurveysCtrl 
 app.post('/api/surveys', SurveyCtrl.addSurvey)
 app.put('/api/surveys/:id', SurveyCtrl.updateSurvey)
+app.put('/api/surveys/alert/:id', SurveyCtrl.updateAlert)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)

@@ -21,6 +21,7 @@ class EditHealthworkerModal extends Component {
   updateGraphic = () => {
     let { healthworker } = this.state
     let { graphic } = this.props
+    console.log(graphic)
 
     let content = [{
       type: "text",

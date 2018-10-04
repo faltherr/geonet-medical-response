@@ -13,12 +13,13 @@ class AssignPatientModal extends Component {
   }
   
   componentDidMount () {
-      this.props.patientsLocation.map(p => { if(p.patientId === this.props.patient.id) {
+      this.props.patientsLocation.map(p => { 
+        if(p.patientId === this.props.patient.id) {
        this.setState({
         nearestHealthworkerName: p.nearestHWName, 
         healthworkerId: p.nearestHWId
         })
-      }
+      } 
     })
   }
 
@@ -50,7 +51,6 @@ class AssignPatientModal extends Component {
         }
       } 
     })
-    console.log(this.props.patient)
     return (
       <div className="outer-assign-modal" onClick={this.props.close}>
         <div className="inner-assign-modal" onClick={(e)=> {e.stopPropagation()}}>

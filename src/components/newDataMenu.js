@@ -11,6 +11,8 @@ import {getOutposts, addOutpost} from '../redux/reducers/outpostReducer'
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+import {handlePTInputName, handlePTInputPhone, handlePTInputAddress, handlePTInputCoordinates, handlePTInputAge, handlePTInputFamPlan, handlePTInputHIV, handlePTInputParity, handlePTInputDueDate, handlePTInputAssignedHW, handleHWInputName, handleHWInputPhone, handleHWInputAddress, handleHWInputOutpost, handleHWInputEmail, handleHWInputCoordinates, handleOutpostInputName, handleOutpostInputAddress, handleOutpostInputCoordinates, resetFormInputs, hideModal, showMask, turnOnGeocoder, patientAddressSelectorOn, hcwAddressSelectorOn, outpostAddressSelectorOn} from '../redux/reducers/formReducer'
+
 class NewDataMenu extends Component {
     constructor() {
         super()
@@ -34,7 +36,7 @@ class NewDataMenu extends Component {
             hcwLatitude: '',
             hcwLongitude: '',
             outpostName: '',
-            outpostAddress: ''          
+            outpostAddress: '',
         }
     }
 
@@ -43,34 +45,39 @@ class NewDataMenu extends Component {
         this.props.getOutposts()
     }
 
-
-    handleChange = (e) => {
-        let change = {}
-        change[e.target.name] = e.target.value
-        this.setState(change)
-    }
+    // handleChange = (e) => {
+    //     let change = {}
+    //     change[e.target.name] = e.target.value
+    //     this.setState(change)
+    // }
 
     handleDatePickerChange = (date) => {
-        this.setState({
-            patientDueDate: date
-        });
+        this.props.handlePTInputDueDate(date)
+    }
+
+    goToMap = (typeOfSelector) => {
+        this.props.hideModal()
+        this.props.turnOnGeocoder()
+        this.props.showMask()
+        let addressType = `${typeOfSelector}AddressSelectorOn`
+        this.props[addressType]()
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.get(`https://api.what3words.com/v2/forward?addr=${this.state.patientAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
-            console.log('W3W response', response.status)
+        axios.get(`https://api.what3words.com/v2/forward?addr=${this.props.patientAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
+            // console.log('W3W response', response.status)
             if (+response.data.geometry.lng < -13.307377 || +response.data.geometry.lng > -10.256908 || +response.data.geometry.lat > 10.0316 || +response.data.geometry.lat < 6.791397) {
-                alert("You're selected address is not in Sierra Leone. Please enter a new valid address.")
+                alert("You're selected address is not in Sierra Leone. Please enter a valid address.")
             } else {
-                this.setState({
-                    patientLatitude: response.data.geometry.lat,
-                    patientLongitude: response.data.geometry.lng
-                })
-                addPatientSurvey(this.state)
-                document.getElementById("create-form").reset()
+                this.props.handlePTInputCoordinates(response.data.geometry.lat, response.data.geometry.lng)
+
+                addPatientSurvey(this.props)
+                // document.getElementById("create-form").reset()
+                this.props.resetFormInputs()
                 this.props.closeModal()
+
             }
         }).catch(err => {
             // console.log(err.response.status)
@@ -82,18 +89,17 @@ class NewDataMenu extends Component {
     handleSubmitHCW = (event) => {
         event.preventDefault();
 
-        axios.get(`https://api.what3words.com/v2/forward?addr=${this.state.hcwAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
+        axios.get(`https://api.what3words.com/v2/forward?addr=${this.props.hcwAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
             console.log('W3W response', response.data.geometry)
             if (+response.data.geometry.lng < -13.307377 || +response.data.geometry.lng > -10.256908 || +response.data.geometry.lat > 10.0316 || +response.data.geometry.lat < 6.791397) {
                 alert("You're selected address is not in Sierra Leone. Please enter a new valid address.")
             } else {
-                this.setState({
-                    hcwLatitude: response.data.geometry.lat,
-                    hcwLongitude: response.data.geometry.lng
-                })
-                addHCW(this.state)
-                document.getElementById("create-form").reset()
+                this.props.handleHWInputCoordinates(response.data.geometry.lat, response.data.geometry.lng)
+                addHCW(this.props)
+                // document.getElementById("create-form").reset()
+                this.props.resetFormInputs()
                 this.props.closeModal()
+
             }
         }).catch(err => {
             // console.log(err.response.status)
@@ -105,17 +111,15 @@ class NewDataMenu extends Component {
     handleSubmitOutpost = (event) => {
         event.preventDefault();
 
-        axios.get(`https://api.what3words.com/v2/forward?addr=${this.state.outpostAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
+        axios.get(`https://api.what3words.com/v2/forward?addr=${this.props.outpostAddress}&key=${process.env.REACT_APP_W3W_KEY}`).then(response => {
             console.log('W3W response', response.status)
             if (+response.data.geometry.lng < -13.307377 || +response.data.geometry.lng > -10.256908 || +response.data.geometry.lat > 10.0316 || +response.data.geometry.lat < 6.791397) {
                 alert("You're selected address is not in Sierra Leone. Please enter a new valid address.")
             } else {
-                this.setState({
-                    outpostLatitude: response.data.geometry.lat,
-                    outpostLongitude: response.data.geometry.lng
-                })
-                addOutpost(this.state)
-                document.getElementById("create-form").reset()
+                this.props.handleOutpostInputCoordinates(response.data.geometry.lat, response.data.geometry.lng)
+                addOutpost(this.props)
+                // document.getElementById("create-form").reset()
+                this.props.resetFormInputs()
                 this.props.closeModal()
             }
         }).catch(err => {
@@ -126,7 +130,7 @@ class NewDataMenu extends Component {
     }
 
     render() {
-        // console.log(this.state)
+        // console.log(this.props.healthWorkers)
 
         let dropdownOption = []
         for (let i = 0; i <= 20; i++) {
@@ -136,9 +140,11 @@ class NewDataMenu extends Component {
         let HWOption = []
         if (this.props.healthWorkers) {
             for (let i = 0; i < this.props.healthWorkers.length; i++) {
-                let name = this.props.healthWorkers[i].name
-                let id = this.props.healthWorkers[i].id
-                HWOption.push(<option key={id} value={id}>{name}</option>)
+                if (this.props.healthWorkers[i].id){
+                    let name = this.props.healthWorkers[i].name
+                    let id = this.props.healthWorkers[i].id
+                    HWOption.push(<option key={id} value={id}>{name}</option>)
+                }
             }
         }
 
@@ -150,17 +156,20 @@ class NewDataMenu extends Component {
                 outpostDropdownOption.push(<option key={id} value={id}>{id}</option>)
             }
         }
-
+        
+        let {handlePTInputName, handlePTInputPhone, handlePTInputAddress, handlePTInputAge, handlePTInputFamPlan, handlePTInputHIV, handlePTInputParity, handlePTInputAssignedHW, handleHWInputName, handleHWInputPhone, handleHWInputAddress, handleHWInputOutpost, handleHWInputEmail, handleOutpostInputName, handleOutpostInputAddress} = this.props
+        // console.log("The props mega object", this.props)
         return (
             <div className='add-menu-container'>
                 <Tabs>
                     <div label='Patient' className='new-patient-form-container'>
                         <h3 className='add-tab-title'>Add a new patient:</h3>
                         <form id="create-form" onSubmit={this.handleSubmit}>
-                            <div className='form-input'><h4>Name:</h4><input name='patientName' onChange={this.handleChange} /></div>
-                            <div className='form-input'><h4>Phone:</h4><input name='patientPhone' onChange={this.handleChange} /></div>
-                            <div className='form-input'><h4>Address: </h4> <p>Use the<a href='https://map.what3words.com/mills.oilier.glitches' target='_blank' rel="noopener noreferrer">What3Words Map</a> to find a new address </p><input name='patientAddress' onChange={this.handleChange} /></div>
-                            <div className='form-input'><h4>Age:</h4><input name='patientAge' onChange={this.handleChange} value={this.state.patientAge} /></div>
+                            <div className='form-input'><h4>Name:</h4><input name='patientName' onChange={handlePTInputName} value={this.props.patientName}/></div>
+                            <div className='form-input'><h4>Phone:</h4><input name='patientPhone' onChange={handlePTInputPhone} value={this.props.patientPhone}/></div>
+                            {/* <div className='form-input'><h4>Address: </h4> <p>Use the<a href='https://map.what3words.com/mills.oilier.glitches' target='_blank' rel="noopener noreferrer">What3Words Map</a> to find a new address </p><input name='patientAddress' onChange={this.handleChange} /></div> */}
+                            <div className='form-input'><h4>Address: </h4> <button type="button" onClick={() => this.goToMap("patient")}>Add an address from the map</button> <input name='patientAddress' onChange={handlePTInputAddress} value={this.props.patientAddress}/></div>
+                            <div className='form-input'><h4>Age:</h4><input name='patientAge' onChange={handlePTInputAge} value={this.props.patientAge}/></div>
                             {/* <div className='form-input'><h4>Did the patient use family planning?</h4><input name='patientFamPlan'onChange={this.handleChange} value={this.state.patientFamPlan}/></div> */}
                             <div className='form-input'><h4>Did the patient use family planning?</h4>
                                 <div className='radio-button-container'>
@@ -169,8 +178,8 @@ class NewDataMenu extends Component {
                                             type="radio"
                                             name='patientFamPlan'
                                             value="yes"
-                                            checked={this.state.patientFamPlan === "yes"}
-                                            onChange={this.handleChange}
+                                            checked={this.props.patientFamPlan === "yes"}
+                                            onChange={handlePTInputFamPlan}
                                         />
                                         Yes
                                     </label>
@@ -179,8 +188,8 @@ class NewDataMenu extends Component {
                                             type="radio"
                                             name='patientFamPlan'
                                             value="no"
-                                            checked={this.state.patientFamPlan === "no"}
-                                            onChange={this.handleChange}
+                                            checked={this.props.patientFamPlan === "no"}
+                                            onChange={handlePTInputFamPlan}
                                         />
                                         No
                                 </label>
@@ -194,8 +203,8 @@ class NewDataMenu extends Component {
                                             type="radio"
                                             name='patientHIV'
                                             value="yes"
-                                            checked={this.state.patientHIV === "yes"}
-                                            onChange={this.handleChange}
+                                            checked={this.props.patientHIV === "yes"}
+                                            onChange={handlePTInputHIV}
                                         />
                                         Yes
                                     </label>
@@ -204,8 +213,8 @@ class NewDataMenu extends Component {
                                             type="radio"
                                             name='patientHIV'
                                             value="no"
-                                            checked={this.state.patientHIV === "no"}
-                                            onChange={this.handleChange}
+                                            checked={this.props.patientHIV === "no"}
+                                            onChange={handlePTInputHIV}
                                         />
                                         No
                                 </label>
@@ -213,7 +222,7 @@ class NewDataMenu extends Component {
                             </div>
                             <div className='form-input'><h4>How many previous children has the patient had?</h4>
                                 {/* <input name='patientParity'onChange={this.handleChange} value={this.state.patientParity}/> */}
-                                <select name='patientParity' onChange={this.handleChange} value={this.state.value}>
+                                <select name='patientParity' onChange={handlePTInputParity} value={this.props.patientParity}>
                                     <option value="">Select An Option</option>
                                     {dropdownOption}
                                 </select>
@@ -223,7 +232,7 @@ class NewDataMenu extends Component {
                                 <DatePicker
                                     name='patientDueDate'
                                     dateFormat="YYYY/MM/DD"
-                                    selected={this.state.patientDueDate}
+                                    selected={this.props.patientDueDate}
                                     onChange={this.handleDatePickerChange}
                                     filterDate={(date) => {
                                         // This limits the ability of the user to select a past due date or a date > 10 months in the future
@@ -233,7 +242,7 @@ class NewDataMenu extends Component {
                             </div>
                             <div className='form-input'><h4>Who is the patient's health worker?</h4>
                                 {/* <input name='patientParity'onChange={this.handleChange} value={this.state.patientParity}/> */}
-                                <select name='patientAssignedHW' onChange={this.handleChange} value={this.state.value}>
+                                <select name='patientAssignedHW' onChange={handlePTInputAssignedHW} value={this.props.patientAssignedHW}>
                                     <option value="">Select An Option</option>
                                     {HWOption}
                                 </select>
@@ -246,16 +255,16 @@ class NewDataMenu extends Component {
                             <h3 className='add-tab-title'>Hire a new health worker:</h3>
 
                             <form id="create-form" onSubmit={this.handleSubmitHCW}>
-                                <div className='form-input'><h4>Name:</h4><input name='hcwName' onChange={this.handleChange} /></div>
-                                <div className='form-input'><h4>Phone:</h4><input name='hcwPhone' onChange={this.handleChange} /></div>
-                                <div className='form-input'><h4>Location: <a href='https://map.what3words.com/mills.oilier.glitches'>What3Words Map</a> </h4><input name='hcwAddress' onChange={this.handleChange} /></div>
+                                <div className='form-input'><h4>Name:</h4><input name='hcwName' onChange={handleHWInputName} value={this.props.hcwName} /></div>
+                                <div className='form-input'><h4>Phone:</h4><input name='hcwPhone' onChange={handleHWInputPhone} value={this.props.hcwPhone}/></div>
+                                <div className='form-input'><h4>Location: <button type="button" onClick={() => this.goToMap("hcw")}>Add an address from the map</button>  </h4><input name='hcwAddress' onChange={handleHWInputAddress} value={this.props.hcwAddress}/></div>
                                 <div className='form-input'><h4>Outpost:</h4>
-                                    <select name='hcwOutpost' onChange={this.handleChange} value={this.state.value}>
+                                    <select name='hcwOutpost' onChange={handleHWInputOutpost} value={this.state.value}>
                                         <option value="">Select An Outpost by ID</option>
                                         {outpostDropdownOption}
                                     </select>
                                 </div>
-                                <div className='form-input'><h4>Email:</h4><input name='hcwEmail' onChange={this.handleChange}/></div>
+                                <div className='form-input'><h4>Email:</h4><input name='hcwEmail' onChange={handleHWInputEmail}/></div>
                                 <button className='add-new-button' type='submit'>Submit</button>
                             </form>
                         </div>
@@ -264,8 +273,8 @@ class NewDataMenu extends Component {
                     <div label='Patient' className='new-patient-form-container'>
                         <h3 className='add-tab-title'>Create a new outpost:</h3>
                             <form id="create-form" onSubmit={this.handleSubmitOutpost}>
-                                <div className='form-input'><h4>Name:</h4><input name='outpostName' onChange={this.handleChange} /></div>
-                                <div className='form-input'><h4>Location: <a href='https://map.what3words.com/mills.oilier.glitches'>What3Words Map</a> </h4><input name='outpostAddress' onChange={this.handleChange} /></div>
+                                <div className='form-input'><h4>Name:</h4><input name='outpostName' onChange={handleOutpostInputName} value={this.props.outpostName} /></div>
+                                <div className='form-input'><h4>Location: <button type="button" onClick={() => this.goToMap("outpost")}>Add an address from the map</button>  </h4><input name='outpostAddress' onChange={handleOutpostInputAddress} value={this.props.outpostAddress} /></div>
                                 <button className='add-new-button' type='submit'>Submit</button>
                             </form>
                         </div>
@@ -279,9 +288,29 @@ class NewDataMenu extends Component {
 function mapStateToProps(state) {
     return {
         healthWorkers: state.healthworkers.healthworkersData,
-        outposts: state.outposts.outpostsData
+        outposts: state.outposts.outpostsData,
+        patientName: state.newForm.patientName,
+        patientPhone: state.newForm.patientPhone,
+        patientAddress: state.newForm.patientAddress,
+        patientLatitude: state.newForm.patientLatitude,
+        patientLongitude: state.newForm.patientLongitude,
+        patientAge: state.newForm.patientAge,
+        patientFamPlan: state.newForm.patientFamPlan,
+        patientHIV: state.newForm.patientHIV,
+        patientParity: state.newForm.patientParity,
+        patientDueDate: state.newForm.patientDueDate,
+        patientAssignedHW: state.newForm.patientAssignedHW,
+        hcwName: state.newForm.hcwName,
+        hcwPhone: state.newForm.hcwPhone,
+        hcwAddress: state.newForm.hcwAddress,
+        hcwOutpost: state.newForm.hcwOutpost,
+        hcwEmail: state.newForm.hcwEmail,
+        hcwLatitude: state.newForm.hcwLatitude,
+        hcwLongitude: state.newForm.hcwLongitude,
+        outpostName: state.newForm.outpostName,
+        outpostAddress: state.newForm.outpostAddress
     }
 }
 
-export default connect(mapStateToProps, { getHealthworkers, addPatientSurvey, getOutposts, addHCW, addOutpost })(NewDataMenu)
+export default connect(mapStateToProps, { getHealthworkers, addPatientSurvey, getOutposts, addHCW, addOutpost, handlePTInputName, handlePTInputPhone, handlePTInputAddress, handlePTInputCoordinates, handlePTInputAge, handlePTInputFamPlan, handlePTInputHIV, handlePTInputParity, handlePTInputDueDate, handlePTInputAssignedHW, handleHWInputName, handleHWInputPhone, handleHWInputAddress, handleHWInputOutpost, handleHWInputEmail, handleHWInputCoordinates, handleOutpostInputName, handleOutpostInputAddress, handleOutpostInputCoordinates, resetFormInputs, hideModal, showMask, turnOnGeocoder, patientAddressSelectorOn, hcwAddressSelectorOn, outpostAddressSelectorOn })(NewDataMenu)
 
