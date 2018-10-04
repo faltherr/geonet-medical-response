@@ -202,6 +202,30 @@ li.tab-list-item{
 .esri-ui-manual-container>.esri-component {
   color: #202020;
 }
+
+.denied-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 250px; 
+}
+
+.denied-button {
+  border-radius: 5px;
+  background: green;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 15px;
+  margin-right: 15px;
+  width: 140px;
+  height: 40px;
+}
+
+.denied-button:hover {
+  color: white;
+  background-color: #51495D;
+}
 .esri-ui-manual-container>.esri-component:hover {
   cursor: pointer;
 }

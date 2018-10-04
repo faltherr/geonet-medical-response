@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { logout } from '../redux/reducers/verifiedUser';
-import { connect } from 'react-redux';
 
 import '../CSS/Landing.css'
 
@@ -48,8 +46,4 @@ class Landing extends Component {
   }
 }
 
-// let mapStateToProps = state => {
-//   user: state.user.user
-// }
-
-export default connect(null, { logout })(Landing);
+export default Landing;
