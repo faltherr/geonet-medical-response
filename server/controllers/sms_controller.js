@@ -33,7 +33,7 @@ module.exports = {
                             to: patientData[0].healthworker_phone
                         }).then(()=>{
                             db.alertStatus(From).then(emergencyResponse => {
-                                console.log('Emergency status!!!!', emergencyResponse)
+                                // console.log('Emergency status!!!!', emergencyResponse)
                                 respond(`Help is on the way, ${emergencyResponse[0].name}. Your health worker is coordinating a response for your address, ${emergencyResponse[0].location}`)
                             })
                         })
