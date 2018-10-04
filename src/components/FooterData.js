@@ -39,11 +39,11 @@ class FooterData extends Component {
     })}
 
   render () {
+    
     let { patientsData, healthworkersData} = this.props
     let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element => {
       return <p key={element}>{element}</p>
     })
-    // console.log('patients awaiting', this.props.patientsAwaitingAssignment)
     return (
       <div className="footer-wrapper">
         <div className="data-containers">
@@ -95,14 +95,14 @@ class FooterData extends Component {
           
           <div className='data-box'>
             <div className='fixed-header'><p>Unassigned Patients</p></div>
-            <div className='content'>
-              
+            <div key='unassigned' className='content'>
                 {
                   patientsData.map( patient => {
                     if (patient.healthworker_id === null){
                       return (
                         <div id='patient-names'
                              key={patient.id}>
+                             
                           <span 
                              onClick={ () => this.assignPatientModalOpen(patient.id)}>{patient.name}
                           {

@@ -102,6 +102,7 @@ export function setCurrentPatient (patient) {
 }
 
 export function assignHealthworkerToPatient (patient_id, healthworker_id) {
+  console.log('odalay', patient_id, healthworker_id)
   let assign = axios.put(`/api/patients/${patient_id}/${healthworker_id}`).then( response => {
     return response.data
   })

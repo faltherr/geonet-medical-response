@@ -90,14 +90,14 @@ class Dashboard extends Component {
       buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
       buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
 
-      buttonWidget.addEventListener("click", function () {
-        const expanded = panel.classList.contains("panel-expanded")
-        if (expanded) {
-          panel.classList.remove("panel-expanded")
-        } else {
-          panel.classList.add("panel-expanded")
-        }
-      })
+      // buttonWidget.addEventListener("click", function () {
+      //   const expanded = panel.classList.contains("panel-expanded")
+      //   if (expanded) {
+      //     panel.classList.remove("panel-expanded")
+      //   } else {
+      //     panel.classList.add("panel-expanded")
+      //   }
+      // })
       await this.props.getMap(mapObj)
 
       await mapView.ui.add(toggle, "top-left")
@@ -106,10 +106,10 @@ class Dashboard extends Component {
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
-      // const speedOption = {
-      //   speedFactor: 0.3,
-      //   easing: "ease-in-out"
-      // }
+      const speedOption = {
+        speedFactor: 0.3,
+        easing: "ease-in-out"
+      }
 
       await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
@@ -117,7 +117,7 @@ class Dashboard extends Component {
         tilt: 0,
         zoom: 9,
         speedFactor: 0.2
-      })
+      }, speedOption)
 
       // Script to determine the distance between each patient and a health worker using Turf
 
@@ -276,7 +276,7 @@ class Dashboard extends Component {
       }
       return communityButtons
     })
-
+ 
     return (
       <div className='wrapper'>
         <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>

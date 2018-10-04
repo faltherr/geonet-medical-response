@@ -13,9 +13,8 @@ class AssignPatientModal extends Component {
   }
   
   componentDidMount () {
-      this.props.patientsLocation.map(p => {
-      if(p.patientId === this.props.patient.id) {
-      this.setState({
+      this.props.patientsLocation.map(p => { if(p.patientId === this.props.patient.id) {
+       this.setState({
         nearestHealthworkerName: p.nearestHWName, 
         healthworkerId: p.nearestHWId
         })
@@ -33,7 +32,7 @@ class AssignPatientModal extends Component {
     var optionsDropDown = []
     let { patient } = this.props
     this.props.healthworkersData.map(healthworker => {
-      if (healthworker.name !== 'Unassigned' && healthworker.name !== null) {
+       if (healthworker.name !== 'Unassigned' && healthworker.name !== null) {
         if(healthworker.id === this.state.healthworkerId) {
           return optionsDropDown.push(
             <option key={healthworker.id}
@@ -51,10 +50,11 @@ class AssignPatientModal extends Component {
         }
       } 
     })
-    
+    console.log(this.props.patient)
     return (
       <div className="outer-assign-modal" onClick={this.props.close}>
         <div className="inner-assign-modal" onClick={(e)=> {e.stopPropagation()}}>
+        <button id='close-button' onClick={this.props.close}> close </button>
           <span> 
             <h2>Patient: {patient.name}</h2>
               <hr></hr>

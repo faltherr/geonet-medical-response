@@ -1,6 +1,7 @@
 .footer-wrapper {
   background-color: #202020;
   height: 200px;
+
 }
 
 .data-containers {
@@ -22,8 +23,11 @@
 }
 
 .fixed-header {
-  position: sticky; 
+  /* position: absolute; 
+  display: flex; */
   height: 20px;
+  /* width: 100%; */
+
  
   /* position: fixed;
   bottom: 80px;
@@ -38,11 +42,12 @@
   overflow: hide; */ 
 }
 .fixed-header > p {
+  
 font-size: 14px;
 text-transform: uppercase;
 margin: 0;
 background-color: #51495D;
-position: relative;
+/* position: relative; */
 
 }
 
