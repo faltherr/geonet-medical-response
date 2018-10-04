@@ -41,18 +41,25 @@ class Slideout extends Component{
             <h2 style={{color: '#D8DBE7'}}> Indicators of Maternal Health in Study Area </h2>
             <div className="question-mark">
               <i className="fas fa-question-circle"style={{color: '#D8DBE7'}} ></i>
-            <div id="info-div">
-              <p>
-              In Sierra Leone there is a unmet need for family planning. In this area the percent of registered women reporting the use of family planning methods is ____.  Identification of the clusters of low access to family planning better equips the GeoNet Medical Response team to target supplies and personnel to the areas of greatest need.
-              </p>
-            </div>
+              <div id="info-div1">
+                The maternal mortality ratio throughout Sierra Leone is among the highest in the world. The aim of GeoNet Medical Response (GMR) is to contribute to the reduction of the maternal mortality and neonatal deaths by connecting women and their infant children with emergency medical services in the event of an emergency. Since 2000, both metrics have declined steadily even in the wake of the Ebola crisis. Comparing the rate maternal mortality and neonatal deaths in GMR service areas to the national average can help alert users to the effectiveness of the program and can be used as a metric to strive beyond.
+              </div>
+              <div id="info-div2">
+                Preventing HIV transmission from mother to child over the course of a pregnancy can be achieved with targeted antiretroviral treatments. Ensuring that HIV positive expectant women have access to anti-retroviral treatment throughout the course of their pregnancy is a key to prevent vertical transmission. In this area the percent of expectant women who are HIV positive is about 40%.
+              </div>
             </div>
           </div>
             <h3 style={{color: '#D8DBE7'}}>HIV Status and Family Planning</h3>
             <PieCharts/>
             <h3 style={{color: '#D8DBE7'}}>Maternal Mortality Rates</h3>
           <div className='slideout-subheader-question-container'>
-            <h2 style={{color: '#D8DBE7'}}> National Indicators of Maternal Health</h2> <i className="fas fa-question-circle" style={{color: '#D8DBE7'}} ></i>
+            <h2 style={{color: '#D8DBE7'}}> National Indicators of Maternal Health</h2> 
+            <div className="question-mark2">
+              <i className="fas fa-question-circle"style={{color: '#D8DBE7'}} ></i>
+              <div id="info-div3">
+                The maternal mortality ratio throughout Sierra Leone is among the highest in the world. The aim of GeoNet Medical Response (GMR) is to contribute to the reduction of the maternal mortality and neonatal deaths by connecting women and their infant children with emergency medical services in the event of an emergency. Since 2000, both metrics have declined steadily even in the wake of the Ebola crisis. Comparing the rate maternal mortality and neonatal deaths in GMR service areas to the national average can help alert users to the effectiveness of the program and can be used as a metric to strive beyond.
+              </div>
+            </div>
           </div>
             <h3 style={{color: '#D8DBE7'}}>Maternal and Neonatal Mortality Rates</h3>
             <LineCharts />
