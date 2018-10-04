@@ -10,11 +10,12 @@ import { hideModal, showModal, turnOffGeocoder, hideMask, patientAddressSelector
 
 
 class FooterData extends Component {
-
-  state = {
-    openModal: false,
-    assignPatientModal: false
-  }
+  
+    state = {
+      openModal: false, 
+      assignPatientModal: false,
+      patientId: null
+    }
 
   handleClick = (long, lat) => {
     this.props.mapView.goTo({
@@ -24,14 +25,22 @@ class FooterData extends Component {
       zoom: 20
     }, this.clickOption)
   }
-  clickOption = {
-    speedFactor: 3
-  }
+    clickOption = {
+      speedFactor: 3
+    }
+ 
 
   onOpenModal = () => { this.props.showModal() }
   onCloseModal = () => { this.props.hideModal() }
-//asspat
-//asspatmod
+  assignPatientModalClosed = () => {this.setState({ assignPatientModal: false})}
+
+  assignPatientModalOpen = (id) => { 
+    this.setState({ 
+      assignPatientModal: true, 
+      patientId: id
+    })
+  }
+
   goToModal = (typeOfSelector) => {
     this.props.showModal()
     this.props.turnOffGeocoder()
@@ -44,9 +53,6 @@ class FooterData extends Component {
     this.props.hideMask()
     this.props.resetFormInputs()
   }
-
-  assignPatientModalOpen = () => { this.setState({ assignPatientModal: true }) }
-  assignPatientModalClosed = () => { this.setState({ assignPatientModal: false }) }
 
   render() {
     let { patientsData, healthworkersData } = this.props
@@ -127,91 +133,97 @@ class FooterData extends Component {
 
       return (
         <div className="footer-wrapper">
-
           <div className="data-containers">
 
-            <div id='due-this-month'>
-              <h4>Expecting This Month</h4>
-              {
-                patientsData.map(patient => {
-                  let todayUnformatted = new Date()
-                  let today = moment(todayUnformatted)
-                  let dueDateFormatted = moment(patient.duedate)
-                  let dueThisMonth = moment(dueDateFormatted).diff(moment(today), 'days', true)
-
-
-                  if (dueThisMonth <= 31 && dueThisMonth >= 1) {
-                    return <p key={patient.id} onClick={() => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p>
-                  } else {
-                    return null
-                  }
-                })
-              }
+            <div className='data-box'>
+            <div className='fixed-header'><p>Expecting This Month</p></div>
+              <div className='content'>
+                {
+                  patientsData.map(patient => {
+                    let todayUnformatted = new Date()
+                    let today = moment(todayUnformatted)
+                    let dueDateFormatted = moment(patient.duedate)
+                    let dueThisMonth = moment(dueDateFormatted).diff(moment(today), 'days', true)
+                    
+                      if (dueThisMonth <= 31 && dueThisMonth >= 1) {
+                        return <p key={patient.id} onClick={ () => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p> 
+                      } else {
+                        return null
+                      }
+                  })
+                }
+              </div>
             </div>
 
-            <div id='service-area'>
-              <h4>Patients outside of service area</h4>
-              {patientsOutsideServiceArea}
+          <div className='data-box'>
+            <div className='fixed-header'><p>Patients outside service area</p></div>
+              <div className='content'>
+                {patientsOutsideServiceArea}
+              </div>
+          </div> 
+
+          <div className='data-box'>
+            <div className='fixed-header'><p>Heathworkers in the Field</p></div>
+              <div className='content'>
+                {
+                  healthworkersData.map( healthworker => {
+                    if (healthworker.in_field === true) {
+                      return <p key={healthworker.id} onClick={ () => {this.handleClick(healthworker.longitude, healthworker.latitude)}}>{healthworker.name}</p>
+                    } else {
+                      return null
+                    }
+                  })
+                }
+              </div>
+          </div>
+          
+          <div className='data-box'>
+            <div className='fixed-header'><p>Unassigned Patients</p></div>
+              <div className='content'>
+                {
+                  patientsData.map( patient => {
+                    if (patient.healthworker_id === null){
+                      return (
+                        <div id='patient-names'
+                             key={patient.id}>
+                             
+                          <span 
+                             onClick={ () => this.assignPatientModalOpen(patient.id)}>{patient.name}
+                          {
+                            this.state.assignPatientModal && this.state.patientId === patient.id 
+                              ?
+                            <AssignPatientModal 
+                              close={this.assignPatientModalClosed}
+                              patient={patient}
+                              patientsLocation={this.props.patientsLocationData
+                              }
+                            />
+                              :
+                              null
+                          }
+                          </span>
+                        </div>
+                      )
+                    } else {
+                      return null
+                    } 
+                  })
+                } 
             </div>
+          </div>
 
-            <div id='healthworker-data'>
-              <h4>Heathworkers in the Field</h4>
-              {
-                healthworkersData.map(healthworker => {
-                  if (healthworker.in_field === true) {
-                    return <p key={healthworker.id} onClick={() => { this.handleClick(healthworker.longitude, healthworker.latitude) }}>{healthworker.name}</p>
-                  } else {
-                    return null
-                  }
-                })
-              }
-            </div>
-
-            <div id='unassigned-data'>
-              <h4>Unassigned Patients</h4>
-              {
-                patientsData.map(patient => {
-                  if (patient.healthworker_id === null || patient.healthworker_id === 1) {
-                    return (
-                      <div id='patient-names'
-                        key={patient.id}>
-                        <p
-                          onClick={() => this.assignPatientModalOpen()}>{patient.name}
-                        </p>
-                        {
-                          this.state.assignPatientModal &&
-                          <AssignPatientModal
-                            open={this.assignPatientModalOpen}
-                            close={this.assignPatientModalClosed}
-                            patient={patient}
-                          />
-
-                        }
-                      </div>
-                    )
-                  } else {
-                    return null
-                  }
-                })
-              }
-
-
-            </div>
-
-            <button id='add-button' onClick={() => this.onOpenModal()}>Add New Data</button>
+          <button id='add-button' onClick={() => this.onOpenModal()}>Add New Data</button>
             <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
               <div className="new-data-modal">
                 <NewDataMenu />
               </div>
             </Modal>
-
           </div>
-        </div>
+      </div>
       )
     }
   }
 }
-
 
 let mapStateToProps = state => {
   return {

@@ -31,7 +31,6 @@ class PatientPopup extends Component {
   
   createGraphics = (props) => {
     let { patientsData } = props
-    // console.log(11111111, patientsData)
     if (this.props.mapView.graphics) {
       this.state.patientGraphics.forEach(graphic => {
         this.props.mapView.graphics.remove(graphic)

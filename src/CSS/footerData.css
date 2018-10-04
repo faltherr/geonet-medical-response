@@ -1,17 +1,101 @@
 .footer-wrapper {
   background-color: #202020;
   height: 200px;
+
 }
 
 .data-containers {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  top: 0;
+  /* justify-content: flex-start;
+  top: 0; */ 
+}
+
+.data-box {
+  height: 160px;
+  width: 300px;
+  font-size: 15px;
+  color: rgb(227, 226, 226);
+  overflow: scroll;
+  border: 5px solid #51495D;
+  margin: 4px;
+  text-align: center;
+}
+
+.fixed-header {
+  /* position: absolute; 
+  display: flex; */
+  height: 20px;
+  /* width: 100%; */
+
+ 
+  /* position: fixed;
+  bottom: 80px;
+  
+  overflow: hide; */
+  /* overflow: hidden; */
+  /* height: 20px;
+  background-color: #1d0d0a;
+  
+  /* top: 0;
+  width: 100%;
+  overflow: hide; */ 
+}
+.fixed-header > p {
+  
+font-size: 14px;
+text-transform: uppercase;
+margin: 0;
+background-color: #51495D;
+/* position: relative; */
+
+}
+
+.content {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  margin-top: 10px;
+  overflow: auto;
+  width: 80%;
+  text-transform: capitalize;
+  font-weight: 500;
+  
+ 
+}
+
+.content > p:hover, 
+#patient-names:hover {
+  cursor: pointer;
+  color: #745138;
+}
+
+#patient-names {
+  margin-top: 10px;
+  
 }
 
 
-#due-this-month,
+#add-button {
+  width:100px;
+  height:40px;
+  margin: 10px;
+  background: #51495D;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+#add-button:hover {
+  color: #51495D;
+  background-color: white;
+}
+
+
+
+/**/
+
+/* #due-this-month,
 #healthworker-data, 
 #service-area,
 #unassigned-data {
@@ -19,13 +103,12 @@
   height: 150px;
   width: 200px;
   margin: 10px;
-  text-transform: uppercase;
   font-size: 13px;
   color: #202020;
   overflow: scroll;
-}
+} */
 
-#service-area > h4,
+/* #service-area > h4,
 #due-this-month > h4,
 #healthworker-data > h4, 
 #unassigned-data > h4 {
@@ -34,22 +117,23 @@
   height: 30px;
   margin: 0;
   padding-top: 3px;
-  /* position: sticky; */
-}
+  
+} */
 
-#due-this-month > p, 
+/* #due-this-month > p, 
 #healthworker-data > p, 
 #service-area > p,
-#patient-names > p {
+#patient-names > span {
   cursor: pointer;
   margin: 5px;
 }
 #due-this-month > p:hover, 
 #healthworker-data > p:hover,
 #service-area > p:hover,
-#patient-names > p:hover {
+#patient-names > span:hover {
   color: #745138;
-}
+} */
+
 
 #add-button {
   width:100px;
