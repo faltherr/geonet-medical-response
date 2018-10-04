@@ -15,3 +15,14 @@
   justify-content: center;
   align-items: center;
 }
+
+#info-div{
+  display: none
+}
+.question-mark:hover #info-div{
+  display: block;
+  position: absolute;
+  right:0;
+  background: white;
+  color: black
+}
