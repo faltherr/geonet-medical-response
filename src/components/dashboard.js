@@ -99,26 +99,26 @@ class Dashboard extends Component {
       buttonWidget.className = "esri-widget esri-component esri-widget-button esri-interactive"
       buttonWidget.innerHTML = "<span aria-hidden='true' role='presentation' class='esri-icon esri-icon-layers'></span>"
 
-      buttonWidget.addEventListener("click", function () {
-        const expanded = panel.classList.contains("panel-expanded")
-        if (expanded) {
-          panel.classList.remove("panel-expanded")
-        } else {
-          panel.classList.add("panel-expanded")
-        }
-      })
+      // buttonWidget.addEventListener("click", function () {
+      //   const expanded = panel.classList.contains("panel-expanded")
+      //   if (expanded) {
+      //     panel.classList.remove("panel-expanded")
+      //   } else {
+      //     panel.classList.add("panel-expanded")
+      //   }
+      // })
       await this.props.getMap(mapObj)
 
       await mapView.ui.add(toggle, "top-left")
       await mapView.ui.add(legend, "top-right")
-      await mapView.ui.add(buttonWidget, "bottom-left")
+      // await mapView.ui.add(buttonWidget, "bottom-left")
 
       // ADD THIS BACK IN PRODUCTION
       //  mapView.GoTo // zooming feature
-      // const speedOption = {
-      //   speedFactor: 0.3,
-      //   easing: "ease-in-out"
-      // }
+      const speedOption = {
+        speedFactor: 0.3,
+        easing: "ease-in-out"
+      }
 
       await mapView.goTo({
         target: [-12.179104, 9.101593, 50000],
@@ -126,7 +126,7 @@ class Dashboard extends Component {
         tilt: 0,
         zoom: 9,
         speedFactor: 0.2
-      })
+      }, speedOption)
 
       // Function to query the w3w API and return lat/lon
       let w3wGeocoder = (lat, lon)=>{
@@ -178,8 +178,9 @@ class Dashboard extends Component {
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
       patientData.forEach(patient => {
-        if (patient.latitude && patient.longitude) {
-          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
+        if (patient.latitude && patient.longitude){
+          patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "id": patient.id,
+          "name": patient.name, "patientPhone": patient.phone }]))
         } else {
           return null
         }
@@ -188,8 +189,11 @@ class Dashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        if (healthworker.latitude && healthworker.longitude) {
-          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
+        if (healthworker.latitude && healthworker.longitude){
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { 
+            "healthworkerId": healthworker.id, 
+            "name": healthworker.name,
+            "hw_phone": healthworker.phone  }]))
         } else {
           return null
         }
@@ -219,17 +223,15 @@ class Dashboard extends Component {
       let patientDistArr = []
 
       patientGeoJson.forEach(patient => {
-        let patientName = patient.geometry.coordinates[2].name
-        let patientPhone = patient.geometry.coordinates[2].patientPhone
-        // console.log(patientName) 
+        let patientName = patient.geometry.coordinates[2]
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
         let patientDistance = {}
-        patientDistance.patientName = patientName
-        patientDistance.patientPhone = patientPhone
+        patientDistance.patientId = patientName.id
+        patientDistance.patientName = patientName.name
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
-        patientDistance.nearestHWPhone = nearest.geometry.coordinates[2].hw_phone
+        patientDistance.nearestHWId = nearest.geometry.coordinates[2].healthworkerId
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
         patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
         patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
@@ -323,7 +325,7 @@ class Dashboard extends Component {
           activeAlertIds: activeIdCopy
         })
       }
-      console.log('current', currentPatientAlerts)
+    
       this.props.setReturnedFalse()
       this.setState({
         patientsInEmergency: currentPatientAlerts
@@ -382,8 +384,7 @@ class Dashboard extends Component {
       </i>
       )
     }
-    let outpostButtons = []
-
+    
     let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
@@ -448,9 +449,14 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
-          <FooterData patientsOutsideService={this.state.patientsAtRisk} lat={this.state.clickLat} lon={this.state.clickLon}/>
+          <FooterData patientsOutsideService={this.state.patientsAtRisk} 
+                      lat={this.state.clickLat} 
+                      lon={this.state.clickLon}
+                      patientsAwaitingAssignment={this.state.patientsAwaitingAssignment}
+                      patientsLocationData={this.state.patientLocationData}/>
         </div>
-      )
+
+      ) 
     } else {
       return (
         <div>
