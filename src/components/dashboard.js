@@ -131,7 +131,7 @@ class Dashboard extends Component {
         axios.get(`https://api.what3words.com/v2/reverse?coords=${lat}%2C${lon}&key=R7MAUPYF`).then(reverseGeocoding=>{
         if(this.props.patientAddressSelector){
           //Set the props of the patient address
-          // console.log('Update the patient input', reverseGeocoding.data.words)
+          console.log('Update the patient input', reverseGeocoding.data.words)
           this.props.clickedPatientAddress(reverseGeocoding.data.words)
         } else if (this.props.hcwAddressSelector){
           console.log('Update the hcw input', reverseGeocoding.data.words)
