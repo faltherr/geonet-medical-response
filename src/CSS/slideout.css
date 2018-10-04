@@ -2,7 +2,7 @@
   position:absolute;
   z-index: 100;
   right: 14px;
-  top: 20px;
+  top: 60px;
   cursor: pointer;
   background-color: #30303000;
   border: none;
@@ -14,4 +14,15 @@
   color: white;
   justify-content: center;
   align-items: center;
+}
+
+#info-div{
+  display: none
+}
+.question-mark:hover #info-div{
+  display: block;
+  position: absolute;
+  right:0;
+  background: white;
+  color: black
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import description from './writeups/description'
 import '../CSS/about.css'
 import Tabs from './tabs/tabs'
@@ -15,12 +16,17 @@ export default class About extends Component {
         // console.log(description)
         return (
             <div className='about-page-container'>
+                
+                    <Link to='/'>
+                        <button className='back-button'>Back</button>
+                    </Link>
+               
                 <div className='description-container'>
                     {/* <div className="about-tabs">
                         <button className="tablinks" onClick="openInfo(event, 'What')">What is GeoNet Medical Response? </button>
                         <button className="tablinks" onClick="openInfor(event, 'How')">How does it work?</button>
                     </div> */}
-
+                    
                     <Tabs>
                         <div label='Mission' className='tab-header'>
                             <h1 className='description-titles'>Our Mission:</h1>

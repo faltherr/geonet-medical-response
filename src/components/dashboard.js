@@ -4,8 +4,11 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
+import { getPatients, setReturnedFalse } from '../redux/reducers/patientsReducer'
+import { logout, getUser } from '../redux/reducers/verifiedUser'
+import { Link } from 'react-router-dom';
 import PatientPopup from '../components/patientPopup'
 import OutpostPopup from '../components/outpostPopup'
 import HealthworkerPopup from '../components/healthworkerPopup'
@@ -13,12 +16,10 @@ import limePatient from '../components/symbols/woman_lime.png'
 import greenPatient from '../components/symbols/woman_green.png'
 import aquaPatient from '../components/symbols/woman_aqua.png'
 import pinkPatient from '../components/symbols/woman_alert_10.png'
-import outpostHut from '../components/symbols/hut_purple.png'
-import diamond from '../images/diamond.png'
+import outpostHut from '../components/symbols/hut_white_outline_filled.png'
+import kyle from '../components/symbols/kyle.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
-import NewDataMenu from './newDataMenu'
-import Modal from 'react-responsive-modal';
 import * as turf from '@turf/turf'
 import axios from 'axios'
 import {clickedPatientAddress, clickedHWAddress, clickedOutpostAddress} from '../redux/reducers/formReducer'
@@ -30,17 +31,19 @@ class Dashboard extends Component {
   constructor() {
     super()
     this.state = {
-      openModal: false,
       patientsAtRisk: [],
       patientsAwaitingAssignment: [],
       patientLocationData: [],
       clickLat: '',
-      clickLon: ''
+      clickLon: '',
+      patientsInEmergency: [],
+      activeAlertIds: [],
+      alertUpdate: null
     }
   }
 
   componentDidMount() {
-
+    this.props.getUser()
     loadModules(['esri/Map',
       'esri/views/MapView',
       'esri/views/SceneView',
@@ -284,7 +287,69 @@ class Dashboard extends Component {
         patientsAwaitingAssignment: newPatientAssignement
       })
       //This ends the async call to ArcGIS online
+
     })
+
+    //This sets interval for reload of getting patient data
+
+    const alertUpdate = setInterval(() => {
+      // toast.dismiss()
+      this.props.getPatients()
+    }, 10000)
+  }
+  //END OF COMPONENT DID MOUNT
+
+
+  componentDidUpdate() {
+    // Checking DB for true alert status and rendering alerts
+    if (this.props.patientData.length && this.props.returnedData) {
+
+      let { patientData } = this.props
+      let currentPatientAlerts = []
+      patientData.forEach(patient => {
+        if (patient.alert === true) {
+          currentPatientAlerts.push(patient)
+        }
+      })
+      let activeIdCopy = [...this.state.activeAlertIds]
+      if (currentPatientAlerts.length) {
+        for (let i = 0; i < currentPatientAlerts.length; i++) {
+          if (activeIdCopy.indexOf(currentPatientAlerts[i].id) === -1) {
+            activeIdCopy.push(currentPatientAlerts[i].id)
+            this.notify(currentPatientAlerts[i])
+          }
+        }
+        this.setState({
+          activeAlertIds: activeIdCopy
+        })
+      }
+      console.log('current', currentPatientAlerts)
+      this.props.setReturnedFalse()
+      this.setState({
+        patientsInEmergency: currentPatientAlerts
+      })
+    }
+  }
+
+  //Toast for alert when patient texts 'emergency'
+  notify = (patient) => {
+    toast.error(<span style={{ paddingBottom: '15px' }}><h5>Emergency Alert</h5>Patient name: {patient.name} <br />Patient location: {patient.location} <br />Patient contact: {patient.phone}
+    </span>, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        onClose: (e) => {
+          console.log(e)
+          axios.put(`/api/surveys/alert/${patient.id}`, patient).then(response => {
+            // response.data
+            let activeIdCopy = [...this.state.activeAlertIds];
+            let index = activeIdCopy.indexOf(patient.id)
+            activeIdCopy.splice(index, 1)
+            this.setState({
+              activeAlertIds: activeIdCopy
+            })
+          })
+        }
+      })
+
   }
 
   // buttons for different community zooms
@@ -307,16 +372,18 @@ class Dashboard extends Component {
     easing: "ease-in-out"
   }
 
-  //Toast for alert when patient texts 'emergency'
-  notify = () => {
-    toast.error("Emergency Alert from (insert name). Please contact at (insert phone) immediately", {
-      position: toast.POSITION.BOTTOM_LEFT
-    })
-  }
-
   render() {
-    // console.log('patient location data', this.state.patientLocationData)
-    console.log(this.props.toggleGeoCoder)
+    // let {map, mapView, legend} = this.props
+    const CloseButton = ({ closeIt }) => {
+      return (
+        <i
+          className="marterial-icons"
+          onClick={closeIt}> X
+      </i>
+      )
+    }
+    let outpostButtons = []
+
     let communityButtons = []
     this.props.outpostsData.map(outpost => {
       if (outpost.id !== 0) {
@@ -327,64 +394,75 @@ class Dashboard extends Component {
       return communityButtons
     })
 
-    return (
-      <div className='wrapper'>
-        <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
-          <div className="new-data-modal">
-            <NewDataMenu closeModal={this.onCloseModal} />
+    if (this.props.adminLoggedIn) {
+      return (
+        <div className='wrapper'>
+          <div className="dashboard-header-container">
+            <div className="dashboard-logo">
+              <img src={require("../logo_transparent.png")} alt="" style={{ height: '50px', width: '50px' }} />
+            </div>
+            <div className="dashboard-name">
+              <h3 style={{ color: 'white', fontFamily: 'Raleway' }}>GeoNet Medical Response</h3>
+            </div>
+            <div className="logout-container">
+              <button className="logout-button"><Link style={{ color: 'white', textDecoration: 'none' }} onClick={this.props.logout} to="/">Logout</Link></button>
+            </div>
           </div>
-        </Modal>
+          <PatientPopup />
+          <OutpostPopup />
+          <HealthworkerPopup />
+          <div className="map" id="mapDiv">
+            <Slideout />
+          </div>
+          <div className='esri-attribution__sources esri-interactive'>
+            <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+            {communityButtons}
+          </div>
 
-        <div style={{ background: '#01101B' }}><Slideout /></div>
+          <div id="panel">
+            <h2>COLOR AND SIZING LEGEND</h2>
+            <div id='panel-details'>
+              <div className='panel-line'>
+                <img src={pinkPatient} className='icons' alt="alert icon"></img>
+                <p>Patient Alert Active</p>
+              </div>
+              <div className='panel-line'>
+                <img src={limePatient} className='icons' alt="third trimester icon"></img>
+                <p> Patient in Third Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={greenPatient} className='icons' alt="second trimester icon"></img>
+                <p> Patient in Second Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
+                <p>Patient in First Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={outpostHut} className='icons' alt="outpost icon"></img>
+                <p> Outpost Location</p>
+              </div>
+              <div className='panel-line'>
+                <img src={kyle} className='icons' alt="kyle icon" style={{ minHeight: '50px' }}></img>
+                <p> Healthworker</p>
+              </div>
+            </div>
+          </div>
+          <FooterData patientsOutsideService={this.state.patientsAtRisk} lat={this.state.clickLat} lon={this.state.clickLon}/>
+        </div>
+      )
+    } else {
+      return (
         <div>
-          <button onClick={() => this.notify()}>Alert Test</button>
-          <ToastContainer style={{ marginBottom: '12%' }} autoClose={false} />
-        </div>
-        <PatientPopup />
-        <OutpostPopup />
-        <HealthworkerPopup />
-        <div className="map" id="mapDiv">
-          <Slideout />
-        </div>
-        <div className='esri-attribution__sources esri-interactive'>
-          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-          {communityButtons}
-        </div>
-
-        <div id="panel">
-          <h2>COLOR AND SIZING LEGEND</h2>
-          <div id='panel-details'>
-            <div className='panel-line'>
-              <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
-              <p>Patient in First Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={greenPatient} className='icons' alt="second trimester icon"></img>
-              <p> Patient in Second Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={limePatient} className='icons' alt="third trimester icon"></img>
-              <p> Patient in Third Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={pinkPatient} className='icons' alt="alert icon"></img>
-              <p>Patient Alert Active</p>
-            </div>
-            <div className='panel-line'>
-              <img src={outpostHut} className='icons' alt="outpost icon"></img>
-              <p> Outpost Location</p>
-            </div>
-            <div className='panel-line'>
-              <img src={diamond} className='icons' alt="icon"></img>
-              <p> Healthworker</p>
-            </div>
+          <div className="denied-container">
+            <button className="denied-button"><Link style={{ textDecoration: 'none', color: 'white' }} to="/">Please Login To Gain Access</Link></button>
           </div>
         </div>
-        <FooterData patientsOutsideService={this.state.patientsAtRisk} lat={this.state.clickLat} lon={this.state.clickLon} />
-      </div>
-    )
+      )
+    }
   }
 }
+
 
 let mapStateToProps = state => {
   return {
@@ -401,6 +479,9 @@ let mapStateToProps = state => {
     patientAddressSelector:state.newForm.patientAddressSelector,
     hcwAddressSelector:state.newForm.hcwAddressSelector, 
     outpostAddressSelector:state.newForm.outpostAddressSelector,
+    returnedData: state.patients.returnedData,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
-export default connect(mapStateToProps, { getMap, clickedPatientAddress, clickedHWAddress, clickedOutpostAddress })(Dashboard)
+
+export default connect(mapStateToProps, { getMap, clickedPatientAddress, clickedHWAddress, clickedOutpostAddress, getPatients, setReturnedFalse, logout, getUser })(Dashboard)

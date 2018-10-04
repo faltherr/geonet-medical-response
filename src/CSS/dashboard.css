@@ -202,6 +202,30 @@ li.tab-list-item{
 .esri-ui-manual-container>.esri-component {
   color: #202020;
 }
+
+.denied-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 250px; 
+}
+
+.denied-button {
+  border-radius: 5px;
+  background: green;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 15px;
+  margin-right: 15px;
+  width: 140px;
+  height: 40px;
+}
+
+.denied-button:hover {
+  color: white;
+  background-color: #51495D;
+}
 .esri-ui-manual-container>.esri-component:hover {
   cursor: pointer;
 }
@@ -217,4 +241,45 @@ li.tab-list-item{
 .esri-ui-corner.esri-component {
   display: flex;
   /* flexdirection */
+}
+
+.return-home-container{
+  display: flex;
+  height: 25px;
+  justify-content: flex-end;
+  background-color: rgb(32,32,32)
+}
+
+.return-home-button {
+  background-color: rgb(32,32,32);
+  border: none;
+}
+
+.dashboard-header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgb(32,32,32)
+}
+
+.dashboard-logo {
+  margin-left: 6.5px;
+}
+
+.logout-container {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.logout-button {
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  background: #51495D;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Raleway', sans-serif;
+  right: 0;
 }

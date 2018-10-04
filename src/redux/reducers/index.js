@@ -5,6 +5,7 @@ import healthworkers from './healthworkersReducer'
 import outposts from './outpostReducer'
 import survey from './surveyReducer'
 import newForm from './formReducer'
+import logout from './verifiedUser'
 
+export default combineReducers({patients, map, healthworkers, outposts, survey, newForm, logout})
 
-export default combineReducers({patients, map, healthworkers, outposts, survey, newForm})
