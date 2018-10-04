@@ -1,55 +1,80 @@
 .footer-wrapper {
   background-color: #202020;
   height: 200px;
+
 }
 
 .data-containers {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  top: 0;
+  /* justify-content: flex-start;
+  top: 0; */ 
 }
 
-
-#due-this-month,
-#healthworker-data, 
-#service-area,
-#unassigned-data {
-  background-color: lightgrey;
-  height: 150px;
-  width: 200px;
-  margin: 10px;
-  text-transform: uppercase;
-  font-size: 13px;
-  color: #202020;
+.data-box {
+  height: 160px;
+  width: 300px;
+  font-size: 15px;
+  color: rgb(227, 226, 226);
   overflow: scroll;
+  border: 5px solid #51495D;
+  margin: 4px;
+  text-align: center;
 }
 
-#service-area > h4,
-#due-this-month > h4,
-#healthworker-data > h4, 
-#unassigned-data > h4 {
-  background-color: #584E63;
-  color: lightgrey;
-  height: 30px;
-  margin: 0;
-  padding-top: 3px;
-  /* position: sticky; */
+.fixed-header {
+  /* position: absolute; 
+  display: flex; */
+  height: 20px;
+  /* width: 100%; */
+
+ 
+  /* position: fixed;
+  bottom: 80px;
+  
+  overflow: hide; */
+  /* overflow: hidden; */
+  /* height: 20px;
+  background-color: #1d0d0a;
+  
+  /* top: 0;
+  width: 100%;
+  overflow: hide; */ 
+}
+.fixed-header > p {
+  
+font-size: 14px;
+text-transform: uppercase;
+margin: 0;
+background-color: #51495D;
+/* position: relative; */
+
 }
 
-#due-this-month > p, 
-#healthworker-data > p, 
-#service-area > p,
-#patient-names > p {
+.content {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  margin-top: 10px;
+  overflow: auto;
+  width: 80%;
+  text-transform: capitalize;
+  font-weight: 500;
+  
+ 
+}
+
+.content > p:hover, 
+#patient-names:hover {
   cursor: pointer;
-  margin: 5px;
-}
-#due-this-month > p:hover, 
-#healthworker-data > p:hover,
-#service-area > p:hover,
-#patient-names > p:hover {
   color: #745138;
 }
+
+#patient-names {
+  margin-top: 10px;
+  
+}
+
 
 #add-button {
   width:100px;
@@ -66,4 +91,145 @@
   background-color: white;
 }
 
+
+
+/**/
+
+/* #due-this-month,
+#healthworker-data, 
+#service-area,
+#unassigned-data {
+  background-color: lightgrey;
+  height: 150px;
+  width: 200px;
+  margin: 10px;
+  font-size: 13px;
+  color: #202020;
+  overflow: scroll;
+} */
+
+/* #service-area > h4,
+#due-this-month > h4,
+#healthworker-data > h4, 
+#unassigned-data > h4 {
+  background-color: #584E63;
+  color: lightgrey;
+  height: 30px;
+  margin: 0;
+  padding-top: 3px;
+  
+} */
+
+/* #due-this-month > p, 
+#healthworker-data > p, 
+#service-area > p,
+#patient-names > span {
+  cursor: pointer;
+  margin: 5px;
+}
+#due-this-month > p:hover, 
+#healthworker-data > p:hover,
+#service-area > p:hover,
+#patient-names > span:hover {
+  color: #745138;
+} */
+
+
+#add-button {
+  width:100px;
+  height:40px;
+  margin: 10px;
+  background: #51495D;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+#add-button:hover {
+  color: #51495D;
+  background-color: white;
+}
+
+
+.address-selector-button {
+  width:200px;
+  height:20px;
+  margin: 10px;
+  background: #51495D;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+.address-selector-button:hover {
+  color: #51495D;
+  background-color: white;
+}
+
+.data-containers2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  top: 0;
+}
+
+.add-menu-mask-container{
+  margin-top: 12px;
+  height: 95%;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  color: white;
+  justify-content: center;
+  background-color: rgb(102,102,102, 0.2);
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
+.address-selector-full-container{
+  height: 100%;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-add-menu-icon-container{
+  height: 30%;
+  width: 20%;
+}
+
+/* Icon style */
+.fa-times:before{
+  font-size: 40px;
+}
+
+.text-address-coordinates-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.text-address-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.text-address-container h2{
+  width: 45%;
+}
+
+.text-address-container h3{
+  width: 40%;
+  border: 1px solid white;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
+
+.coordinates-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 

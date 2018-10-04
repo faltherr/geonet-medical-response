@@ -31,7 +31,6 @@ class PatientPopup extends Component {
   
   createGraphics = (props) => {
     let { patientsData } = props
-    // console.log(11111111, patientsData)
     if (this.props.mapView.graphics) {
       this.state.patientGraphics.forEach(graphic => {
         this.props.mapView.graphics.remove(graphic)
@@ -191,7 +190,6 @@ let mapStateToProps = state => {
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
     patientPointGeometry: state.patients.patientPointGeometry
-
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)
