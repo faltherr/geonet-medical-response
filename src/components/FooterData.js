@@ -30,7 +30,8 @@ class FooterData extends Component {
 
   onOpenModal = () => { this.props.showModal() }
   onCloseModal = () => { this.props.hideModal() }
-
+//asspat
+//asspatmod
   goToModal = (typeOfSelector) => {
     this.props.showModal()
     this.props.turnOffGeocoder()
