@@ -16,13 +16,35 @@
   align-items: center;
 }
 
-#info-div{
+#info-div1{
   display: none
 }
-.question-mark:hover #info-div{
+
+#info-div2{
+  display: none
+}
+
+#info-div3{
+  display: none
+}
+
+.question-mark:hover #info-div1{
   display: block;
   position: absolute;
   right:0;
-  background: white;
-  color: black
+  margin: 10px;
+  padding: 10px;
+  background: #252429;
+  color:#D8DBE7;
+  z-index: 10;
+}
+.question-mark2:hover #info-div3{
+  display: block;
+  position: absolute;
+  right:0;
+  margin: 10px;
+  padding: 10px;
+  background: #252429;
+  color:#D8DBE7;
+  z-index: 10;
 }

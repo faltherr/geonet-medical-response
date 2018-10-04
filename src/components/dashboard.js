@@ -283,93 +283,6 @@ class Dashboard extends Component {
       })
 
     }
-
-      // This turns the individual health worker points into a collection interpretable by turf
-      let hwPoints = turf.featureCollection(healthworkerGeoJson)
-
-      // Here we calculate the distance to the nearest health outpost
-      // We assume that patients outside of the buffers (A 25km radius) are at risk in the event of complications arising during labor
-
-      // Here we convert outpost lat/lon strings to geojson coordinates interpretable by turf
-      let outpostGeoJson = []
-      outpostsData.forEach(outpost => {
-        if (outpost.latitude && outpost.longitude) {
-          outpostGeoJson.push(turf.point([outpost.latitude, outpost.longitude, { "name": outpost.name }]))
-        } else {
-          return null
-        }
-      })
-
-      // This turns the individual outpost points into a collection interpretable by turf
-      let outpostPoints = turf.featureCollection(outpostGeoJson)
-
-      // Here we build an object that contains the returned geometries from a nearest point calculation and push it to a new array
-
-      let patientDistArr = []
-
-      patientGeoJson.forEach(patient => {
-        let patientName = patient.geometry.coordinates[2].name
-        let patientPhone = patient.geometry.coordinates[2].patientPhone
-        // console.log(patientName) 
-        let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
-        let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
-        // console.log("Nearest point object", nearest)
-        let patientDistance = {}
-        patientDistance.patientName = patientName
-        patientDistance.patientPhone = patientPhone
-        patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
-        patientDistance.nearestHWPhone = nearest.geometry.coordinates[2].hw_phone
-        patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
-        patientDistance.nearestHWLat = nearest.geometry.coordinates[0]
-        patientDistance.nearestHWLon = nearest.geometry.coordinates[1]
-        patientDistance.nearestOutpostName = nearestOutpost.geometry.coordinates[2].name
-        patientDistance.nearestOutpostDistKM = nearestOutpost.properties.distanceToPoint
-        patientDistance.nearestOutpostLat = nearestOutpost.geometry.coordinates[0]
-        patientDistance.nearestOutpostLon = nearestOutpost.geometry.coordinates[1]
-        // console.log(patientToHWDistance)
-        patientDistArr.push(patientDistance)
-      })
-
-      // Here we set the state of the the geographic processed data
-      this.setState({
-        patientLocationData: patientDistArr
-      })
-
-      // Now we can use the above array of objects to alert the nearest healthworker in an emergency, assign the patient to the nearest healthworker, and identify patients outside of sevice areas
-
-      let newPatientAtRisk = []
-
-      patientDistArr.forEach(patient => {
-        if (patient.nearestOutpostDistKM >= 25) {
-          newPatientAtRisk.push(patient.patientName)
-        } else {
-          return null
-        }
-      })
-
-      // This sets the state of patients who are outside of the service areas
-
-      this.setState({
-        patientsAtRisk: newPatientAtRisk
-      }
-      )
-
-      let newPatientAssignement = []
-
-      patientData.forEach(patient => {
-        // console.log(patient)
-        for (let i = 0; i < patientDistArr.length; i++) {
-          if (patientDistArr[i].patientName === patient.name) {
-            // console.log("Assigned HW name",patient.healthworker_name)
-            // console.log("Nearest HW name", patientDistArr[i].nearestHWName)
-            if (patient.healthworker_name !== patientDistArr[i].nearestHWName) {
-              newPatientAssignement.push(patient.name)
-              // console.log('Patients not assigned to nearest HW:', patient)
-            }
-          }
-        }
-      })
-
   }
 
   //Toast for alert when patient texts 'emergency'
@@ -479,8 +392,8 @@ class Dashboard extends Component {
               <p> Healthworker</p>
             </div>
           </div>
-          <FooterData patientsOutsideService={this.state.patientsAtRisk} />
         </div>
+          <FooterData patientsOutsideService={this.state.patientsAtRisk} />
         </div>
       )
     }else {
