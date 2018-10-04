@@ -4,7 +4,7 @@ import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { connect } from 'react-redux'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import { getPatients, setReturnedFalse } from '../redux/reducers/patientsReducer'
 import { logout, getUser } from '../redux/reducers/verifiedUser'
@@ -23,7 +23,7 @@ import FooterData from './FooterData'
 import * as turf from '@turf/turf'
 import axios from 'axios'
 import {clickedPatientAddress, clickedHWAddress, clickedOutpostAddress} from '../redux/reducers/formReducer'
-
+import {patientDataChecker} from '../utils/patientAlertFunction'
 
 loadCss('https://js.arcgis.com/4.8/esri/css/main.css');
 
@@ -295,6 +295,7 @@ class Dashboard extends Component {
     //This sets interval for reload of getting patient data
 
     const alertUpdate = setInterval(() => {
+      console.log('ARE YOU FIRING??')
       // toast.dismiss()
       this.props.getPatients()
     }, 10000)
@@ -307,17 +308,18 @@ class Dashboard extends Component {
     if (this.props.patientData.length && this.props.returnedData) {
 
       let { patientData } = this.props
-      let currentPatientAlerts = []
-      patientData.forEach(patient => {
-        if (patient.alert === true) {
-          currentPatientAlerts.push(patient)
-        }
-      })
+      let currentPatientAlerts = patientDataChecker(patientData)
+      // patientData.forEach(patient => {
+      //   if (patient.alert === true) {
+      //     currentPatientAlerts.push(patient)
+      //   }
+      // })
       let activeIdCopy = [...this.state.activeAlertIds]
       if (currentPatientAlerts.length) {
+        console.log(currentPatientAlerts)
         for (let i = 0; i < currentPatientAlerts.length; i++) {
-          if (activeIdCopy.indexOf(currentPatientAlerts[i].id) === -1) {
-            activeIdCopy.push(currentPatientAlerts[i].id)
+          if (activeIdCopy.indexOf(currentPatientAlerts[i].survey_id) === -1) {
+            activeIdCopy.push(currentPatientAlerts[i].survey_id)
             this.notify(currentPatientAlerts[i])
           }
         }
@@ -339,11 +341,11 @@ class Dashboard extends Component {
     </span>, {
         position: toast.POSITION.BOTTOM_LEFT,
         onClose: (e) => {
-          console.log(e)
-          axios.put(`/api/surveys/alert/${patient.id}`, patient).then(response => {
+          // console.log('patient id',patient)
+          axios.put(`/api/surveys/alert/${patient.survey_id}`, patient).then(response => {
             // response.data
             let activeIdCopy = [...this.state.activeAlertIds];
-            let index = activeIdCopy.indexOf(patient.id)
+            let index = activeIdCopy.indexOf(patient.survey_id)
             activeIdCopy.splice(index, 1)
             this.setState({
               activeAlertIds: activeIdCopy
@@ -407,6 +409,9 @@ class Dashboard extends Component {
             </div>
             <div className="logout-container">
               <button className="logout-button"><Link style={{ color: 'white', textDecoration: 'none' }} onClick={this.props.logout} to="/">Logout</Link></button>
+            </div>
+            <div>
+              <ToastContainer style={{marginBottom: '10%'}} autoClose={false} closeButton={<CloseButton closeIt={this.notify.onClose}/>}/>
             </div>
           </div>
           <PatientPopup />
