@@ -48,8 +48,11 @@ class FooterData extends Component {
       <div className="footer-wrapper">
         <div className="data-containers">
       
-          <div id='due-this-month'>
-            <h4>Expecting This Month</h4>
+        <div className='data-box'>
+          <div className='fixed-header'><p>Expecting This Month</p></div>
+            <div className='content'>
+
+            
               { 
                 patientsData.map(patient => {
                   let todayUnformatted = new Date()
@@ -64,18 +67,20 @@ class FooterData extends Component {
                     }
                 })
               }
+              
+              </div>
           </div>
 
-          <div id='service-area'>
-            <h4>Patients outside of service area</h4>
-              <p>
-              {patientsOutsideServiceArea}
-              </p>
-          </div>
-              
-          <div id='healthworker-data'>
-            <h4>Heathworkers in the Field</h4>
-            <p>
+          <div className='data-box'>
+            <div className='fixed-header'><p>Patients outside service area</p></div>
+              <div className='content'>
+                {patientsOutsideServiceArea}
+              </div>
+          </div> 
+
+          <div className='data-box'>
+            <div className='fixed-header'><p>Heathworkers in the Field</p></div>
+              <div className='content'>
                 {
                   healthworkersData.map( healthworker => {
                     if (healthworker.in_field === true) {
@@ -85,11 +90,13 @@ class FooterData extends Component {
                     }
                   })
                 }
-                </p>
+              </div>
           </div>
           
-          <div id='unassigned-data'>
-            <h4>Unassigned Patients</h4>
+          <div className='data-box'>
+            <div className='fixed-header'><p>Unassigned Patients</p></div>
+            <div className='content'>
+              
                 {
                   patientsData.map( patient => {
                     if (patient.healthworker_id === null){
@@ -117,8 +124,8 @@ class FooterData extends Component {
                       return null
                     } 
                   })
-                }  
-            
+                } 
+            </div>
           </div>
 
           <button id='add-button'onClick={() => this.onOpenModal()}>Add New Data</button>
