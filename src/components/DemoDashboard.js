@@ -3,8 +3,9 @@ import { loadModules, loadCss } from 'esri-loader'
 import '../CSS/dashboard.css'
 import '../CSS/Charts.css'
 import 'react-toastify/dist/ReactToastify.css'
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 import { getMap } from '../redux/reducers/mapReducer'
 import DemoPatientPopup from '../components/DemoPatientPopup'
 import DemoOutpostPopup from '../components/DemoOutpostPopup'
@@ -125,7 +126,7 @@ class DemoDashboard extends Component {
 
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
-  
+
       patientData.forEach(patient => {
         patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name }]))
       })
@@ -133,9 +134,9 @@ class DemoDashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        if (healthworker.latitude && healthworker.longitude){
-        healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
-      }
+        if (healthworker.latitude && healthworker.longitude) {
+          healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name }]))
+        }
       })
 
       // This turns the individual health worker points into a collection interpretable by turf
@@ -284,48 +285,53 @@ class DemoDashboard extends Component {
 
 
     return (
-      <div className='wrapper'>
-        <DemoPatientPopup />
-        <DemoOutpostPopup />
-        <DemoHealthworkerPopup />
-        <div className="map" id="mapDiv">
-          <Slideout />
+      <div>
+        <div className="return-home-container">
+          <button className="return-home-button"><Link style={{textDecoration: 'none', color: 'white'}}to="/">Return Home</Link></button>
         </div>
-        <div className='esri-attribution__sources esri-interactive'>
-          <button onClick={this.sierraLeonClick}>Sierra Leone</button>
-          {outpostButtons}
-        </div>
+        <div className='wrapper'>
+          <DemoPatientPopup />
+          <DemoOutpostPopup />
+          <DemoHealthworkerPopup />
+          <div className="map" id="mapDiv">
+            <Slideout />
+          </div>
+          <div className='esri-attribution__sources esri-interactive'>
+            <button onClick={this.sierraLeonClick}>Sierra Leone</button>
+            {outpostButtons}
+          </div>
 
-        <div id="panel">
-          <h2>COLOR AND SIZING LEGEND</h2>
-          <div id='panel-details'>
-            <div className='panel-line'>
-              <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
-              <p>Patient in First Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={greenPatient} className='icons' alt="second trimester icon"></img>
-              <p> Patient in Second Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={limePatient} className='icons' alt="third trimester icon"></img>
-              <p> Patient in Third Trimester</p>
-            </div>
-            <div className='panel-line'>
-              <img src={pinkPatient} className='icons' alt="alert icon"></img>
-              <p>Patient Alert Active</p>
-            </div>
-            <div className='panel-line'>
-              <img src={outpostHut} className='icons' alt="outpost icon"></img>
-              <p> Outpost Location</p>
-            </div>
-            <div className='panel-line'>
-              <img src={diamond} className='icons' alt="icon"></img>
-              <p> Healthworker</p>
+          <div id="panel">
+            <h2>COLOR AND SIZING LEGEND</h2>
+            <div id='panel-details'>
+              <div className='panel-line'>
+                <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
+                <p>Patient in First Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={greenPatient} className='icons' alt="second trimester icon"></img>
+                <p> Patient in Second Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={limePatient} className='icons' alt="third trimester icon"></img>
+                <p> Patient in Third Trimester</p>
+              </div>
+              <div className='panel-line'>
+                <img src={pinkPatient} className='icons' alt="alert icon"></img>
+                <p>Patient Alert Active</p>
+              </div>
+              <div className='panel-line'>
+                <img src={outpostHut} className='icons' alt="outpost icon"></img>
+                <p> Outpost Location</p>
+              </div>
+              <div className='panel-line'>
+                <img src={diamond} className='icons' alt="icon"></img>
+                <p> Healthworker</p>
+              </div>
             </div>
           </div>
+          <DemoFooterData patientsOutsideService={this.state.patientsAtRisk} />
         </div>
-        <DemoFooterData patientsOutsideService={this.state.patientsAtRisk} />
       </div>
     )
   }

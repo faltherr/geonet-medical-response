@@ -128,7 +128,7 @@ class Dashboard extends Component {
       // Here we convert patient lat/lon strings to geojson coordinates interpretable by turf
       let patientGeoJson = []
       patientData.forEach(patient => {
-        if (patient.latitude && patient.longitude){
+        if (patient.latitude && patient.longitude) {
           patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "name": patient.name, "patientPhone": patient.phone }]))
         } else {
           return null
@@ -138,9 +138,9 @@ class Dashboard extends Component {
       // Here we convert healthworker lat/lon strings to geojson coordinates interpretable by turf
       let healthworkerGeoJson = []
       healthworkerData.forEach(healthworker => {
-        if (healthworker.latitude && healthworker.longitude){
+        if (healthworker.latitude && healthworker.longitude) {
           healthworkerGeoJson.push(turf.point([healthworker.latitude, healthworker.longitude, { "name": healthworker.name, "hw_phone": healthworker.phone }]))
-        } else{
+        } else {
           return null
         }
       })
@@ -284,18 +284,16 @@ class Dashboard extends Component {
     if (this.props.adminLoggedIn) {
       return (
         <div className='wrapper'>
-          <button><Link onClick={this.props.logout} to="/">Logout</Link></button>
-          <button onClick={() => this.onOpenModal()}>Add New Data</button>
-          <Modal open={this.state.openModal} onClose={() => this.onCloseModal()} center>
-            <div className="new-data-modal">
-              <NewDataMenu closeModal={this.onCloseModal} />
+          <div className="dashboard-header-container">
+            <div className="dashboard-logo">
+              <img src={require("../logo_transparent.png")} alt="" style={{ height: '50px', width: '50px' }} />
             </div>
-          </Modal>
-
-          <div style={{ background: '#01101B' }}><Slideout /></div>
-          <div>
-            <button onClick={() => this.notify()}>Alert Test</button>
-            <ToastContainer style={{ marginBottom: '12%' }} autoClose={false} />
+            <div className="dashboard-name">
+              <h3 style={{ color: 'white', fontFamily: 'Raleway' }}>GeoNet Medical Response</h3>
+            </div>
+            <div className="logout-container">
+              <button className="logout-button"><Link style={{color: 'white', textDecoration: 'none'}}onClick={this.props.logout} to="/">Logout</Link></button>
+            </div>
           </div>
           <PatientPopup />
           <OutpostPopup />
@@ -344,7 +342,7 @@ class Dashboard extends Component {
       return (
         <div>
           <div className="denied-container">
-          <button className="denied-button"><Link style={{textDecoration: 'none', color: 'white'}} to="/">Please Login To Gain Access</Link></button>
+            <button className="denied-button"><Link style={{ textDecoration: 'none', color: 'white' }} to="/">Please Login To Gain Access</Link></button>
           </div>
         </div>
       )
