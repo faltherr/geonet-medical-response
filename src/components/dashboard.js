@@ -180,7 +180,7 @@ class Dashboard extends Component {
       patientData.forEach(patient => {
         if (patient.latitude && patient.longitude){
           patientGeoJson.push(turf.point([patient.latitude, patient.longitude, { "id": patient.id,
-          "name": patient.name, "patientPhone": patient.phone }]))
+          "name": patient.name, "patientPhone": patient.phone, "patientLat": patient.latitude, "patientLon": patient.longitude }]))
         } else {
           return null
         }
@@ -230,6 +230,9 @@ class Dashboard extends Component {
         let patientDistance = {}
         patientDistance.patientId = patientName.id
         patientDistance.patientName = patientName.name
+        patientDistance.patientLat = patientName.patientLat
+        patientDistance.patientLon = patientName.patientLon
+
         patientDistance.nearestHWName = nearest.geometry.coordinates[2].name
         patientDistance.nearestHWId = nearest.geometry.coordinates[2].healthworkerId
         patientDistance.nearestHWDistanceKM = nearest.properties.distanceToPoint
@@ -254,7 +257,11 @@ class Dashboard extends Component {
 
       patientDistArr.forEach(patient => {
         if (patient.nearestOutpostDistKM >= 25) {
-          newPatientAtRisk.push(patient.patientName)
+          let patObj = {}
+          patObj.patientName = patient.patientName
+          patObj.patientLat = patient.patientLat
+          patObj.patientLon = patient.patientLon
+          newPatientAtRisk.push(patObj)
         } else {
           return null
         }
