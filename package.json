@@ -33,7 +33,8 @@
     "redux-promise-middleware": "^5.1.1",
     "telerivet": "^1.4.2",
     "twilio": "^3.20.0",
-    "validator": "^10.8.0"
+    "validator": "^10.8.0",
+    "watchman": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
