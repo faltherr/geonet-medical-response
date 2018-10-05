@@ -13,18 +13,17 @@ module.exports = {
             var twiml = new MessagingResponse();
             twiml.message(message);
             res.type('text/xml');
-            console.log("!!!!!!!!,", twiml)
             res.send(twiml.toString());
         }
 
         let { Body, From } = request.body
         let db = request.app.get('db')
-
+        
         // This is the emergency response functionality
         if (Body.toLowerCase().match(/^.*(emergency).*$/)) {
             // db.alertStatus(From).then(emergencyResponse => {
             db.get_patient_by_phone(From).then(patientData => {
-                console.log("patient data", patientData)
+                // console.log("patient data", patientData)
                 // HMMMMM ASYNC????
                 client.messages
                         .create({
