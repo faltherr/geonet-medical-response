@@ -171,7 +171,7 @@ class NewDataMenu extends Component {
                             <div className='form-input'><h4>Name:</h4><input name='patientName' onChange={handlePTInputName} value={this.props.patientName}/></div>
                             <div className='form-input'><h4>Phone:</h4><input name='patientPhone' onChange={handlePTInputPhone} value={this.props.patientPhone}/></div>
                             {/* <div className='form-input'><h4>Address: </h4> <p>Use the<a href='https://map.what3words.com/mills.oilier.glitches' target='_blank' rel="noopener noreferrer">What3Words Map</a> to find a new address </p><input name='patientAddress' onChange={this.handleChange} /></div> */}
-                            <div className='form-input'><h4>Address: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("patient")}>Get address from map    <i class="fas fa-map-marker-alt"></i></button> <input name='patientAddress' onChange={handlePTInputAddress} value={this.props.patientAddress}/></div></div>
+                            <div className='form-input'><h4>Address: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("patient")}>Get address from map    <i className="fas fa-map-marker-alt"></i></button> <input name='patientAddress' onChange={handlePTInputAddress} value={this.props.patientAddress}/></div></div>
                             <div className='form-input'><h4>Age:</h4><input name='patientAge' onChange={handlePTInputAge} value={this.props.patientAge}/></div>
                             {/* <div className='form-input'><h4>Did the patient use family planning?</h4><input name='patientFamPlan'onChange={this.handleChange} value={this.state.patientFamPlan}/></div> */}
                             <div className='form-input'><h4>Did the patient use family planning?</h4>
@@ -263,7 +263,7 @@ class NewDataMenu extends Component {
                             <form id="create-form" onSubmit={this.handleSubmitHCW}>
                                 <div className='form-input'><h4>Name:</h4><input name='hcwName' onChange={handleHWInputName} value={this.props.hcwName} /></div>
                                 <div className='form-input'><h4>Phone:</h4><input name='hcwPhone' onChange={handleHWInputPhone} value={this.props.hcwPhone}/></div>
-                                <div className='form-input'><h4>Location: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("hcw")}>Get address from map    <i class="fas fa-map-marker-alt"></i></button>  <input name='hcwAddress' onChange={handleHWInputAddress} value={this.props.hcwAddress}/></div></div>
+                                <div className='form-input'><h4>Location: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("hcw")}>Get address from map    <i className="fas fa-map-marker-alt"></i></button>  <input name='hcwAddress' onChange={handleHWInputAddress} value={this.props.hcwAddress}/></div></div>
                                 <div className='form-input'><h4>Outpost:</h4>
                                     <select name='hcwOutpost' onChange={handleHWInputOutpost} value={this.state.value}>
                                         <option value="">Select An Outpost by ID</option>
@@ -284,7 +284,7 @@ class NewDataMenu extends Component {
                             </div>
                             <form id="create-form" onSubmit={this.handleSubmitOutpost}>
                                 <div className='form-input'><h4>Name:</h4><input name='outpostName' onChange={handleOutpostInputName} value={this.props.outpostName} /></div>
-                                <div className='form-input'><h4>Location: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("outpost")}>Get address from map    <i class="fas fa-map-marker-alt"></i></button>  <input name='outpostAddress' onChange={handleOutpostInputAddress} value={this.props.outpostAddress} /></div></div>
+                                <div className='form-input'><h4>Location: </h4> <div><button type="button" className='go-to-add-address-button' onClick={() => this.goToMap("outpost")}>Get address from map    <i className="fas fa-map-marker-alt"></i></button>  <input name='outpostAddress' onChange={handleOutpostInputAddress} value={this.props.outpostAddress} /></div></div>
                                 <div className='form-button-container'>
                                 <button className='add-new-button' type='submit'>Submit</button>
                                 </div>

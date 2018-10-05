@@ -56,7 +56,7 @@ class FooterData extends Component {
 
   render() {
     let { patientsData, healthworkersData } = this.props
-    console.log(this.props.patientsOutsideService)
+    // console.log(this.props.patientsOutsideService)
     let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element => {
       return <p key={element.patientName} onClick={ () => this.handleClick(element.patientLon, element.patientLat)}>{element.patientName}</p>
     })
