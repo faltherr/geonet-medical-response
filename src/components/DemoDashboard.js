@@ -302,7 +302,7 @@ class DemoDashboard extends Component {
           </div>
 
           <div id="panel">
-            <h2>COLOR AND SIZING LEGEND</h2>
+            <h2>LEGEND</h2>
             <div id='panel-details'>
               <div className='panel-line'>
                 <img src={aquaPatient} className='icons' alt="first trimester icon"></img>
