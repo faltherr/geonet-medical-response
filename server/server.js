@@ -25,6 +25,8 @@ app.use(session({
 
 app.use(bodyParser.json())
 
+app.use( express.static( `${__dirname}/../build` ) );
+
 //URL encoded is for parsing sms from twilio
 app.use(urlencoded({ extended: true }));
 
@@ -74,8 +76,6 @@ app.put('/api/surveys/alert/:id', SurveyCtrl.updateAlert)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)
-
-app.use( express.static( `${__dirname}/../build` ) );
 
 app.listen(port, () => {
   console.log('listening on port:', port)
