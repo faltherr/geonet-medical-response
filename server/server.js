@@ -46,7 +46,7 @@ app.get('/api/currentUser', (req, res) => {
 
 app.get('/api/logout', (req, res) => {
   req.session.destroy()
-  console.log(req.session)
+  // console.log(req.session)
   res.sendStatus(200)
 })
 
@@ -74,6 +74,8 @@ app.put('/api/surveys/alert/:id', SurveyCtrl.updateAlert)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)
+
+app.use( express.static( `${__dirname}/../build` ) );
 
 app.listen(port, () => {
   console.log('listening on port:', port)
