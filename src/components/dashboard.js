@@ -17,7 +17,7 @@ import greenPatient from '../components/symbols/woman_green.png'
 import aquaPatient from '../components/symbols/woman_aqua.png'
 import pinkPatient from '../components/symbols/woman_alert_10.png'
 import outpostHut from '../components/symbols/hut_white_outline_filled.png'
-import kyle from '../components/symbols/kyle.png'
+import doctor from '../components/symbols/doctor.png'
 import Slideout from './Slideout'
 import FooterData from './FooterData'
 import * as turf from '@turf/turf'
@@ -134,13 +134,13 @@ class Dashboard extends Component {
         axios.get(`https://api.what3words.com/v2/reverse?coords=${lat}%2C${lon}&key=R7MAUPYF`).then(reverseGeocoding=>{
         if(this.props.patientAddressSelector){
           //Set the props of the patient address
-          console.log('Update the patient input', reverseGeocoding.data.words)
+          // console.log('Update the patient input', reverseGeocoding.data.words)
           this.props.clickedPatientAddress(reverseGeocoding.data.words)
         } else if (this.props.hcwAddressSelector){
-          console.log('Update the hcw input', reverseGeocoding.data.words)
+          // console.log('Update the hcw input', reverseGeocoding.data.words)
           this.props.clickedHWAddress(reverseGeocoding.data.words)
         } else if (this.props.outpostAddressSelector){
-          console.log('Update the outpost input', reverseGeocoding.data.words)
+          // console.log('Update the outpost input', reverseGeocoding.data.words)
           this.props.clickedOutpostAddress(reverseGeocoding.data.words)
         }
 
@@ -166,8 +166,8 @@ class Dashboard extends Component {
         })
         if (ref.props.toggleGeoCoder){
         w3wGeocoder(lat, lon)
-        console.log(lat)
-        console.log(lon)
+        // console.log(lat)
+        // console.log(lon)
       }
     })
 
@@ -302,7 +302,6 @@ class Dashboard extends Component {
     //This sets interval for reload of getting patient data
 
     const alertUpdate = setInterval(() => {
-      console.log('ARE YOU FIRING??')
       // toast.dismiss()
       this.props.getPatients()
     }, 10000)
@@ -433,7 +432,7 @@ class Dashboard extends Component {
           </div>
 
           <div id="panel">
-            <h2>COLOR AND SIZING LEGEND</h2>
+            <h2>LEGEND</h2>
             <div id='panel-details'>
               <div className='panel-line'>
                 <img src={pinkPatient} className='icons' alt="alert icon"></img>
@@ -456,7 +455,7 @@ class Dashboard extends Component {
                 <p> Outpost Location</p>
               </div>
               <div className='panel-line'>
-                <img src={kyle} className='icons' alt="kyle icon" style={{ minHeight: '50px' }}></img>
+                <img src={doctor} className='icons' alt="doctor icon" style={{ minHeight: '50px' }}></img>
                 <p> Healthworker</p>
               </div>
             </div>

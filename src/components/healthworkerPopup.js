@@ -52,7 +52,7 @@ class HealthworkerPopup extends Component {
         this.props.healthworkerPointGeometry.push(point)   
         const markerSymbol = {
           type: "picture-marker", 
-          url: require('../components/symbols/kyle.png'),
+          url: require('../components/symbols/doctor.png'),
           contentType: 'image/png', 
           width: "32px",
           height: "32px"
