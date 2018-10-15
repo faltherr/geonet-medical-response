@@ -15,6 +15,7 @@ require ('dotenv').config()
 const app = express()
 const port = 8443
 const {CONNECTION_STRING} = process.env
+const path = require('path');
 
 
 app.use(session({
@@ -76,6 +77,10 @@ app.put('/api/surveys/alert/:id', SurveyCtrl.updateAlert)
 
 // SMS controller
 app.post('/sms', sms_controller.emergency)
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 app.listen(port, () => {
   console.log('listening on port:', port)
