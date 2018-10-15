@@ -134,12 +134,7 @@ width:100vw
   padding: 5px;
 }
 
-.add-menu-container{
-  background-color: rgba(206, 210, 227, 0.6);
-  height:500px;
-  width: 600px;
-  padding: 0;
-}
+
 
 li.tab-list-item{
   display: inline-block;
@@ -149,42 +144,6 @@ li.tab-list-item{
   color: black;
 }
 
-.form-input{
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 5px;
-}
-
-.form-input h4{
-  margin: 0;
-  height: 20px;
-  width: auto;
-}
-
-.radio-button-container{
-  display: flex;
-  justify-content: space-between;
-  width: auto;
-}
-
-.add-new-button{
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 150px;
-  align-self: center;
-}
-
-.add-new-button:hover {
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
 
 .esri-component esri-basemap-toggle esri-widget {
   margin: 40px;
