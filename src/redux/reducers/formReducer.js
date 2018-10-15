@@ -170,7 +170,6 @@ export default function reducer(state = initialState, action) {
           outpostLongitude: action.payload.longitude
         }
       case HIDE_MODAL:
-      console.log(state)
         return {
           ...state,
           openModal: action.payload,
