@@ -14,6 +14,8 @@ module.exports = {
       redirect_uri: `http://${req.headers.host}/auth/callback`
     }
 
+    console.log('req.headers', req.headers)
+
     let auth0domain = `https://${process.env.REACT_APP_AUTH0_DOMAIN}`
 
     let accessTokenResponse = await axios.post(`${auth0domain}/oauth/token`, payload)
@@ -26,11 +28,11 @@ module.exports = {
 
     if(users.length){
       req.session.user = users[0]
-      res.redirect(process.env.REACT_APP_DASHBOARD)
+      res.redirect(process.env.AUTH_REDIRECT)
     } else {
       let users = await db.create_admin(userInfo)
       req.session.user = users[0]
-      res.redirect(process.env.REACT_APP_DASHBOARD)
+      res.redirect(process.env.AUTH_REDIRECT)
     }
     } catch(error) {
       console.log('we have a problem', error)
