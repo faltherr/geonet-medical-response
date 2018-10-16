@@ -3,7 +3,7 @@ const axios = require('axios')
 module.exports = {
   auth: async (req, res) => {
     let { code } = req.query
-
+    
     try {
 
     let payload = {
@@ -28,11 +28,11 @@ module.exports = {
 
     if(users.length){
       req.session.user = users[0]
-      res.redirect(process.env.AUTH_REDIRECT)
+      res.redirect('/#/dashboard')
     } else {
       let users = await db.create_admin(userInfo)
       req.session.user = users[0]
-      res.redirect(process.env.AUTH_REDIRECT)
+      res.redirect('/#/dashboard')
     }
     } catch(error) {
       console.log('we have a problem', error)
