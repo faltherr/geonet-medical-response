@@ -14,7 +14,6 @@ module.exports = {
   delete : (req, res) => {
     const db = req.app.get('db')
     const {id} = req.params
-    console.log( 'Whats up', id)
     db.delete_outposts([id]).then(response => {
       res.status(200).send({id})
     })

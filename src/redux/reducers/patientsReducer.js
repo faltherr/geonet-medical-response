@@ -78,7 +78,7 @@ export function addPatientSurvey(props) {
     completed: true,
     HWID: props.patientAssignedHW,
   }
-  console.log('!!!!!!!!!!!!', patientSurveyData)
+  // console.log('!!!!!!!!!!!!', patientSurveyData)
 
   let newPatientSurvey = axios.post('/api/surveys', patientSurveyData).then(response => {
     return response.data

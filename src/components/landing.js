@@ -35,7 +35,7 @@ class Landing extends Component {
             </div>
             <div className="landing-button-container">
               <button className="landing-button" onClick={this.login}>Admin Login</button>
-              <Link to="/demo-dashboard"><button className="landing-guest-button">Continue As A Guest</button></Link>
+              <Link to="/dashboard"><button className="landing-guest-button">Continue As A Guest</button></Link>
             </div>
             <div className="landing-mission">
               <p>"Bringing medical supplies and emergency response to those in need in the most hard to reach locations."</p>

@@ -10,12 +10,12 @@ import { hideModal, showModal, turnOffGeocoder, hideMask, patientAddressSelector
 
 
 class FooterData extends Component {
-  
-    state = {
-      openModal: false, 
-      assignPatientModal: false,
-      patientId: null
-    }
+
+  state = {
+    openModal: false,
+    assignPatientModal: false,
+    patientId: null
+  }
 
   handleClick = (long, lat) => {
     this.props.mapView.goTo({
@@ -25,18 +25,18 @@ class FooterData extends Component {
       zoom: 20
     }, this.clickOption)
   }
-    clickOption = {
-      speedFactor: 3
-    }
- 
+  clickOption = {
+    speedFactor: 3
+  }
+
 
   onOpenModal = () => { this.props.showModal() }
   onCloseModal = () => { this.props.hideModal() }
-  assignPatientModalClosed = () => {this.setState({ assignPatientModal: false})}
+  assignPatientModalClosed = () => { this.setState({ assignPatientModal: false }) }
 
-  assignPatientModalOpen = (id) => { 
-    this.setState({ 
-      assignPatientModal: true, 
+  assignPatientModalOpen = (id) => {
+    this.setState({
+      assignPatientModal: true,
       patientId: id
     })
   }
@@ -54,40 +54,47 @@ class FooterData extends Component {
     this.props.resetFormInputs()
   }
 
+  stringTrimmer = (words) => {
+    let WordtoNum = +words
+    let fixedLength = WordtoNum.toFixed(7)
+    return fixedLength.toString()
+  }
+
   render() {
     let { patientsData, healthworkersData } = this.props
-    // console.log(this.props.patientsOutsideService)
     let patientsOutsideServiceArea = this.props.patientsOutsideService.map(element => {
-      return <p key={element.patientName} onClick={ () => this.handleClick(element.patientLon, element.patientLat)}>{element.patientName}</p>
+      return <p key={element.patientId} onClick={() => this.handleClick(element.patientLon, element.patientLat)}>{element.patientName}</p>
     })
 
     let displayLocation
 
+
+
     if (this.props.patientAddressSelector) {
       displayLocation = (
         <div className='address-selector-full-container'>
-        <div className='text-address-coordinates-container'>
-        <div className='text-address-container'>
-          <h2>What3Words Address:</h2>
-          <h3>{this.props.patientAddress}</h3>
-        </div>
-          <div className='coordinates-container'>
-            <p>Latitude: {this.props.lat}</p> <p>Longitude: {this.props.lon}</p>
+          <div className='text-address-coordinates-container'>
+            <div className='text-address-container'>
+              <h2>What3Words Address:</h2>
+              <h3>{this.props.patientAddress}</h3>
+            </div>
+            <div className='coordinates-container'>
+              <p>Latitude: {this.stringTrimmer(this.props.lat)}</p> <p>Longitude: {this.stringTrimmer(this.props.lon)}</p>
+            </div>
+          </div>
+          <div className='address-selector-button-container'>
+            <button className='address-selector-button' type='button' onClick={() => this.goToModal('patient')}> Select this address </button>
           </div>
         </div>
-        <div className='address-selector-button-container'>
-          <button className='address-selector-button' type='button' onClick={() => this.goToModal('patient')}> Select this address </button>
-        </div>
-      </div>
       )
     } else if (this.props.hcwAddressSelector) {
       displayLocation = (
         <div className='address-selector-full-container'>
           <div className='text-address-coordinates-container'>
-          <div className='text-address-container'>
-            <h2>What3Words Address:</h2>
-            <h3>{this.props.hcwAddress}</h3>
-          </div>
+            <div className='text-address-container'>
+              <h2>What3Words Address:</h2>
+              <h3>{this.props.hcwAddress}</h3>
+            </div>
             <div className='coordinates-container'>
               <p>Latitude: {this.props.lat}</p> <p>Longitude: {this.props.lon}</p>
             </div>
@@ -101,10 +108,10 @@ class FooterData extends Component {
       displayLocation = (
         <div className='address-selector-full-container'>
           <div className='text-address-coordinates-container'>
-          <div className='text-address-container'>
-            <h2>What3Words Address:</h2>
-            <h3>{this.props.outpostAddress}</h3>
-          </div>
+            <div className='text-address-container'>
+              <h2>What3Words Address:</h2>
+              <h3>{this.props.outpostAddress}</h3>
+            </div>
             <div className='coordinates-container'>
               <p>Latitude: {this.props.lat}</p> <p>Longitude: {this.props.lon}</p>
             </div>
@@ -116,28 +123,28 @@ class FooterData extends Component {
       )
     }
 
-  // Conditionally render the footer mask if the user is in the add address toggle state on otherwise render the standard footer
+    // Conditionally render the footer mask if the user is in the add address toggle state on otherwise render the standard footer
     if (this.props.toggleMask) {
       return (
         <div className="footer-wrapper">
           <div className='data-containers2'>
-          <div className='add-menu-mask-container'>
-            {displayLocation}
-            <div className='close-add-menu-icon-container'>
-              <i className="fas fa-times" onClick={()=> this.closeAddMenu()}></i>
+            <div className='add-menu-mask-container'>
+              {displayLocation}
+              <div className='close-add-menu-icon-container'>
+                <i className="fas fa-times" onClick={() => this.closeAddMenu()}></i>
               </div>
             </div>
           </div>
         </div>
       )
     } else {
-
+      // console.log(this.props.adminLoggedIn.admin)
       return (
         <div className="footer-wrapper">
           <div className="data-containers">
 
             <div className='data-box'>
-            <div className='fixed-header'><p>Expecting This Month</p></div>
+              <div className='fixed-header'><p>Expecting This Month</p></div>
               <div className='content'>
                 {
                   patientsData.map(patient => {
@@ -145,82 +152,102 @@ class FooterData extends Component {
                     let today = moment(todayUnformatted)
                     let dueDateFormatted = moment(patient.duedate)
                     let dueThisMonth = moment(dueDateFormatted).diff(moment(today), 'days', true)
-                    
-                      if (dueThisMonth <= 31 && dueThisMonth >= 1) {
-                        return <p key={patient.id} onClick={ () => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p> 
-                      } else {
-                        return null
-                      }
-                  })
-                }
-              </div>
-            </div>
 
-          <div className='data-box'>
-            <div className='fixed-header'><p>Patients outside service area</p></div>
-              <div className='content'>
-                {patientsOutsideServiceArea}
-              </div>
-          </div> 
-
-          <div className='data-box'>
-            <div className='fixed-header'><p>Heathworkers in the Field</p></div>
-              <div className='content'>
-                {
-                  healthworkersData.map( healthworker => {
-                    if (healthworker.in_field === true) {
-                      return <p key={healthworker.id} onClick={ () => {this.handleClick(healthworker.longitude, healthworker.latitude)}}>{healthworker.name}</p>
+                    if (dueThisMonth <= 31 && dueThisMonth >= 1) {
+                      return <p key={patient.id} onClick={() => this.handleClick(patient.longitude, patient.latitude)}>{patient.name} {moment(patient.duedate).format('MM/DD/YYYY')}</p>
                     } else {
                       return null
                     }
                   })
                 }
               </div>
-          </div>
-          
-          <div className='data-box'>
-            <div className='fixed-header'><p>Unassigned Patients</p></div>
+            </div>
+
+            <div className='data-box'>
+              <div className='fixed-header'><p>Patients outside service area</p></div>
+              <div className='content'>
+                {patientsOutsideServiceArea}
+              </div>
+            </div>
+
+            <div className='data-box'>
+              <div className='fixed-header'><p>Heathworkers in the Field</p></div>
               <div className='content'>
                 {
-                  patientsData.map( patient => {
-                    if (patient.healthworker_id === null){
+                  healthworkersData.map(healthworker => {
+                    if (healthworker.in_field === true) {
+                      return <p key={healthworker.id} onClick={() => { this.handleClick(healthworker.longitude, healthworker.latitude) }}>{healthworker.name}</p>
+                    } else {
+                      return null
+                    }
+                  })
+                }
+              </div>
+            </div>
+
+            <div className='data-box'>
+              <div className='fixed-header'><p>Unassigned Patients</p></div>
+              <div className='content'>
+                {
+                  patientsData.map(patient => {
+                    if (patient.healthworker_id === null || patient.healthworker_id === 1) {
                       return (
                         <div id='patient-names'
-                             key={patient.id}>
-                             
-                          <span 
-                             onClick={ () => this.assignPatientModalOpen(patient.id)}>{patient.name}
+                          key={patient.id}>
                           {
-                            this.state.assignPatientModal && this.state.patientId === patient.id 
+                            this.props.adminLoggedIn
                               ?
-                            <AssignPatientModal 
-                              close={this.assignPatientModalClosed}
-                              patient={patient}
-                              patientsLocation={this.props.patientsLocationData
-                              }
-                            />
+                              this.props.adminLoggedIn.admin
+                                ?
+                                <span
+                                  onClick={() => this.assignPatientModalOpen(patient.id)}>{patient.name}
+                                  {
+                                    this.state.assignPatientModal && this.state.patientId === patient.id
+                                      ?
+                                      <AssignPatientModal
+                                        close={this.assignPatientModalClosed}
+                                        patient={patient}
+                                        patientsLocation={this.props.patientsLocationData
+                                        }
+                                      />
+                                      :
+                                      null
+                                  }
+                                </span>
+                                :
+                                <span> {patient.name} </span>
                               :
                               null
                           }
-                          </span>
                         </div>
                       )
                     } else {
                       return null
-                    } 
+                    }
                   })
-                } 
-            </div>
-          </div>
-
-          <button id='add-button' onClick={() => this.onOpenModal()}>Add New Data</button>
-            <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
-              <div className="new-data-modal">
-                <NewDataMenu />
+                }
               </div>
-            </Modal>
+            </div>
+            {
+              this.props.adminLoggedIn
+                ?
+                this.props.adminLoggedIn.admin
+                  ?
+                  <div>
+                    <button id='add-button' onClick={() => this.onOpenModal()}>Add New Data</button>
+                    <Modal open={this.props.openModal} onClose={() => this.onCloseModal()} center>
+                      <div className="new-data-modal">
+                        <NewDataMenu />
+                      </div>
+                    </Modal>
+                  </div>
+                  :
+                  null
+                :
+                null
+            }
           </div>
-      </div>
+        </div>
       )
     }
   }
@@ -240,6 +267,7 @@ let mapStateToProps = state => {
     patientAddressSelector: state.newForm.patientAddressSelector,
     hcwAddressSelector: state.newForm.hcwAddressSelector,
     outpostAddressSelector: state.newForm.outpostAddressSelector,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
 export default connect(mapStateToProps, { getPatients, hideModal, showModal, turnOffGeocoder, hideMask, patientAddressSelectorOff, hcwAddressSelectorOff, outpostAddressSelectorOff, resetFormInputs })(FooterData)

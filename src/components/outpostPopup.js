@@ -55,22 +55,51 @@ componentDidUpdate(prevProps) {
                 width: 1
               }
             }
-       
-      const PopupTemplate = {
-        title: "Community Outposts",
-        content: [{
-        type: "text",
-        text: `
-          <span><h4>Location:  ${outpost.location}</h4></span>
-          <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
-              `
-        }],
-        actions: [{
-          title: "Delete Outpost",
-          outpost: outpost.id,
-          className: "esri-icon-trash" 
-        }]
+            
+      let PopupTemplate = {}
+
+      if (this.props.adminLoggedIn){
+      if (this.props.adminLoggedIn.admin){
+        PopupTemplate = {
+          title: "Community Outposts",
+          content: [{
+          type: "text",
+          text: `
+            <span><h4>Location:  ${outpost.location}</h4></span>
+            <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
+                `
+          }],
+          actions: [{
+            title: "Delete Outpost",
+            outpost: outpost.id,
+            className: "esri-icon-trash" 
+          }]
+        }
+      } else {
+        PopupTemplate = {
+          title: "Community Outposts",
+          content: [{
+          type: "text",
+          text: `
+            <span><h4>Location:  ${outpost.location}</h4></span>
+            <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
+                `
+          }]
       }
+    }
+  } else {
+    PopupTemplate = {
+      title: "Community Outposts",
+      content: [{
+      type: "text",
+      text: `
+        <span><h4>Location:  ${outpost.location}</h4></span>
+        <span><h4>Coordinates: ${outpost.latitude}, ${outpost.longitude}</h4></span>
+            `
+      }]
+  }
+  }
+
       const outpostGraphic = new Graphic ({
         geometry: pointGeometry,
         symbol: markerSymbol,
@@ -116,7 +145,8 @@ let mapStateToProps = state => {
     outpostGraphic: state.outposts.outpostGraphic,
     outpostsData: state.outposts.outpostsData,
     mapView: state.map.mapView, 
-    map: state.map.map
+    map: state.map.map,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
 
