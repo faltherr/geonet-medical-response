@@ -3,7 +3,7 @@ const axios = require('axios')
 module.exports = {
   auth: async (req, res) => {
     let { code } = req.query
-
+    
     try {
 
     let payload = {
