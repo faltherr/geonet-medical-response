@@ -217,7 +217,7 @@ class FooterData extends Component {
                                 :
                                 <span> {patient.name} </span>
                               :
-                              null
+                              <span> {patient.name} </span>
                           }
                         </div>
                       )
