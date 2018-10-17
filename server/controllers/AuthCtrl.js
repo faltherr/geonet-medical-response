@@ -11,7 +11,8 @@ module.exports = {
       client_secret: process.env.AUTH0_CLIENT_SECRET,
       code,
       grant_type: "authorization_code",
-      redirect_uri: `http://${req.headers.host}/auth/callback`
+      //For production use an https protocol for development use http
+      redirect_uri: `https://${req.headers.host}/auth/callback`
     }
 
     // console.log('req.headers', req.headers)
@@ -28,11 +29,11 @@ module.exports = {
 
     if(users.length){
       req.session.user = users[0]
-      res.redirect('/#/dashboard')
+      res.redirect('/dashboard')
     } else {
       let users = await db.create_admin(userInfo)
       req.session.user = users[0]
-      res.redirect('/#/dashboard')
+      res.redirect('/dashboard')
     }
     } catch(error) {
       console.log('we have a problem', error)
