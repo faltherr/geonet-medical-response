@@ -19,7 +19,8 @@ class Landing extends Component {
     let location = `${auth0domain}/authorize?client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUri}&response_type=code`
 
     //Window.location takes the wraped url location and sends us to the new location 
-    window.location = location
+    // window.location = location
+    console.log('URI', redirectUri)
   }
 
   render() {
