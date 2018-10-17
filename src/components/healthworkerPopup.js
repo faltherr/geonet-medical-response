@@ -58,7 +58,48 @@ class HealthworkerPopup extends Component {
           height: "32px"
         }
       
-        const PopupTemplate = {
+        let PopupTemplate = {}
+        if (this.props.adminLoggedIn){
+
+        
+        if (this.props.adminLoggedIn.admin){
+          PopupTemplate = {
+            title: "Field Healthworker Information",
+            content: [{
+            type: "text",
+            text: `
+              <span><h4>Name:  ${healthworker.name}</h4></span>
+              <span><h4>Phone:  ${healthworker.phone}</h4></span>
+              <span><h4>Outpost:  ${healthworker.outpost_id}</h4></span>
+              <span><h4>Email:  ${healthworker.email}</h4></span>
+              <span><h4>Coordinates:  ${healthworker.latitude}, ${healthworker.longitude}</h4></span>
+              <span><h4>In the Field:  ${healthworker.in_field}</h4></span>
+                `
+            }],
+            actions: [{
+              title: "Edit Healthworker",
+              healthworker: healthworker, 
+              className: "esri-icon-user" 
+            }]
+          }
+        } else {
+          PopupTemplate = {
+            title: "Field Healthworker Information",
+            content: [{
+            type: "text",
+            text: `
+              <span><h4>Name:  ${healthworker.name}</h4></span>
+              <span><h4>Phone:  ${healthworker.phone}</h4></span>
+              <span><h4>Outpost:  ${healthworker.outpost_id}</h4></span>
+              <span><h4>Email:  ${healthworker.email}</h4></span>
+              <span><h4>Coordinates:  ${healthworker.latitude}, ${healthworker.longitude}</h4></span>
+              <span><h4>In the Field:  ${healthworker.in_field}</h4></span>
+                `
+            }]
+          }
+        }
+      } else {
+        PopupTemplate = {
           title: "Field Healthworker Information",
           content: [{
           type: "text",
@@ -70,13 +111,9 @@ class HealthworkerPopup extends Component {
             <span><h4>Coordinates:  ${healthworker.latitude}, ${healthworker.longitude}</h4></span>
             <span><h4>In the Field:  ${healthworker.in_field}</h4></span>
               `
-          }],
-          actions: [{
-            title: "Edit Healthworker",
-            healthworker: healthworker, 
-            className: "esri-icon-user" 
           }]
         }
+      }
 
         // Edit Healthworker button 
         let { showEditModal } = this
@@ -154,7 +191,8 @@ let mapStateToProps = state => {
     healthworkersData: state.healthworkers.healthworkersData, 
     healthworkerGraphic: state.healthworkers.healthworkerGraphic,
     mapView: state.map.mapView,
-    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry
+    healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
 
