@@ -38,6 +38,8 @@ class NewDataMenu extends Component {
             hcwLongitude: '',
             outpostName: '',
             outpostAddress: '',
+            outpostLatitude: '',
+            outpostLongitude: '',
         }
     }
 
@@ -320,7 +322,9 @@ function mapStateToProps(state) {
         hcwLatitude: state.newForm.hcwLatitude,
         hcwLongitude: state.newForm.hcwLongitude,
         outpostName: state.newForm.outpostName,
-        outpostAddress: state.newForm.outpostAddress
+        outpostAddress: state.newForm.outpostAddress,
+        outpostLatitude: state.newForm.outpostLatitude,
+        outpostLongitude: state.newForm.outpostLongitude,
     }
 }
 

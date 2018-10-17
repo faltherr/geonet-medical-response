@@ -58,15 +58,14 @@ export function deleteOutpost (id) {
   }
 }
 
-export function addOutpost (state) {
+export function addOutpost (props) {
 
   let outpostData ={
-    name: state.outpostName,
-    location: state.outpostAddress,
-    latitude: state.outpostLatitude,
-    longitude: state.outpostLongitude,
+    name: props.outpostName,
+    location: props.outpostAddress,
+    latitude: props.outpostLatitude,
+    longitude: props.outpostLongitude,
   }
-
   let outposts = axios.post('api/outposts', outpostData).then(response => {
     return response.data
   })
