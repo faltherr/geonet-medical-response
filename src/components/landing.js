@@ -20,7 +20,7 @@ class Landing extends Component {
 
     //Window.location takes the wraped url location and sends us to the new location 
     window.location = location
-    console.log('URI', redirectUri)
+    // console.log('URI', redirectUri)
   }
 
   render() {
