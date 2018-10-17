@@ -12,6 +12,7 @@ module.exports = {
       code,
       grant_type: "authorization_code",
       //For production use an https protocol for development use http
+      // redirect_uri: `http://${req.headers.host}/auth/callback`
       redirect_uri: `https://${req.headers.host}/auth/callback`
     }
 
