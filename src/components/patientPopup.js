@@ -92,29 +92,73 @@ class PatientPopup extends Component {
             height: height,
           };
 
-        const PopupTemplate = {
-          title: `Patient Information`,
-          content: [{
-            type: "text",
-            text: `
-              <span><h4>Name: ${patient.name}</h4></span>
-              <span><h4>Location: ${patient.location}</h4></span>
-              <span><h4>Age:  ${patient.age}</h4></span>
-              <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
-              <span><h4>Phone:  ${patient.phone}</h4></span>
-              <span><h4>Family Plan:  ${patient.famplan}</h4></span>
-              <span><h4>HIV Status:  ${patient.hiv}</h4></span>
-              <span><h4>Parity:  ${patient.parity}</h4></span>
-              <span><h4>Alert:  ${patient.alert}</h4></span>
-              </h4></span>           
-              `
-          }],
-          actions: [{
-            title: "Edit Patient",
-            patient: patient,
-            className: "esri-icon-user" 
-          }]
-          }
+        let PopupTemplate ={}
+        if (this.props.adminLoggedIn){
+        
+        if (this.props.adminLoggedIn.admin){
+          PopupTemplate = {
+            title: `Patient Information`,
+            content: [{
+              type: "text",
+              text: `
+                <span><h4>Name: ${patient.name}</h4></span>
+                <span><h4>Location: ${patient.location}</h4></span>
+                <span><h4>Age:  ${patient.age}</h4></span>
+                <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
+                <span><h4>Phone:  ${patient.phone}</h4></span>
+                <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+                <span><h4>HIV Status:  ${patient.hiv}</h4></span>
+                <span><h4>Parity:  ${patient.parity}</h4></span>
+                <span><h4>Alert:  ${patient.alert}</h4></span>
+                </h4></span>           
+                `
+            }],
+            actions: [{
+              title: "Edit Patient",
+              patient: patient,
+              className: "esri-icon-user" 
+            }]
+            }
+        } else {
+          PopupTemplate = {
+            title: `Patient Information`,
+            content: [{
+              type: "text",
+              text: `
+                <span><h4>Name: ${patient.name}</h4></span>
+                <span><h4>Location: ${patient.location}</h4></span>
+                <span><h4>Age:  ${patient.age}</h4></span>
+                <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
+                <span><h4>Phone:  ${patient.phone}</h4></span>
+                <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+                <span><h4>HIV Status:  ${patient.hiv}</h4></span>
+                <span><h4>Parity:  ${patient.parity}</h4></span>
+                <span><h4>Alert:  ${patient.alert}</h4></span>
+                </h4></span>           
+                `
+            }]
+        }
+      }
+    } else {
+      PopupTemplate = {
+        title: `Patient Information`,
+        content: [{
+          type: "text",
+          text: `
+            <span><h4>Name: ${patient.name}</h4></span>
+            <span><h4>Location: ${patient.location}</h4></span>
+            <span><h4>Age:  ${patient.age}</h4></span>
+            <span><h4>Due Date:  ${moment(patient.duedate).format('MM/DD/YYYY')}</h4></span>
+            <span><h4>Phone:  ${patient.phone}</h4></span>
+            <span><h4>Family Plan:  ${patient.famplan}</h4></span>
+            <span><h4>HIV Status:  ${patient.hiv}</h4></span>
+            <span><h4>Parity:  ${patient.parity}</h4></span>
+            <span><h4>Alert:  ${patient.alert}</h4></span>
+            </h4></span>           
+            `
+        }]
+    }
+    }
 
         // Edit Patient 
         let { showEditModal} = this
@@ -189,7 +233,8 @@ let mapStateToProps = state => {
     mapView: state.map.mapView,
     healthworkerPointGeometry: state.healthworkers.healthworkerPointGeometry,
     healthworkerData: state.healthworkers.healthworkersData,
-    patientPointGeometry: state.patients.patientPointGeometry
+    patientPointGeometry: state.patients.patientPointGeometry,
+    adminLoggedIn: state.logout.adminLoggedIn
   }
 }
 export default connect( mapStateToProps, { getPatients, getPatientGraphic, setCurrentPatient })(PatientPopup)

@@ -77,7 +77,7 @@ class NewDataMenu extends Component {
                 addPatientSurvey(this.props)
                 // document.getElementById("create-form").reset()
                 this.props.resetFormInputs()
-                this.props.closeModal()
+                // this.props.closeModal()
 
             }
         }).catch(err => {
@@ -99,7 +99,7 @@ class NewDataMenu extends Component {
                 addHCW(this.props)
                 // document.getElementById("create-form").reset()
                 this.props.resetFormInputs()
-                this.props.closeModal()
+                // this.props.closeModal()
 
             }
         }).catch(err => {
@@ -121,7 +121,7 @@ class NewDataMenu extends Component {
                 addOutpost(this.props)
                 // document.getElementById("create-form").reset()
                 this.props.resetFormInputs()
-                this.props.closeModal()
+                // this.props.closeModal()
             }
         }).catch(err => {
             // console.log(err.response.status)

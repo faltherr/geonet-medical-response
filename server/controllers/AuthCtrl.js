@@ -3,7 +3,7 @@ const axios = require('axios')
 module.exports = {
   auth: async (req, res) => {
     let { code } = req.query
-    
+
     try {
 
     let payload = {
@@ -14,7 +14,7 @@ module.exports = {
       redirect_uri: `http://${req.headers.host}/auth/callback`
     }
 
-    console.log('req.headers', req.headers)
+    // console.log('req.headers', req.headers)
 
     let auth0domain = `https://${process.env.REACT_APP_AUTH0_DOMAIN}`
 

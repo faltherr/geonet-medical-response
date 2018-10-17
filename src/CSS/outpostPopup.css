@@ -19,3 +19,8 @@
 .esri-popup__main-container p {
   font-size: 20px;
 } */
+
+.esri-ui-manual-container>.esri-component{
+  background-color: transparent;
+  border-color: transparent;
+}

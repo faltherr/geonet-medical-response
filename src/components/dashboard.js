@@ -227,6 +227,7 @@ class Dashboard extends Component {
         let nearest = turf.nearestPoint(patient, hwPoints, { units: 'kilometers' })
         let nearestOutpost = turf.nearestPoint(patient, outpostPoints, { units: 'kilometers' })
         // console.log("Nearest point object", nearest)
+        // console.log("Nearest outpost", nearestOutpost.properties.distanceToPoint)
         let patientDistance = {}
         patientDistance.patientId = patientName.id
         patientDistance.patientName = patientName.name
@@ -261,6 +262,7 @@ class Dashboard extends Component {
           patObj.patientName = patient.patientName
           patObj.patientLat = patient.patientLat
           patObj.patientLon = patient.patientLon
+          patObj.patientId = patient.patientId
           newPatientAtRisk.push(patObj)
         } else {
           return null
@@ -383,6 +385,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    // console.log("Patient at risk", this.state.patientsAtRisk)
     // let {map, mapView, legend} = this.props
     const CloseButton = ({ closeIt }) => {
       return (
@@ -403,7 +406,7 @@ class Dashboard extends Component {
       return communityButtons
     })
 
-    if (this.props.adminLoggedIn) {
+    // if (this.props.adminLoggedIn) {
       return (
         <div className='wrapper'>
           <div className="dashboard-header-container">
@@ -468,15 +471,15 @@ class Dashboard extends Component {
         </div>
 
       ) 
-    } else {
-      return (
-        <div>
-          <div className="denied-container">
-            <button className="denied-button"><Link style={{ textDecoration: 'none', color: 'white' }} to="/">Please Login To Gain Access</Link></button>
-          </div>
-        </div>
-      )
-    }
+    // } else {
+    //   return (
+    //     <div>
+    //       <div className="denied-container">
+    //         <button className="denied-button"><Link style={{ textDecoration: 'none', color: 'white' }} to="/">Please Login To Gain Access</Link></button>
+    //       </div>
+    //     </div>
+    //   )
+    // }
   }
 }
 
